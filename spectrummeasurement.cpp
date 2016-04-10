@@ -62,6 +62,11 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
 
     set_sliding_disabled(true,false);
     ui->pushButton_6->setDisabled(true);
+
+    ui->pushButton_2->setObjectName("stop");
+    ui->pushButton->setObjectName("start");
+    this->setStyleSheet("
+                        "QPushButton#stop{background-color:red; text: white bold}");
 }
 
 spectrummeasurement::~spectrummeasurement()

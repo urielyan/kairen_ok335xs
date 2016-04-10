@@ -49,7 +49,8 @@ SOURCES += main.cpp\
     spectrum_painter.cpp \
     buzzer.cpp \
     communication_help.cpp \
-    query_change_voltage.cpp
+    query_change_voltage.cpp \
+    settings_datasave.cpp
 
 HEADERS  += widget.h \
     date_widget.h \
@@ -88,7 +89,8 @@ HEADERS  += widget.h \
     spectrum_painter.h \
     buzzer.h \
     communication_help.h \
-    query_change_voltage.h
+    query_change_voltage.h \
+    settings_datasave.h
 
 FORMS    += widget.ui \
     date_widget.ui \

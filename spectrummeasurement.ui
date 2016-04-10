@@ -270,6 +270,9 @@
            <height>0</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
          <property name="text">
           <string>开始</string>
          </property>
