@@ -38,6 +38,12 @@ countingMeasurement::countingMeasurement(QWidget *parent) :
   ui->pushButton_7->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
 
     set_sliding_disabled(true,false);
+
+    ui->pushButton_2->setObjectName("stop");
+    ui->pushButton->setObjectName("start");
+    this->setStyleSheet(""
+                        "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
+                        "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}");
 }
 countingMeasurement::~countingMeasurement()
 {

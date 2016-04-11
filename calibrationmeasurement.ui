@@ -118,6 +118,9 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QPushButton" name="pushButton">
          <property name="text">
@@ -133,16 +136,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="pushButton_4">
          <property name="text">
-          <string>返回</string>
+          <string>查询</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="pushButton_3">
          <property name="text">
-          <string>查询</string>
+          <string>返回</string>
          </property>
         </widget>
        </item>
