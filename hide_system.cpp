@@ -89,7 +89,7 @@ void hide_system::on_b_clear_clicked()
 
 void hide_system::on_pushButton_2_clicked()
 {
-  proportion_widget->showFullScreen();
+  proportion_widget->showAndInit();
 }
 
 void  hide_system::time_use_count(){

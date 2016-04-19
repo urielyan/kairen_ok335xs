@@ -582,32 +582,10 @@ void countingMeasurement::printer_result(){
   if(ui->widget->global_is_sample ==REFERENCE_BE_LOCATON)printer::transmit(reference,6);
   if(ui->widget->global_is_sample ==WAIT_BE_LOCATION)printer::transmit(wait_measurement,6);
   printer ::transmit(enter,1);
-  printer::transmit(date,4);
 
-  printer::transmit((void *)"   ",3);
 
-  //年
-  QString date_year = QString::number(QDate::currentDate().year());
-  printer::transmit((void *)date_year.toLocal8Bit().data(),date_year.size());
-  printer::transmit(year,2);
-
-  //月
-  QString date_month = QString::number(QDate::currentDate().month());
-  printer::transmit((void *)date_month.toLocal8Bit().data(),date_month.size());
-  printer::transmit(month,2);
-
-  //日
-  QString date_day = QString::number(QDate::currentDate().day());
-  printer::transmit((void *)date_day.toLocal8Bit().data(),date_day.size());
-  printer::transmit(day,2);
-
-  printer::transmit((void *)"   ",3);
-
-  //当前时间
-  printer::transmit((void *)QString::number(QTime::currentTime().hour()).toLocal8Bit().data(),2);
-  printer ::transmit((void *)":",1);
-  printer::transmit((void *)QString::number(QTime::currentTime().minute()).toLocal8Bit().data(),2);
-  printer ::transmit(enter,1);
+  //日期
+  printer::printCurrentDateTime();
 
   printer::transmit(just_conut,4);
   printer::transmit(average,6);

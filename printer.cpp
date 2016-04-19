@@ -1,8 +1,16 @@
 #include <QStringList>
 #include <QMessageBox>
+#include <QString>
+#include <QDateTime>
 
 #include "printer.h"
 #include "global.h"
+
+printer* printer::instance()
+{
+  static printer Instance;
+  return &Instance;
+}
 
 printer::printer(QObject *parent) :
   QObject(parent)
@@ -46,6 +54,55 @@ struct termios printer::options;
 
 printer::~printer(){
   close(fd);
+}
+
+void printer::printCurrentDateTime()
+{
+  int enter = 0x0A;
+
+  int date  = 0xDAC6D5C8;
+  int year = 0xEAC4;
+  int month = 0xC2D4;
+  int day  = 0xD5C8;
+  printer::transmit(date,4);
+  printer::transmit((void *)"   ",3);
+
+  //年
+  QString date_year = QString::number(QDate::currentDate().year());
+  printer::transmit((void *)date_year.toLocal8Bit().data(),date_year.size());
+  printer::transmit(year,2);
+
+  //月
+  QString date_month = QString::number(QDate::currentDate().month());
+  if(date_month.size() == 1)
+    {
+      date_month = "0" +date_month;
+    }
+  printer::transmit((void *)date_month.toLocal8Bit().data(),date_month.size());
+  printer::transmit(month,2);
+
+  //日
+  QString date_day = QString::number(QDate::currentDate().day());
+  if(date_day.size() == 1)
+    {
+      date_day = "0" +date_day;
+    }
+  printer::transmit((void *)date_day.toLocal8Bit().data(),date_day.size());
+  printer::transmit(day,2);
+
+  //3 blank
+  printer::transmit((void *)"   ",3);
+
+  //当前时间
+  printer::transmit((void *)QString::number(QTime::currentTime().hour()).toLocal8Bit().data(),2);
+  printer ::transmit((void *)":",1);
+  QString stringMinute = QString::number(QTime::currentTime().minute());
+  if(stringMinute.size() == 0)
+  {
+      stringMinute = "0" + stringMinute;
+  }
+  printer::transmit((void *)stringMinute.toLocal8Bit().data(),2);
+  printer ::transmit(enter,1);
 }
 
 int printer::transmit(char c){

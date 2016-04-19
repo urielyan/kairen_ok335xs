@@ -1,3 +1,6 @@
+//查询电压修改记录包括自动修改和手动修改
+
+
 #ifndef QUERY_CHANGE_VOLTAGE_H
 #define QUERY_CHANGE_VOLTAGE_H
 

@@ -17,8 +17,12 @@ class printer : public QObject
 {
   Q_OBJECT
 public:
+  static printer *instance();
   explicit printer(QObject *parent = 0);
   ~printer();
+
+  static void printCurrentDateTime();
+
   static int fd;
   static struct termios options;
   static int transmit(char);

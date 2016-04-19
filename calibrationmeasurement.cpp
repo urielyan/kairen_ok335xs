@@ -48,6 +48,7 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
       labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     }
   ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
+  ui->label_second->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
 
   ui->pushButton_2->setObjectName("stop");
   ui->pushButton->setObjectName("start");

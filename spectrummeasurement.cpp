@@ -62,12 +62,6 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
 
     set_sliding_disabled(true,false);
     ui->pushButton_6->setDisabled(true);
-
-    ui->pushButton_2->setObjectName("stop");
-    ui->pushButton->setObjectName("start");
-    this->setStyleSheet(""
-                        "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
-                        "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}");
 }
 
 spectrummeasurement::~spectrummeasurement()
@@ -146,8 +140,8 @@ void spectrummeasurement::changetable(){
   item2->setTextAlignment(Qt::AlignCenter);
 
   specture_array_data[row + column*10/2 + 4] = recv_data.toInt();
-//  painter_result->update();
-//  painter_result->just_updae();
+  painter_result->update();
+  painter_result->just_updae();
 
   ui->tableWidget->setItem(row,column,item1);
   ui->tableWidget->setItem(row,column + 1,item2);
@@ -512,48 +506,29 @@ void spectrummeasurement::printer_result(){
   long long summitat = 0xDAD4BBCEE5B7ll;
   long long countdata_zhi = 0xB5D6FDCAC6BCll;
   int  sulphur = 0xF2C1;
-  int date  = 0xDAC6D5C8;
-  int year = 0xEAC4;
-  int month = 0xC2D4;
-  int day  = 0xD5C8;
+
 
 
   printer::transmit((void *)"========================================",SEGMENT_LENGTH);
   printer ::transmit(enter,1);
 
-  //头：能谱测量，参考样，日期
+  //头：能谱测量，参考样
   printer::transmit(spectrum,8);
   printer ::transmit(enter,1);
-  if(ui->widget->global_is_sample ==REFERENCE_BE_LOCATON)printer::transmit(reference,6);
-  if(ui->widget->global_is_sample ==WAIT_BE_LOCATION)printer::transmit(wait_measurement,6);
-  printer ::transmit(enter,1);
-  printer::transmit(date,4);
-
-  printer::transmit((void *)"   ",3);
-
-  //年
-  QString date_year = QString::number(QDate::currentDate().year());
-  printer::transmit((void *)date_year.toLocal8Bit().data(),date_year.size());
-  printer::transmit(year,2);
-
-  //月
-  QString date_month = QString::number(QDate::currentDate().month());
-  printer::transmit((void *)date_month.toLocal8Bit().data(),date_month.size());
-  printer::transmit(month,2);
-
-  //日
-  QString date_day = QString::number(QDate::currentDate().day());
-  printer::transmit((void *)date_day.toLocal8Bit().data(),date_day.size());
-  printer::transmit(day,2);
-
-  printer::transmit((void *)"   ",3);
-
-  //当前时间
-  printer::transmit((void *)QString::number(QTime::currentTime().hour()).toLocal8Bit().data(),2);
-  printer ::transmit((void *)":",1);
-  printer::transmit((void *)QString::number(QTime::currentTime().minute()).toLocal8Bit().data(),2);
+  if(ui->widget->global_is_sample ==REFERENCE_BE_LOCATON)
+    {
+    printer::transmit(reference,6);
+    }
+  if(ui->widget->global_is_sample ==WAIT_BE_LOCATION)
+    {
+    printer::transmit(wait_measurement,6);
+    }
   printer ::transmit(enter,1);
 
+  //日期
+  printer::printCurrentDateTime();
+
+  //打印数据
   for (int column = 6; column >= 0; column -= 2) {
       for(int row=9;row >= 0;row--){
           QTableWidgetItem *item= ui->tableWidget->item(row,column);
@@ -574,7 +549,8 @@ void spectrummeasurement::printer_result(){
         }
     }
 #endif
-#if 1
+#if 0
+  //打印坐标图
   //沿切纸方向打印 Y 轴
   char tmp_x_reverse = 0x00;
   int x_data_length = 2;
@@ -605,9 +581,6 @@ void spectrummeasurement::printer_result(){
   printer::transmit(tmp_x_reverse5,x_data_length);
   printer::transmit(tmp_x_reverse);
 
-#endif
-
-#if 1
   //沿走纸方向打印 X 轴及曲线
   //    0x1c 0x4d 50 0x02 0x35 0x30 0x0b 0x31 0x30 0x30 0x0b 0x00 0x01 0x80 0x00
   int trans_data_size = 1;

@@ -14,6 +14,7 @@ class proportion : public QWidget
 
 public:
     explicit proportion(QWidget *parent = 0);
+  void showAndInit();
     ~proportion();
 
 private slots:

@@ -45,6 +45,7 @@ sampleMeasurement::sampleMeasurement(QWidget *parent) :
         labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       }
     ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
+    ui->label_second->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
 
     ui->pushButton_2->setObjectName("stop");
     ui->pushButton->setObjectName("start");
@@ -409,45 +410,21 @@ void sampleMeasurement::printer_result(){
   long long measurement_time = 0xE4BCB1CABFC1E2B2ll;
   long long repeat_time = 0xFDCACEB4B4B8D8D6ll;
 
-//头：测量，参考样，日期
+//头：测量，参考样
 #if 1
   printer::transmit((void *)"================================================",SEGMENT_LENGTH);
   printer ::transmit(enter,1);
 
-
   printer::transmit(samplemeasurement,8);
   printer ::transmit(enter,1);
 
-
-  printer::transmit(date,4);
-  printer::transmit((void *)"   ",3);
-//年
-  QString date_year = QString::number(QDate::currentDate().year());
-  printer::transmit((void *)date_year.toLocal8Bit().data(),date_year.size());
-  printer::transmit(year,2);
-
-//月
-  QString date_month = QString::number(QDate::currentDate().month());
-  printer::transmit((void *)date_month.toLocal8Bit().data(),date_month.size());
-  printer::transmit(month,2);
-
-//日
-  QString date_day = QString::number(QDate::currentDate().day());
-  printer::transmit((void *)date_day.toLocal8Bit().data(),date_day.size());
-  printer::transmit(day,2);
-
-  printer::transmit((void *)"   ",3);
-
-//当前时间
-  printer::transmit((void *)QString::number(QTime::currentTime().hour()).toLocal8Bit().data(),2);
-  printer ::transmit(':',1);
-  printer::transmit((void *)QString::number(QTime::currentTime().minute()).toLocal8Bit().data(),2);
-  printer ::transmit(enter,1);
+  //日期
+  printer::printCurrentDateTime();
 
   printer::transmit(work_line1,8);
   printer::transmit(work_line2,2);
   printer::transmit((void *)":  ",4);
-  printer::transmit((char)(showsm->get_real_curve() + 0x31));
+  printer::transmit((char)(showsm->get_real_curve() + 0x30));
   printer ::transmit(enter,1);
 
   printer::transmit(measurement_time,8);

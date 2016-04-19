@@ -14,7 +14,9 @@
  *      sample_data_n：含量测量记录的数据(work curve; datetime;measurement time;
  *                                    repeat time; average value;standard deviation)
  *      work_curve_n：工作曲线记录的数据（kb值或a0,a1,a2）;example:(k=0;b=0r=0    or    a0=1;a1=1;a2=1)
- *
+ *      count_voltage : 设定计数管高压
+ *      light_voltage   : 设定光管高压
+ *      light_voltage   : 设定光管电流
  *  count_data.conf中保存的内容有：
  *      count_count:
  *      count_data_n:
@@ -39,11 +41,19 @@
 
 int main(int argc, char *argv[])
 {
-  //printf("in...%s\n",__FUNCTION__);
   QApplication a(argc, argv);
-
+  QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/home/yange/test/");
   buzzer buz;
   buz.stop_music();
+
+#ifdef  Q_WS_QPA
+  QMessageBox msgBox;
+   msgBox.setText("The document has been modified.");
+   msgBox.setInformativeText("Do you want to save your changes?");
+   msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+   msgBox.setDefaultButton(QMessageBox::Save);
+   int ret = msgBox.exec();
+#endif
 #if 1
   QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
   //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));

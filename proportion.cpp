@@ -30,6 +30,11 @@ proportion::proportion(QWidget *parent) :
 
 }
 
+void proportion::showAndInit()
+{
+  this->showFullScreen();
+}
+
 proportion::~proportion()
 {
     delete ui;

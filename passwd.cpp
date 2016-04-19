@@ -57,6 +57,7 @@ passwd::passwd(QWidget *parent) :
     ui->widget_3->hide();
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+    ui->label_title->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
 }
 
 passwd::~passwd()
@@ -245,7 +246,8 @@ void passwd::on_b_ok_clicked()
                                             + ";" + line_data);
             communication_err_data.setValue("change_count_voltage_count",
                                             communication_err_data.value("change_count_voltage_count").toInt()+1);
-            mysettings.setValue("count_voltage",line_data.toInt());            QMessageBox msgbox;
+            mysettings.setValue("count_voltage",line_data.toInt());
+            QMessageBox msgbox;
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
             msgbox.setText("设定成功");
             msgbox.exec();
@@ -284,24 +286,24 @@ void passwd::on_b_ok_clicked()
 void passwd::alterpasswd_show(int index){
     //提供给修改计数管，光管的界面
     if(index == SETUP_COUNT_VOLTAGE){
-        ui->label_title->setText(QString("设定计数管高压(电压范围在%1-%2V)").arg(COUNT_VOLTAGE_MIN).arg(COUNT_VOLTAGE_MAX));
+        ui->label_title->setText(tr("设定计数管高压"));
 
-        ui->label_caution->setText("请输入电压");
+        ui->label_caution->setText(QString(tr("请输入电压(电压范围在%1-%2V)")).arg(COUNT_VOLTAGE_MIN).arg(COUNT_VOLTAGE_MAX));
         ui->label_unit->setText("V");
-        ui->lineEdit->setText("");
+        ui->lineEdit->setText(mysettings.value("count_voltage").toString());
     }else if(index == SETUP_LIGHT_VOLTAGE){
-        ui->label_title->setText("设定光管高压");
-        ui->label_caution->setText("请输入电压");
+        ui->label_title->setText(tr("设定光管高压"));
+        ui->label_caution->setText(tr("请输入电压"));
         ui->label_unit->setText("V");
-        ui->lineEdit->setText("");
+        ui->lineEdit->setText(mysettings.value("light_voltage").toString());
     }else if(index == SETUP_LIGHT_ELECTRICITY){
-        ui->label_title->setText("设定光管电流");
-        ui->label_caution->setText("请输入电流");
+        ui->label_title->setText(tr("设定光管电流"));
+        ui->label_caution->setText(tr("请输入电流"));
         ui->label_unit->setText("μA");
-        ui->lineEdit->setText("");
+        ui->lineEdit->setText(mysettings.value("light_electricty").toString());
     }else if(index == DISPLAY_ALTER_PASSWD){
-        ui->label_title->setText("修改密码");
-        ui->label_caution->setText("请输入新密码:");
+        ui->label_title->setText(tr("修改密码"));
+        ui->label_caution->setText(tr("请输入新密码:"));
         ui->label_unit->setText("");
         ui->lineEdit->setText("");
         ui->line->showFullScreen();
