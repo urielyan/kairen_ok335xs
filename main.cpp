@@ -16,7 +16,7 @@
  *      work_curve_n：工作曲线记录的数据（kb值或a0,a1,a2）;example:(k=0;b=0r=0    or    a0=1;a1=1;a2=1)
  *      count_voltage : 设定计数管高压
  *      light_voltage   : 设定光管高压
- *      light_voltage   : 设定光管电流
+ *      light_current   : 设定光管电流
  *  count_data.conf中保存的内容有：
  *      count_count:
  *      count_data_n:
@@ -39,26 +39,48 @@
 #include <QDebug>
 #include <QSettings>
 
-int main(int argc, char *argv[])
+
+void settingsInit()
 {
-  QApplication a(argc, argv);
+
+  QCoreApplication::setOrganizationName("shanghaikairen");
+  QCoreApplication::setApplicationName("analysis");
+
   QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/home/yange/test/");
-  buzzer buz;
-  buz.stop_music();
+
+  QSettings mysettings;
+  if(!mysettings.contains("count_voltage")){
+      mysettings.setValue("count_voltage",578);
+    }
+
+  if(!mysettings.contains("light_voltage")){
+      mysettings.setValue("light_voltage",0);
+    }
+
+  if(!mysettings.contains("light_current")){
+      mysettings.setValue("light_current",0);
+    }
+}
+
+void LanguageInit()
+{
 
 #ifdef  Q_WS_QPA
   QMessageBox msgBox;
-   msgBox.setText("The document has been modified.");
-   msgBox.setInformativeText("Do you want to save your changes?");
-   msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-   msgBox.setDefaultButton(QMessageBox::Save);
-   int ret = msgBox.exec();
+  msgBox.setText("The document has been modified.");
+  msgBox.setInformativeText("Do you want to save your changes?");
+  msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+  msgBox.setDefaultButton(QMessageBox::Save);
+  int ret = msgBox.exec();
 #endif
+
 #if 1
   QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
   //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
   //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
+
+
   int nIndex = QFontDatabase::addApplicationFont("/wenquanyi.ttf");//opt/Qtopia4.4.3/lib/fonts
   if (nIndex != -1){
       QStringList strList(QFontDatabase::applicationFontFamilies(nIndex));
@@ -79,21 +101,30 @@ int main(int argc, char *argv[])
           a.setFont(fontThis);
         }
     }
-  printer pri;
-#if 0
-  printer::transmit(0x0A,1);
-  printer::transmit((void *)"shanghaikairen",14);
-  printer::transmit(0x0A,1);
-#endif
-
 
   //把QMessageBox的按钮变成中文的
   QTranslator trans;
   trans.load("/qt_zh_CN");
   a.installTranslator(&trans);
 
-  QCoreApplication::setOrganizationName("shanghaikairen");
-  QCoreApplication::setApplicationName("analysis");
+}
+
+int main(int argc, char *argv[])
+{
+  QApplication a(argc, argv);
+
+  settingsInit();
+  LanguageInit();
+
+  buzzer buz;
+  buz.stop_music();
+
+  printer pri;
+#if 0
+  printer::transmit(0x0A,1);
+  printer::transmit((void *)"shanghaikairen",14);
+  printer::transmit(0x0A,1);
+#endif
 
   Widget w;
   logo l;
