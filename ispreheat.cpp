@@ -64,7 +64,7 @@ void ispreheat::change_label_content(){
 
   if((is_sampling_num >= 0 && is_sampling_num <= COUNT_MEASUREMENT_DATA_COUNT) || is_sampling_num == NEED_START_SAMPLING){
       if(1 == blink_flag){
-          int ret = 0;
+          //int ret = 0;
           switch (is_sampling_num) {
             case NEED_START_SAMPLING:
               ui->label_2->setText("请移动滑板到参考样采样!");

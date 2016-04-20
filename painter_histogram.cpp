@@ -10,7 +10,7 @@ painter_histogram::painter_histogram(QWidget *parent) :
   ui(new Ui::painter_histogram)
 {
   ui->setupUi(this);
-  spectrum_data == NULL;
+  //spectrum_data == NULL;
   different_display_color = 0;
 
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));

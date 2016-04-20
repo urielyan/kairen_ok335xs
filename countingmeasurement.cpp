@@ -169,6 +169,7 @@ int countingMeasurement::examine_count_5_data_availability(){
 int countingMeasurement::clear_count_5_data(){
   count_data_5.clear();
   //examine_count_5_data_availability();
+  return 0;
 }
 QStringList countingMeasurement::get_count_5_data(){
   QMap<QDateTime,int>::iterator i;
@@ -566,10 +567,6 @@ void countingMeasurement::printer_result(){
   long long count_measurement = 0xBFC1E2B2FDCAC6BCll;//right
   long long reference = 0xf9d1bcbfceb2;
   long long wait_measurement = 0xF9D1A8B6EAB1;
-  int date  = 0xDAC6D5C8;
-  int year = 0xEAC4;
-  int month = 0xC2D4;
-  int day  = 0xD5C8;
 
   long long average  = 0xB5D6F9BEBDC6ll;
   long long statistics =0xB5D6C6BCB3CDll;

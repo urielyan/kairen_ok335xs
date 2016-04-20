@@ -13,6 +13,13 @@ proportion::proportion(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // not set default value
+//    if(!mysettings.contains("proportion_1"))
+//      {
+//        mysettings.setValue("proportion_1", 0.1);
+//        mysettings.setValue("proportion_2", 1);
+//      }
+
     QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
     for(int i=0;i<allPButtons.count();i++){
         allPButtons[i]->setFocusPolicy(Qt::NoFocus);//设置所有按钮没有焦点
@@ -27,7 +34,6 @@ proportion::proportion(QWidget *parent) :
     ui->lineEdit_2->setText(mysettings.value("proportion_2").toString());
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-
 }
 
 void proportion::showAndInit()

@@ -50,7 +50,8 @@ SOURCES += main.cpp\
     buzzer.cpp \
     communication_help.cpp \
     query_change_voltage.cpp \
-    settings_datasave.cpp
+    settings_datasave.cpp \
+    global.cpp
 
 HEADERS  += widget.h \
     date_widget.h \

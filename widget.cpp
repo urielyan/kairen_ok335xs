@@ -74,9 +74,7 @@ Widget::Widget(QWidget *parent) :
   connect(sm,SIGNAL(transmit_steady_summit_result(double)),\
           this,SLOT(judge_spectrument_measurement_result(double)));
 
-  if(!mysettings.contains("count_voltage")){
-      mysettings.setValue("count_voltage",578);
-    }
+
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
   QList<QLabel *> labellist = this->findChildren<QLabel *>();
   for (int i = 0; i < labellist.count(); ++i) {

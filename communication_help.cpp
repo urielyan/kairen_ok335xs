@@ -170,7 +170,7 @@ void communication_help::on_pushButton_2_clicked()
   int err2 = communication_err_data.value("com_err_2").toInt();
   int err3 = communication_err_data.value("com_err_3").toInt();
   int err4 = communication_err_data.value("com_err_4").toInt();
-  int err5 = communication_err_data.value("com_err_5").toInt();//setup
+  //int err5 = communication_err_data.value("com_err_5").toInt();//setup
   int err6 = communication_err_data.value("com_err_6").toInt();
   int err10 = communication_err_data.value("com_err_10").toInt();
   QMessageBox msgbox;
