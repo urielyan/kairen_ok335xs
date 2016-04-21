@@ -54,15 +54,15 @@ void settingsInit()
     }
 
   if(!mysettings.contains("light_voltage")){
-      mysettings.setValue("light_voltage",0);
+      mysettings.setValue("light_voltage"," ");
     }
 
   if(!mysettings.contains("light_current")){
-      mysettings.setValue("light_current",0);
+      mysettings.setValue("light_current"," ");
     }
 }
 
-void LanguageInit()
+void LanguageInit(QApplication &a)
 {
 
 #ifdef  Q_WS_QPA
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
   QApplication a(argc, argv);
 
   settingsInit();
-  LanguageInit();
+  LanguageInit(a);
 
   buzzer buz;
   buz.stop_music();
