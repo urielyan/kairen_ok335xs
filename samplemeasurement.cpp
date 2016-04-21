@@ -80,7 +80,7 @@ void sampleMeasurement::doing_measurement(){
     //接收数据，若有误则停止测量
     if(change_second < 0){
         sleep(ui->comboBox_time->currentText().toInt()/30);
-        QString recv_data = com::receive(ui->comboBox_time->currentText().toInt()/10 + 3);
+        QString recv_data = Communciation_Com::receive(ui->comboBox_time->currentText().toInt()/10 + 3);
         sleep(1);
         if(recv_data == NULL){
             QSettings communication_err_data("shanghaikairen","communication_error");
@@ -129,7 +129,7 @@ void sampleMeasurement::doing_measurement(){
             all_combox_disabled(false);
             return;
         }
-        recv_data = com::receive();
+        recv_data = Communciation_Com::receive();
     }
     change_second--;
 }
@@ -222,11 +222,11 @@ void sampleMeasurement::on_pushButton_clicked()
 
     //发送测量信号
     measurement_flag = MEASUREMENT_SAMPLE;
-    tcflush(com::fd,TCIOFLUSH);
+    tcflush(Communciation_Com::fd,TCIOFLUSH);
     long long tmp = 0x03FELL | ((ui->comboBox_time->currentIndex() + 0x31) << 16);
     tmp |= ((ui->comboBox_count->currentIndex() + 0x31) << 24);
     tmp |= 0xffLL << 32;
-    if (com::transmit(tmp,5) <= 0){
+    if (Communciation_Com::transmit(tmp,5) <= 0){
         QMessageBox msgbox;
         msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
         msgbox.setText(TRANSMIT_DATA_ERROR);
@@ -235,7 +235,7 @@ void sampleMeasurement::on_pushButton_clicked()
         return;
     }
     //如果没有收到滑板到位指令，则返回
-    QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+    QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
     if(recv_data == NULL){
         QMessageBox msgbox;
         msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -268,7 +268,7 @@ void sampleMeasurement::on_pushButton_clicked()
         flag = 1;
         timer_measurement->start(1000);
         measurement_flag = MEASUREMENT_SAMPLE;
-        tcflush(com::fd,TCIOFLUSH);
+        tcflush(Communciation_Com::fd,TCIOFLUSH);
         showsm->clear_tablewidget();
         return;
     }else{
@@ -300,15 +300,15 @@ int sampleMeasurement::on_pushButton_2_clicked()
     timer_measurement->stop();
     measurement_flag = MEASUREMENT_NOTHING;
     ui->widget->change_label_content(REFERENCE_BE_LOCATON);
-    tcflush(com::fd,TCIOFLUSH);
-    if(com::transmit(STOP_ORDER,3) <= 0){
+    tcflush(Communciation_Com::fd,TCIOFLUSH);
+    if(Communciation_Com::transmit(STOP_ORDER,3) <= 0){
         QMessageBox msgbox;
         msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
         msgbox.setText(TRANSMIT_DATA_ERROR);
         msgbox.exec();
         return ERRNO_COMMUNICATION_1;
       }
-    QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+    QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
     if(recv_data == NULL){
         QSettings communication_err_data("shanghaikairen","communication_error");
         communication_err_data.setValue("com_err_10",communication_err_data.value("com_err_10").toInt() + 1);

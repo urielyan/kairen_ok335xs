@@ -39,7 +39,7 @@ private:
     int second,count_flag,button_flag;
     showcalibratemeasurement *showcalibratemeasure;
     query_s_count_data *query_s_count_data_in_this;
-    com *calibrate_com;
+    Communciation_Com *calibrate_com;
     void disable_button(bool);
     QSettings mysettings;
 };

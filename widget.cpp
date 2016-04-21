@@ -26,7 +26,7 @@ Widget::Widget(QWidget *parent) :
 {
   ui->setupUi(this);
 
-  com *tmp_com= new com(this);
+  Communciation_Com *tmp_com= new Communciation_Com(this);
   tmp_com->transmit(0,0);
 
   cm = new countingMeasurement();
@@ -158,9 +158,9 @@ void Widget::on_b4_clicked()
   if(measurement_flag != MEASUREMENT_NOTHING){
       emit transmit_stop_auto_count();
     }
-  tcflush(com::fd,TCIOFLUSH);
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
   measurement_flag = MEASUREMENT_NOTHING;
-  if(com::transmit(IN_SLIDING_PLATE,4) < 0){
+  if(Communciation_Com::transmit(IN_SLIDING_PLATE,4) < 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
@@ -171,7 +171,7 @@ void Widget::on_b4_clicked()
         }
       return;
     }
-  QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+  QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   if(recv_data == NULL){
       QSettings communication_err_data("shanghaikairen","communication_error");
       communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
@@ -226,16 +226,16 @@ int Widget::on_b6_clicked()
   if(measurement_flag != MEASUREMENT_NOTHING){
       emit transmit_stop_auto_count();
     }
-  tcflush(com::fd,TCIOFLUSH);
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
   measurement_flag = MEASUREMENT_NOTHING;
-  if(com::transmit(OUT_SLIDING_PLATE,4) < 0){
+  if(Communciation_Com::transmit(OUT_SLIDING_PLATE,4) < 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
       msgbox.exec();
       return ERRNO_COMMUNICATION_1;
     }
-  QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+  QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   //qDebug() <<recv_data.toLocal8Bit().data();
   if(recv_data == NULL){
       QSettings communication_err_data("shanghaikairen","communication_error");

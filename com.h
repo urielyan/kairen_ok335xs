@@ -24,22 +24,24 @@
 #define IN_SLIDING_PLATE        0XFF3106FEUL
 #define OUT_SLIDING_PLATE       0XFF3206FEUL
 
-class com : public QObject
+class Communciation_Com : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    explicit com(QObject *parent = 0);
-    ~com();
-    static int fd;
-    static struct termios options;
-    static int transmit(char);
-    static int transmit(void *,int);
-    static int transmit(long long ,int);
-    static int transmit(unsigned long ,int);
-    static int transmit(int ,int);
+  explicit Communciation_Com(QObject *parent = 0);
+  ~Communciation_Com();
+  static Communciation_Com* instance();
 
-    static QString receive();
-    static QString receive(int);
+  static int fd;
+  static struct termios options;
+  static int transmit(char);
+  static int transmit(void *,int);
+  static int transmit(long long ,int);
+  static int transmit(unsigned long ,int);
+  static int transmit(int ,int);
+
+  static QString receive();
+  static QString receive(int);
 
 public slots:
 

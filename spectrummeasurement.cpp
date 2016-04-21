@@ -41,7 +41,7 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
   countmeas = new countingMeasurement();
   timer = new QTimer();
   connect(timer,SIGNAL(timeout()),this,SLOT(changetable()));
-  spectrum_com = new com();
+  spectrum_com = new Communciation_Com();
   ui->tableWidget->clearContents();
   for(int i = 0;i < ui->tableWidget->rowCount();i++){
       ui->tableWidget->setRowHeight(i,FONT_SIZE - 2);
@@ -93,7 +93,7 @@ void spectrummeasurement::changetable(){
 #endif
 
   //tablewidget setup
-  QString recv_data = com::receive(3);
+  QString recv_data = Communciation_Com::receive(3);
   if (NULL == recv_data ){
       QMessageBox msgbox;
       msgbox.setFont(QFont("wenquanyi", FONT_SIZE ,QFont::Normal));
@@ -267,9 +267,9 @@ void spectrummeasurement::on_pushButton_clicked()
   //开始之前停止任何测量,test communication
   if(on_pushButton_2_clicked() != ALL_RIGHT)return;
 
-  tcflush(com::fd,TCIOFLUSH);
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
   //开始能谱测量
-  if(com::transmit(ACTIVATING_SPECTRUM,3) <= 0){
+  if(Communciation_Com::transmit(ACTIVATING_SPECTRUM,3) <= 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont("wenquanyi", FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
@@ -282,7 +282,7 @@ void spectrummeasurement::on_pushButton_clicked()
   disable_pushbutton(true);
   timer->start(1000);
   measurement_flag = MEASUREMENT_SPECTRUM;
-  tcflush(com::fd,TCIOFLUSH);
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
   row = column = 0;
   flag = 2;
 }
@@ -300,15 +300,15 @@ int spectrummeasurement::on_pushButton_2_clicked()
   row = column = 0;
   flag = 3;
   turn_inspectoscope = true;
-  tcflush(com::fd,TCIOFLUSH);
-  if (com::transmit(STOP_ORDER,3) <= 0){
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
+  if (Communciation_Com::transmit(STOP_ORDER,3) <= 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont("wenquanyi", FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
       msgbox.exec();
       return ERRNO_COMMUNICATION_1;
     }
-  QString recv_data = com::receive(1);
+  QString recv_data = Communciation_Com::receive(1);
   if(recv_data == NULL){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -364,9 +364,9 @@ void spectrummeasurement::on_pushButton_5_clicked()
   if(measurement_flag != MEASUREMENT_NOTHING){
       emit transmit_stop_auto_count();
     }
-  tcflush(com::fd,TCIOFLUSH);
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
   measurement_flag = MEASUREMENT_NOTHING;
-  if(com::transmit(IN_SLIDING_PLATE,4) < 0){
+  if(Communciation_Com::transmit(IN_SLIDING_PLATE,4) < 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
@@ -377,7 +377,7 @@ void spectrummeasurement::on_pushButton_5_clicked()
         }
       return;
     }
-  QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+  QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   if(recv_data == NULL){
       QSettings communication_err_data("shanghaikairen","communication_error");
       communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
@@ -431,16 +431,16 @@ int spectrummeasurement::on_pushButton_4_clicked()
   if(measurement_flag != MEASUREMENT_NOTHING){
       emit transmit_stop_auto_count();
     }
-  tcflush(com::fd,TCIOFLUSH);
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
   measurement_flag = MEASUREMENT_NOTHING;
-  if(com::transmit(OUT_SLIDING_PLATE,4) < 0){
+  if(Communciation_Com::transmit(OUT_SLIDING_PLATE,4) < 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
       msgbox.exec();
       return -1;
     }
-  QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+  QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   //qDebug() <<recv_data.toLocal8Bit().data();
   if(recv_data == NULL){
       QSettings communication_err_data("shanghaikairen","communication_error");

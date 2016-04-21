@@ -201,15 +201,15 @@ void passwd::on_b_ok_clicked()
             return;
           }
 
-        tcflush(com::fd,TCIOFLUSH);
-        if(com::transmit(transmit_data,7) <= 0){
+        tcflush(Communciation_Com::fd,TCIOFLUSH);
+        if(Communciation_Com::transmit(transmit_data,7) <= 0){
             QMessageBox msgbox;
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
             msgbox.setText(tr("transmit err!"));
             msgbox.exec();
             return;
           }
-        QString recv_data = com::receive(SETUP_WAIT_TIME);
+        QString recv_data = Communciation_Com::receive(SETUP_WAIT_TIME);
         if(recv_data == NULL){
             QSettings communication_err_data("shanghaikairen","communication_error");
             communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
@@ -332,15 +332,15 @@ int passwd::stop_all_measurement(){
   if(measurement_flag != MEASUREMENT_NOTHING){
       emit transmit_stop_auto_count();
     }
-  tcflush(com::fd,TCIOFLUSH);
-  if (com::transmit(STOP_ORDER,3) <= 0){
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
+  if (Communciation_Com::transmit(STOP_ORDER,3) <= 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont("wenquanyi", FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
       msgbox.exec();
       return ERRNO_COMMUNICATION_1;
     }
-  QString recv_data = com::receive(1);
+  QString recv_data = Communciation_Com::receive(1);
   if(recv_data == NULL){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
