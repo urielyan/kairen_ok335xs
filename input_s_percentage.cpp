@@ -125,15 +125,15 @@ void input_S_percentage::slot_keyNumPressed(){
       ui->tableWidget->currentItem()->setText(itemtext);
     }
   if(itemtext.size() >= 6){
-      int r = ui->tableWidget->currentRow();
-      int c = ui->tableWidget->currentColumn();
-      r++;
-      if(r > 5) {
-          c = 3;
-          r = 0;
+      int tmp_Row = ui->tableWidget->currentRow();
+      int tmp_Column = ui->tableWidget->currentColumn();
+      tmp_Row++;
+      if(tmp_Row > 5) {
+          tmp_Column = 3;
+          tmp_Row = 0;
         }
 
-      ui->tableWidget->setCurrentCell(r,c);
+      ui->tableWidget->setCurrentCell(tmp_Row,tmp_Column);
     }
 
   //setup current item is want to change item
@@ -198,7 +198,7 @@ void input_S_percentage::on_b_point_clicked()
       return;
     }
   QString itemtext = tmpitem->text();
-    if (itemtext.size() == 0)return;
+  if (itemtext.size() == 0)return;
   //if It have "." : return;
   if(itemtext.contains("."))return;
   itemtext += ".";

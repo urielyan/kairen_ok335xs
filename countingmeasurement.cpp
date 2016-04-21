@@ -169,6 +169,7 @@ int countingMeasurement::examine_count_5_data_availability(){
 int countingMeasurement::clear_count_5_data(){
   count_data_5.clear();
   //examine_count_5_data_availability();
+  return 0;
 }
 QStringList countingMeasurement::get_count_5_data(){
   QMap<QDateTime,int>::iterator i;
@@ -197,7 +198,7 @@ void countingMeasurement::count_second(){
   emit transmit_time(11 * TURN_SECONDS - (turn_counter * TURN_SECONDS - turn_second));
 
   if(turn_second < 0){
-      recv_data = com::receive(5);
+      recv_data = Communciation_Com::receive(5);
       if(recv_data == NULL){
           QSettings communication_err_data("shanghaikairen","communication_error");
           communication_err_data.setValue("com_err_2",communication_err_data.value("com_err_2").toInt() + 1);
@@ -311,8 +312,8 @@ void countingMeasurement::on_pushButton_clicked()
       return;
     }
   //开始计数测量
-  tcflush(com::fd,TCIOFLUSH);
-  if(com::transmit(ACTIVATINE_COUNT,3) <= 0){
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
+  if(Communciation_Com::transmit(ACTIVATINE_COUNT,3) <= 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
@@ -324,7 +325,7 @@ void countingMeasurement::on_pushButton_clicked()
   ui->label_counter->setText("第 1 次");
   flag = 2;
   measurement_flag = MEASUREMENT_COUNT;
-  tcflush(com::fd,TCIOFLUSH);
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
   disable_button(true);
   timer->start(1000);
 }
@@ -351,15 +352,15 @@ int countingMeasurement::on_pushButton_2_clicked()
   ui->label_seconds->setText("");
   ui->label_counter->setText("");
   flag = 1;
-  tcflush(com::fd,TCIOFLUSH);
-  if(com::transmit(STOP_ORDER,3) <= 0){
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
+  if(Communciation_Com::transmit(STOP_ORDER,3) <= 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
       msgbox.exec();
       return ERRNO_COMMUNICATION_1;
     }
-  QString recv_data = com::receive(1);
+  QString recv_data = Communciation_Com::receive(1);
   if(recv_data == NULL){
       QSettings communication_err_data("shanghaikairen","communication_error");
       communication_err_data.setValue("com_err_10",communication_err_data.value("com_err_10").toInt() + 1);
@@ -426,9 +427,9 @@ void countingMeasurement::on_pushButton_6_clicked()
   if(measurement_flag != MEASUREMENT_NOTHING){
       emit transmit_stop_auto_count();
     }
-  tcflush(com::fd,TCIOFLUSH);
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
   measurement_flag = MEASUREMENT_NOTHING;
-  if(com::transmit(IN_SLIDING_PLATE,4) < 0){
+  if(Communciation_Com::transmit(IN_SLIDING_PLATE,4) < 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
@@ -439,7 +440,7 @@ void countingMeasurement::on_pushButton_6_clicked()
         }
       return;
     }
-  QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+  QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   if(recv_data == NULL){
       QSettings communication_err_data("shanghaikairen","communication_error");
       communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
@@ -494,16 +495,16 @@ int countingMeasurement::on_pushButton_4_clicked()
   if(measurement_flag != MEASUREMENT_NOTHING){
       emit transmit_stop_auto_count();
     }
-  tcflush(com::fd,TCIOFLUSH);
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
   measurement_flag = MEASUREMENT_NOTHING;
-  if(com::transmit(OUT_SLIDING_PLATE,4) < 0){
+  if(Communciation_Com::transmit(OUT_SLIDING_PLATE,4) < 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
       msgbox.exec();
       return -1;
     }
-  QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+  QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   //qDebug() <<recv_data.toLocal8Bit().data();
   if(recv_data == NULL){
       QSettings communication_err_data("shanghaikairen","communication_error");
@@ -566,10 +567,6 @@ void countingMeasurement::printer_result(){
   long long count_measurement = 0xBFC1E2B2FDCAC6BCll;//right
   long long reference = 0xf9d1bcbfceb2;
   long long wait_measurement = 0xF9D1A8B6EAB1;
-  int date  = 0xDAC6D5C8;
-  int year = 0xEAC4;
-  int month = 0xC2D4;
-  int day  = 0xD5C8;
 
   long long average  = 0xB5D6F9BEBDC6ll;
   long long statistics =0xB5D6C6BCB3CDll;

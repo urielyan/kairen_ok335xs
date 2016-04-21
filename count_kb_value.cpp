@@ -125,10 +125,6 @@ void count_kb_value::on_pushButton_clicked()
 void count_kb_value::printer_result(){
 
   int enter = 0x0A;
-  int date  = 0xDAC6D5C8;
-  int year = 0xEAC4;
-  int month = 0xC2D4;
-  int day  = 0xD5C8;
 
   long long calibrate_result = 0xFBB9E1BDA8B6EAB1;
   long long sample = 0xBFC1ACBA;

@@ -29,7 +29,7 @@ void spectrum_painter::on_pushButton_clicked()
 #define POINT_SIZE 2
 static QMap<int,QString>painter_data;//painter data
 void spectrum_painter::paintEvent(QPaintEvent *){
-  int rect_width = this->width()/130;
+  //int rect_width = this->width()/130;
   int side = qMin(width(), height());                                           //创建窗口宽高参数
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing,true);                //开启抗锯齿

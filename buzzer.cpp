@@ -27,7 +27,7 @@ buzzer::buzzer(QObject *parent) :
 
 
   fd = ::open("/dev/buzzer", O_RDWR);
-  printf("fd = %d\n",fd);
+  //printf("fd = %d\n",fd);
   if (fd < 0) {
       perror("open buzzer device");
     }
@@ -48,7 +48,7 @@ void buzzer::start_music(){
       return;
     }
   already_start_flag = ALREADY_START;
-  printf("already start music\n");
+  //printf("already start music\n");
   //timer->start(10);
 }
 
@@ -60,7 +60,7 @@ void buzzer::stop_music(){
   ioctl(fd, 1, 0);
   already_start_flag = NO_START;
   //timer->stop();
-  printf("already stop music\n");
+  //printf("already stop music\n");
 }
 
 void buzzer::play_music(){
@@ -69,10 +69,10 @@ void buzzer::play_music(){
       ioctl(fd, 1, 0);
       already_start_flag = NO_START;
       //timer->stop();
-      printf("already stop music\n");
+      //printf("already stop music\n");
       return;
     }
-  printf("is playing music%d\n",i);
+  //printf("is playing music%d\n",i);
   if(i >= 3) i = 0;
       ioctl(fd, 1, hig[i]);
 //      //usleep(3200000/length[i]);

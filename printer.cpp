@@ -94,70 +94,77 @@ void printer::printCurrentDateTime()
   printer::transmit((void *)"   ",3);
 
   //当前时间
-  printer::transmit((void *)QString::number(QTime::currentTime().hour()).toLocal8Bit().data(),2);
+  QString stringHour = QString::number(QTime::currentTime().hour());
+  if(stringHour.size() == 1)
+    {
+      stringHour = "0" + stringMinute;
+    }
+  printer::transmit((void *)stringHour.toLocal8Bit().data(),2);
+
   printer ::transmit((void *)":",1);
+
   QString stringMinute = QString::number(QTime::currentTime().minute());
-  if(stringMinute.size() == 0)
-  {
+  if(stringMinute.size() == 1)
+    {
       stringMinute = "0" + stringMinute;
-  }
+    }
   printer::transmit((void *)stringMinute.toLocal8Bit().data(),2);
   printer ::transmit(enter,1);
 }
 
 int printer::transmit(char c){
   if(write(fd,&c,1) <= 0){
-        printf("write err \n");
-        return -1;
+      printf("write err \n");
+      return -1;
     }
   return 1;
 }
 int printer::transmit(void *data,int size){
-    if(sizeof(data) <= 0) return 0;
-    int ret  = write(fd,data,size);
+  if(sizeof(data) <= 0) return 0;
+  int ret  = write(fd,data,size);
 
-    if(ret <= 0){
-        printf("write err \n");
-        return -1;
+  if(ret <= 0){
+      printf("write err \n");
+      return -1;
     }
-    return ret;
+  return ret;
 }
 
 int printer::transmit(long long data, int size){
-    if (0 == data || size <= 0){
-        return 0;
+  if (0 == data || size <= 0){
+      return 0;
     }
-    int ret  = write(fd,(void *)&data,size);
+  int ret  = write(fd,(void *)&data,size);
 
-    if(ret <= 0){
-        printf("write err \n");
-        return -1;
+  if(ret <= 0){
+      printf("write err \n");
+      return -1;
     }
-    return ret;
+  return ret;
 }
 int printer::transmit(unsigned long data, int size){
-    if (0 == data || size <= 0){
-        return 0;
+  if (0 == data || size <= 0){
+      return 0;
     }
-    int ret  = write(fd,(void *)&data,size);
+  int ret  = write(fd,(void *)&data,size);
 
-    if(ret <= 0){
-        printf("write err \n");
-        return -1;
+  if(ret <= 0){
+      printf("write err \n");
+      return -1;
     }
-    return ret;
+  return ret;
 }
 int printer::transmit(int data, int size){
-    if (0 == data || size <= 0){
-        return 0;
+  if (0 == data || size <= 0){
+      return 0;
     }
-    int ret  = write(fd,(void *)&data,size);
+  int ret  = write(fd,(void *)&data,size);
 
-    if(ret <= 0){
-        //QMessageBox::warning(NULL,"int","write");
-        printf("write err \n");
+  if(ret <= 0){
+      //QMessageBox::warning(NULL,"int","write");
+      printf("write err \n");
 
-        return -1;
+      return -1;
     }
-    return ret;
+  return ret;
 }

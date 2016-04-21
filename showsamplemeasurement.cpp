@@ -245,7 +245,7 @@ void showsamplemeasurement::show_calculate_storage(QString data){
     query.finish();
 #endif
     ok = db.commit();
-    if(ok = false ){
+    if(ok == false ){
         QMessageBox box;
         box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
         box.setText("transaction err!");

@@ -54,7 +54,7 @@ private slots:
 private:
     Ui::spectrummeasurement *ui;
     QTimer *timer;
-    com *spectrum_com;
+    Communciation_Com *spectrum_com;
     size_t row,column,flag,try_inspectoscope_flag;
     countingMeasurement *countmeas;
     painter_histogram * painter_result;

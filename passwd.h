@@ -7,10 +7,7 @@
 #include "systemsetup.h"
 #include "hide_system.h"
 
-#define COUNT_VOLTAGE_MAX 700
-#define COUNT_VOLTAGE_MIN 500
-
-#define DISPLAY_ALTER_PASSWD 1
+#define SETUP_ALTER_PASSWD 1
 #define SETUP_COUNT_VOLTAGE     7
 #define SETUP_LIGHT_VOLTAGE     8
 #define SETUP_LIGHT_ELECTRICITY 9
@@ -24,6 +21,18 @@ class passwd : public QWidget
     Q_OBJECT
 
 public:
+  enum ENUM_INPUT_MAX{
+    //unit : v
+    enumMaxCountVoltage = 700,
+    enumMinCountVoltage = 500,
+
+    enumMaxLightVoltage = 9999,
+    enumMinLightVoltage = 3000,
+
+    //unit : uA
+    enumMaxLightCurrent = 1000,
+    enumMinLightCurrent = 50,
+  };
     explicit passwd(QWidget *parent = 0);
     ~passwd();
     void showpass();
@@ -37,6 +46,8 @@ signals:
     void start_steady_summit_measurement();
 
 private slots:
+    void slotBackSpaceClicked();
+    void slotClearClicked();
     void slot_keyNumPressed();
 
     void on_b_return_clicked();
@@ -54,6 +65,8 @@ private:
     int flag;
     QSettings mysettings;
     int stop_all_measurement();
+
+    //void connectSignalAndSlot();
 };
 
 #endif // PASSWD_H

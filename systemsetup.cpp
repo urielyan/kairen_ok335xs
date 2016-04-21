@@ -60,7 +60,7 @@ void systemsetup::on_pushButton_2_clicked()
 //  tmppwd = new passwd();
 //  tmppwd->alterpasswd();
   //delete tmppwd;
-  emit show_alterpasswd(DISPLAY_ALTER_PASSWD);
+  emit show_alterpasswd(SETUP_ALTER_PASSWD);
 }
 
 void systemsetup::on_pushButton_clicked()

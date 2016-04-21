@@ -80,7 +80,7 @@ void sampleMeasurement::doing_measurement(){
     //接收数据，若有误则停止测量
     if(change_second < 0){
         sleep(ui->comboBox_time->currentText().toInt()/30);
-        QString recv_data = com::receive(ui->comboBox_time->currentText().toInt()/10 + 3);
+        QString recv_data = Communciation_Com::receive(ui->comboBox_time->currentText().toInt()/10 + 3);
         sleep(1);
         if(recv_data == NULL){
             QSettings communication_err_data("shanghaikairen","communication_error");
@@ -129,7 +129,7 @@ void sampleMeasurement::doing_measurement(){
             all_combox_disabled(false);
             return;
         }
-        recv_data = com::receive();
+        recv_data = Communciation_Com::receive();
     }
     change_second--;
 }
@@ -196,7 +196,7 @@ void sampleMeasurement::on_pushButton_clicked()
         if((work_curve_value.split(";")[0] == NULL) || (work_curve_value.split(";")[1] == NULL)){
             QMessageBox msgbox;
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            msgbox.setText("您不能自动选择“自动选择工作曲线”，工作曲线1没有kb值，请重新选择");
+            msgbox.setText(tr("您不能自动选择“自动选择工作曲线”，工作曲线1没有kb值，请重新选择"));
             msgbox.exec();
             return;
         }
@@ -204,7 +204,7 @@ void sampleMeasurement::on_pushButton_clicked()
         if((work_curve_value.split(";")[0] == NULL) || (work_curve_value.split(";")[1] == NULL)){
             QMessageBox msgbox;
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            msgbox.setText("您不能自动选择“自动选择工作曲线”，工作曲线2没有kb值，请重新选择");
+            msgbox.setText(tr("您不能自动选择“自动选择工作曲线”，工作曲线2没有kb值，请重新选择"));
             msgbox.exec();
             return;
         }
@@ -212,62 +212,21 @@ void sampleMeasurement::on_pushButton_clicked()
         if((work_curve_value.split(";")[0] == NULL) || (work_curve_value.split(";")[1] == NULL)){
             QMessageBox msgbox;
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            msgbox.setText("您不能自动选择“自动选择工作曲线”，工作曲线6没有kb值，请重新选择");
+            msgbox.setText(tr("您不能自动选择“自动选择工作曲线”，工作曲线6没有kb值，请重新选择"));
             msgbox.exec();
             return;
         }
      }
-    //int a = ui->comboBox_time->currentIndex()
     //开始之前停止任何测量,并刷新输入输出缓冲区
      if(on_pushButton_2_clicked() != ALL_RIGHT)return;
-//    tcflush(com::fd,TCIOFLUSH);
-//    if(com::transmit(STOP_ORDER,3) <= 0){
-//        QMessageBox msgbox;
-//        msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-//        msgbox.setText(TRANSMIT_DATA_ERROR);
-//        msgbox.exec();
-//        return;
-//      }
-//    usleep(200);
-//    QString recv_data = com::receive(1);
-//    if(recv_data == NULL){
-//        QMessageBox msgbox;
-//        msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-//        msgbox.setText(TRANSMIT_DATA_ERROR);
-//        msgbox.setInformativeText("recv NULL");
-//        msgbox.exec();
-//        return;
-//    }
-//    if(recv_data[1] == (char)0x31){
-//        ui->widget->change_label_content(REFERENCE_BE_LOCATON);
-//    }else if(recv_data[1] == (char)0x32){
-//        ui->widget->change_label_content(WAIT_BE_LOCATION);
-//    }else if(recv_data[1] == (char)0x33){
-//        measurement_flag = MEASUREMENT_NOTHING;
-//         ui->widget->global_is_sample = REFERENCE_BE_LOCATON;
-//         all_combox_disabled(false);
-//        QMessageBox msgbox;
-//        msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-//        msgbox.setText(MACHINE_MALFUNCTION_TEXT);
-//        msgbox.exec();
-//        return;
-//    }else{
-//        QSettings communication_err_data("shanghaikairen","communication_error");
-//        communication_err_data.setValue("com_err_10",communication_err_data.value("com_err_10").toInt() + 1);
-//        QMessageBox msgbox;
-//        msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-//        msgbox.setText(QString("通信不正常，未开始进行含量测量") + ":" + recv_data + QString::number(measurement_flag));
-//        msgbox.exec();
-//        return;
-//    }
 
     //发送测量信号
     measurement_flag = MEASUREMENT_SAMPLE;
-    tcflush(com::fd,TCIOFLUSH);
+    tcflush(Communciation_Com::fd,TCIOFLUSH);
     long long tmp = 0x03FELL | ((ui->comboBox_time->currentIndex() + 0x31) << 16);
     tmp |= ((ui->comboBox_count->currentIndex() + 0x31) << 24);
     tmp |= 0xffLL << 32;
-    if (com::transmit(tmp,5) <= 0){
+    if (Communciation_Com::transmit(tmp,5) <= 0){
         QMessageBox msgbox;
         msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
         msgbox.setText(TRANSMIT_DATA_ERROR);
@@ -276,7 +235,7 @@ void sampleMeasurement::on_pushButton_clicked()
         return;
     }
     //如果没有收到滑板到位指令，则返回
-    QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+    QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
     if(recv_data == NULL){
         QMessageBox msgbox;
         msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -309,7 +268,7 @@ void sampleMeasurement::on_pushButton_clicked()
         flag = 1;
         timer_measurement->start(1000);
         measurement_flag = MEASUREMENT_SAMPLE;
-        tcflush(com::fd,TCIOFLUSH);
+        tcflush(Communciation_Com::fd,TCIOFLUSH);
         showsm->clear_tablewidget();
         return;
     }else{
@@ -341,15 +300,15 @@ int sampleMeasurement::on_pushButton_2_clicked()
     timer_measurement->stop();
     measurement_flag = MEASUREMENT_NOTHING;
     ui->widget->change_label_content(REFERENCE_BE_LOCATON);
-    tcflush(com::fd,TCIOFLUSH);
-    if(com::transmit(STOP_ORDER,3) <= 0){
+    tcflush(Communciation_Com::fd,TCIOFLUSH);
+    if(Communciation_Com::transmit(STOP_ORDER,3) <= 0){
         QMessageBox msgbox;
         msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
         msgbox.setText(TRANSMIT_DATA_ERROR);
         msgbox.exec();
         return ERRNO_COMMUNICATION_1;
       }
-    QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+    QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
     if(recv_data == NULL){
         QSettings communication_err_data("shanghaikairen","communication_error");
         communication_err_data.setValue("com_err_10",communication_err_data.value("com_err_10").toInt() + 1);
@@ -396,10 +355,6 @@ void sampleMeasurement::on_b_input_serial_clicked()
 void sampleMeasurement::printer_result(){
 
   int enter = 0x0A;
-  int date  = 0xDAC6D5C8;
-  int year = 0xEAC4;
-  int month = 0xC2D4;
-  int day  = 0xD5C8;
   int second_tr = 0xEBC3;
   int repeat_count = 0xCEB4;
 

@@ -12,9 +12,6 @@
 
 extern int measurement_flag;
 
-static QString tmppasswd("");
-static QString tmplineedit("");
-
 passwd::passwd(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::passwd)
@@ -30,7 +27,7 @@ passwd::passwd(QWidget *parent) :
     if (!mysettings.contains("passwd")){
         mysettings.setValue("passwd",111111);
     }
-    ui->lineEdit->setText(tmplineedit);
+    ui->lineEdit->setText("");
 
     //使系统设定里的信号触发这里的信号从而触发自动测量的停止槽函数
     connect(ss,SIGNAL(transmit_stop_auto_count()),this,SIGNAL(transmit_stop_auto_count()));
@@ -58,6 +55,11 @@ passwd::passwd(QWidget *parent) :
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     ui->label_title->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
+
+    ui->b_clear->setText(tr("清除"));
+    connect(ui->b_clear, SIGNAL(clicked(bool)),this,SLOT(slotClearClicked()));
+    ui->b_backSpace->setText(tr("退格"));
+    connect(ui->b_backSpace, SIGNAL(clicked(bool)),this,SLOT(slotBackSpaceClicked()));
 }
 
 passwd::~passwd()
@@ -67,63 +69,53 @@ passwd::~passwd()
     delete ui;
 }
 
-void passwd::slot_keyNumPressed(){
+void passwd::slot_keyNumPressed()
+{
     QString tmpstr=sender()->objectName();
     tmpstr.remove("b_");
-    tmppasswd += tmpstr;
+    ui->lineEdit->setText(ui->lineEdit->text() + tmpstr);
 
     if(flag == SETUP_COUNT_VOLTAGE)
     {
-        if(tmppasswd.toInt() > 700){
-             tmppasswd.chop(1);
+        if(ui->lineEdit->text().toInt() > enumMaxCountVoltage){
+             ui->lineEdit->setText(ui->lineEdit->text().left(ui->lineEdit->text().size() - 1));
           }
-        ui->lineEdit->setText(tmppasswd);
         return;
     }
     if(flag == SETUP_LIGHT_VOLTAGE)
     {
-        if(tmppasswd.toInt() > 15000){
-             tmppasswd.chop(1);
+        if(ui->lineEdit->text().toInt() > enumMaxLightVoltage){
+            ui->lineEdit->setText(ui->lineEdit->text().left(ui->lineEdit->text().size() - 1));
           }
-        ui->lineEdit->setText(tmppasswd);
         return;
     }
     if(flag == SETUP_LIGHT_ELECTRICITY)
     {
-        if(tmppasswd.toInt() > 1000){
-             tmppasswd.chop(1);
+        if(ui->lineEdit->text().toInt() > enumMaxLightCurrent){
+            ui->lineEdit->setText(ui->lineEdit->text().left(ui->lineEdit->text().size() - 1));
           }
-        ui->lineEdit->setText(tmppasswd);
         return;
     }
-    if(flag == DISPLAY_ALTER_PASSWD){
-        if(tmppasswd.size() > 6){
-            tmppasswd.chop(1);
+    if(flag == SETUP_ALTER_PASSWD){
+        if(ui->lineEdit->text().size() > 6){
+            ui->lineEdit->setText(ui->lineEdit->text().left(ui->lineEdit->text().size() - 1));
         }
-        ui->lineEdit->setText(tmppasswd);
         return;
     }
 
-    tmplineedit += "*";
-    ui->lineEdit->setText(tmplineedit);
-    if(tmppasswd.size() >= 6){
-        //qDebug() << mysettings.value("passwd").toInt();
-        if(tmppasswd.compare(mysettings.value("passwd").toString()) == 0){
+    if(ui->lineEdit->text().size() >= 6){
+        qDebug() << mysettings.value("passwd").toInt();
+        if(ui->lineEdit->text().compare(mysettings.value("passwd").toString()) == 0){
             ss->showFullScreen();
-            tmppasswd.clear();
-            tmplineedit.clear();
             ui->lineEdit->clear();
             this->close();
-        }else if(!tmppasswd.compare("666666")){
+        }else if(!ui->lineEdit->text().compare("666666")){
             //进入管理员菜单
-            tmppasswd.clear();
-            tmplineedit.clear();
             ui->lineEdit->clear();
             hs->showFullScreen();
             this->close();
         }else{
-            tmppasswd.clear();
-            tmplineedit.clear();
+            ui->lineEdit->text().clear();
             ui->lineEdit->clear();
             QMessageBox msgbox;
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -155,14 +147,12 @@ void passwd::alterpasswd(){
 
     //alterpasswd_show(DISPLAY_ALTER_PASSWD,"修改密码","请输入新密码:");
     ui->widget_2->hide();
-    flag = DISPLAY_ALTER_PASSWD;
+    flag = SETUP_ALTER_PASSWD;
     this->showFullScreen();
 }
 
 void passwd::on_b_return_clicked()
 {
-    tmppasswd = "";
-    tmplineedit = "";
     ui->lineEdit->setText("");
     ui->label_unit->setText("");
     flag = 0;
@@ -184,10 +174,10 @@ void passwd::on_b_ok_clicked()
         }
         QString line_data = ui->lineEdit->text().toLocal8Bit();
         if(flag == SETUP_COUNT_VOLTAGE){
-            if(line_data.toInt() < COUNT_VOLTAGE_MIN){
+            if(line_data.toInt() < enumMinCountVoltage){
                 QMessageBox msgbox;
                 msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-                msgbox.setText(QString("设定计数管高压的电压范围在%1-%2V").arg(COUNT_VOLTAGE_MIN).arg(COUNT_VOLTAGE_MAX));
+                msgbox.setText(QString("设定计数管高压的电压范围在%1-%2V").arg(enumMinCountVoltage).arg(enumMaxCountVoltage));
                 msgbox.exec();
                 return;
               }
@@ -206,17 +196,20 @@ void passwd::on_b_ok_clicked()
         transmit_data = (transmit_data << 8) | flag;
         transmit_data = (transmit_data << 8) | 0xfe;
 
-        stop_all_measurement();
+        if(stop_all_measurement() != ALL_RIGHT)
+          {
+            return;
+          }
 
-        tcflush(com::fd,TCIOFLUSH);
-        if(com::transmit(transmit_data,7) <= 0){
+        tcflush(Communciation_Com::fd,TCIOFLUSH);
+        if(Communciation_Com::transmit(transmit_data,7) <= 0){
             QMessageBox msgbox;
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            msgbox.setText("transmit err!");
+            msgbox.setText(tr("transmit err!"));
             msgbox.exec();
             return;
           }
-        QString recv_data = com::receive(SETUP_WAIT_TIME);
+        QString recv_data = Communciation_Com::receive(SETUP_WAIT_TIME);
         if(recv_data == NULL){
             QSettings communication_err_data("shanghaikairen","communication_error");
             communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
@@ -224,7 +217,7 @@ void passwd::on_b_ok_clicked()
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
             msgbox.setText("设定不成功");
             msgbox.exec();
-        }else if(recv_data[1] == (char)0x31){
+        }else if(recv_data[1] == (char)0x31 || recv_data[1] == (char)0x32){
             QSettings communication_err_data("shanghaikairen","communication_error");
             communication_err_data.setValue(QString("change_count_voltage_")+
                                             communication_err_data.value("change_count_voltage_count").toString(),
@@ -232,21 +225,19 @@ void passwd::on_b_ok_clicked()
                                             + ";" + line_data);
             communication_err_data.setValue("change_count_voltage_count",
                                             communication_err_data.value("change_count_voltage_count").toInt()+1);
-            mysettings.setValue("count_voltage",line_data.toInt());
-            QMessageBox msgbox;
-            msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            msgbox.setText("设定成功");
-            msgbox.exec();
-            countingMeasurement::clear_count_5_data();
-        }else if(recv_data[1] == (char)0x32){
-            QSettings communication_err_data("shanghaikairen","communication_error");
-            communication_err_data.setValue(QString("change_count_voltage_")+
-                                            communication_err_data.value("change_count_voltage_count").toString(),
-                                            QDateTime::currentDateTime().toString()+ ";" + communication_err_data.value("count_voltage").toString()
-                                            + ";" + line_data);
-            communication_err_data.setValue("change_count_voltage_count",
-                                            communication_err_data.value("change_count_voltage_count").toInt()+1);
-            mysettings.setValue("count_voltage",line_data.toInt());
+            switch (flag) {
+              case SETUP_COUNT_VOLTAGE:
+                mysettings.setValue("count_voltage",line_data.toInt());
+                break;
+              case SETUP_LIGHT_VOLTAGE:
+                mysettings.setValue("light_voltage",line_data.toInt());
+                break;
+              case SETUP_LIGHT_ELECTRICITY:
+                mysettings.setValue("light_current",line_data.toInt());
+                break;
+              default:
+                break;
+              }
             QMessageBox msgbox;
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
             msgbox.setText("设定成功");
@@ -267,20 +258,22 @@ void passwd::on_b_ok_clicked()
             msgbox.exec();
           }
         on_b_return_clicked();
-    }
-    if(DISPLAY_ALTER_PASSWD != flag)return;
-    if(tmppasswd.size() != 6)return;
+    }else if(SETUP_ALTER_PASSWD == flag)
+      {
+        //下面是修改密码的代码
+        if(ui->lineEdit->text().size() != 6)
+          return;
 
-    //下面是修改密码的代码
-    mysettings.setValue("passwd",tmppasswd);
-    qDebug() << mysettings.value("passwd").toString();
+        mysettings.setValue("passwd",ui->lineEdit->text());
+        qDebug() << mysettings.value("passwd").toString();
 
-    QMessageBox msgbox;
-    msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    msgbox.setText("修改密码成功，请牢记此密码" + tmppasswd);
-    msgbox.exec();
+        QMessageBox msgbox;
+        msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+        msgbox.setText(tr("修改密码成功，请牢记此密码") + ui->lineEdit->text());
+        msgbox.exec();
 
-    on_b_return_clicked();
+        on_b_return_clicked();
+      }
 }
 
 void passwd::alterpasswd_show(int index){
@@ -288,7 +281,7 @@ void passwd::alterpasswd_show(int index){
     if(index == SETUP_COUNT_VOLTAGE){
         ui->label_title->setText(tr("设定计数管高压"));
 
-        ui->label_caution->setText(QString(tr("请输入电压(电压范围在%1-%2V)")).arg(COUNT_VOLTAGE_MIN).arg(COUNT_VOLTAGE_MAX));
+        ui->label_caution->setText(QString(tr("请输入电压(电压范围在%1-%2V)")).arg(enumMinCountVoltage).arg(enumMaxCountVoltage));
         ui->label_unit->setText("V");
         ui->lineEdit->setText(mysettings.value("count_voltage").toString());
     }else if(index == SETUP_LIGHT_VOLTAGE){
@@ -300,8 +293,8 @@ void passwd::alterpasswd_show(int index){
         ui->label_title->setText(tr("设定光管电流"));
         ui->label_caution->setText(tr("请输入电流"));
         ui->label_unit->setText("μA");
-        ui->lineEdit->setText(mysettings.value("light_electricty").toString());
-    }else if(index == DISPLAY_ALTER_PASSWD){
+        ui->lineEdit->setText(mysettings.value("light_current").toString());
+    }else if(index == SETUP_ALTER_PASSWD){
         ui->label_title->setText(tr("修改密码"));
         ui->label_caution->setText(tr("请输入新密码:"));
         ui->label_unit->setText("");
@@ -313,7 +306,7 @@ void passwd::alterpasswd_show(int index){
 }
 
 int passwd::set_count_voltage(int count_voltage){
-  if(count_voltage > COUNT_VOLTAGE_MAX || count_voltage < COUNT_VOLTAGE_MIN){
+  if(count_voltage > enumMaxCountVoltage || count_voltage < enumMinCountVoltage){
       return 1;
     }
   ui->lineEdit->setText(QString::number(count_voltage));
@@ -322,19 +315,32 @@ int passwd::set_count_voltage(int count_voltage){
   return ALL_RIGHT;
 }
 
+void passwd::slotBackSpaceClicked()
+{
+  if(ui->lineEdit->text().size() > 0)
+    {
+      ui->lineEdit->setText(ui->lineEdit->text().left(ui->lineEdit->text().size() - 1));
+  }
+}
+
+void passwd::slotClearClicked()
+{
+  ui->lineEdit->setText("");
+}
+
 int passwd::stop_all_measurement(){
   if(measurement_flag != MEASUREMENT_NOTHING){
       emit transmit_stop_auto_count();
     }
-  tcflush(com::fd,TCIOFLUSH);
-  if (com::transmit(STOP_ORDER,3) <= 0){
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
+  if (Communciation_Com::transmit(STOP_ORDER,3) <= 0){
       QMessageBox msgbox;
       msgbox.setFont(QFont("wenquanyi", FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
       msgbox.exec();
       return ERRNO_COMMUNICATION_1;
     }
-  QString recv_data = com::receive(1);
+  QString recv_data = Communciation_Com::receive(1);
   if(recv_data == NULL){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));

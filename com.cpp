@@ -2,7 +2,7 @@
 #include <QDebug>
 #include "issample.h"
 
-com::com(QObject *parent) :
+Communciation_Com::Communciation_Com(QObject *parent) :
     QObject(parent)
 {
    // fd = open( "/dev/ttyUSB0", O_RDWR|O_NOCTTY|O_NDELAY);
@@ -36,20 +36,27 @@ com::com(QObject *parent) :
     }
 }
 
-com::~com(){
-    close(fd);
+Communciation_Com::~Communciation_Com(){
+  close(fd);
 }
-int com::fd;
-struct termios com::options;
 
-int com::transmit(char c){
+Communciation_Com *Communciation_Com::instance()
+{
+  static Communciation_Com Instance;
+  return &Instance;
+}
+
+int Communciation_Com::fd;
+struct termios Communciation_Com::options;
+
+int Communciation_Com::transmit(char c){
   if(write(fd,&c,1) <= 0){
       printf("write err\n");
       return -1;
     }
   return 1;
 }
-int com::transmit(void *data,int size){
+int Communciation_Com::transmit(void *data,int size){
     if(sizeof(data) <= 0) return 0;
     int ret  = write(fd,data,size);
 
@@ -60,7 +67,7 @@ int com::transmit(void *data,int size){
     return ret;
 }
 
-int com::transmit(long long data, int size){
+int Communciation_Com::transmit(long long data, int size){
     if (0 == data || size <= 0){
         return 0;
     }
@@ -72,7 +79,7 @@ int com::transmit(long long data, int size){
     }
     return ret;
 }
-int com::transmit(unsigned long data, int size){
+int Communciation_Com::transmit(unsigned long data, int size){
     if (0 == data || size <= 0){
         return 0;
     }
@@ -84,7 +91,7 @@ int com::transmit(unsigned long data, int size){
     }
     return ret;
 }
-int com::transmit(int data, int size){
+int Communciation_Com::transmit(int data, int size){
     if (0 == data || size <= 0){
         return 0;
     }
@@ -98,7 +105,7 @@ int com::transmit(int data, int size){
 }
 
 
-QString com::receive(){
+QString Communciation_Com::receive(){
     fd_set fds;
     FD_ZERO(&fds);
     FD_SET(fd,&fds);
@@ -137,7 +144,7 @@ QString com::receive(){
     QString recv_data(buf);
     return recv_data;
 }
-QString com::receive(int wait_time){
+QString Communciation_Com::receive(int wait_time){
     fd_set fds;
     FD_ZERO(&fds);
     FD_SET(fd,&fds);

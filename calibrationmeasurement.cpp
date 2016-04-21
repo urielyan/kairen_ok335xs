@@ -40,7 +40,7 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
   timer =  new QTimer(this);
   connect(timer,SIGNAL(timeout()),this,SLOT(doing_measurement()));
 
-  calibrate_com = new com();
+  calibrate_com =  Communciation_Com::instance();
 
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
   QList<QLabel *> labellist = this->findChildren<QLabel *>();
@@ -79,7 +79,7 @@ void calibrationmeasurement::doing_measurement(){
   ui->label_second->setText(tmpstr_second);
 
   if(second == 0){
-      QString recv_data = com::receive(5);
+      QString recv_data = Communciation_Com::receive(5);
       //ui->label->setText(recv_data.toLocal8Bit().toHex());//test
       if(recv_data == NULL){
           QSettings communication_err_data("shanghaikairen","communication_error");
@@ -114,9 +114,9 @@ void calibrationmeasurement::doing_measurement(){
 
           //等待滑板改变
           //sleep(SLIDING_PLATE_CHANGE_TIME - 3);
-          recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+          recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
           if(recv_data == NULL){
-              recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+              recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
               if(recv_data == NULL){
                   QSettings communication_err_data("shanghaikairen","communication_error");
                   communication_err_data.setValue("com_err_4",communication_err_data.value("com_err_4").toInt() + 1);
@@ -229,9 +229,9 @@ void calibrationmeasurement::on_pushButton_clicked()
   if(on_pushButton_2_clicked() != ALL_RIGHT)return;
 
   //开始标定测量
-  tcflush(com::fd,TCIOFLUSH);
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
   usleep(100);
-  if(com::transmit(ACTIVATING_CALIBRATE,3) <= 0){
+  if(Communciation_Com::transmit(ACTIVATING_CALIBRATE,3) <= 0){
       measurement_flag = MEASUREMENT_NOTHING;
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -240,7 +240,7 @@ void calibrationmeasurement::on_pushButton_clicked()
       disable_button(false);
       return;
     }
-  QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+  QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   if(recv_data == NULL){
       QSettings communication_err_data("shanghaikairen","communication_error");
       communication_err_data.setValue("com_err_4",communication_err_data.value("com_err_4").toInt() + 1);
@@ -271,7 +271,7 @@ void calibrationmeasurement::on_pushButton_clicked()
       ui->label_issamlpe->setText(WAIT_BE_LOCATION_TEXT);
       timer->start(1000);
       measurement_flag = MEASUREMENT_CALIBRATE;
-      tcflush(com::fd,TCIOFLUSH);
+      tcflush(Communciation_Com::fd,TCIOFLUSH);
       count++;
       //started
       return;
@@ -307,8 +307,8 @@ int  calibrationmeasurement::on_pushButton_2_clicked()
   timer->stop();
   measurement_flag = MEASUREMENT_NOTHING;
   disable_button(false);
-  tcflush(com::fd,TCIOFLUSH);
-  if(com::transmit(STOP_ORDER,3) <0){
+  tcflush(Communciation_Com::fd,TCIOFLUSH);
+  if(Communciation_Com::transmit(STOP_ORDER,3) <0){
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(TRANSMIT_DATA_ERROR);
@@ -316,7 +316,7 @@ int  calibrationmeasurement::on_pushButton_2_clicked()
       return ERRNO_COMMUNICATION_1;
     }
   usleep(100);
-  QString recv_data = com::receive(SLIDING_PLATE_CHANGE_TIME);
+  QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   if(recv_data == NULL){
       QSettings communication_err_data("shanghaikairen","communication_error");
       communication_err_data.setValue("com_err_10",communication_err_data.value("com_err_10").toInt() + 1);
