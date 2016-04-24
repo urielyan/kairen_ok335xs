@@ -13,6 +13,8 @@
 #include <termios.h>
 #include <unistd.h>
 
+#define SEGMENT_LENGTH        30
+
 class printer : public QObject
 {
   Q_OBJECT
@@ -22,6 +24,8 @@ public:
   ~printer();
 
   static void printCurrentDateTime();
+  static void printStart();
+  static void printEnd();
 
   static int fd;
   static struct termios options;
@@ -30,6 +34,10 @@ public:
   static int transmit(long long ,int);
   static int transmit(unsigned long ,int);
   static int transmit(int ,int);
+
+private:
+
+  //void initData();
 };
 
 #endif // PRINTER_H

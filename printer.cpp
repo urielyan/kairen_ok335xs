@@ -6,6 +6,8 @@
 #include "printer.h"
 #include "global.h"
 
+static int enter = 0x0A;
+
 printer* printer::instance()
 {
   static printer Instance;
@@ -48,6 +50,8 @@ printer::printer(QObject *parent) :
       return;
     }
 #endif
+
+  //initData();
 }
 int printer::fd;
 struct termios printer::options;
@@ -58,8 +62,6 @@ printer::~printer(){
 
 void printer::printCurrentDateTime()
 {
-  int enter = 0x0A;
-
   int date  = 0xDAC6D5C8;
   int year = 0xEAC4;
   int month = 0xC2D4;
@@ -97,7 +99,7 @@ void printer::printCurrentDateTime()
   QString stringHour = QString::number(QTime::currentTime().hour());
   if(stringHour.size() == 1)
     {
-      stringHour = "0" + stringMinute;
+      stringHour = "0" + stringHour;
     }
   printer::transmit((void *)stringHour.toLocal8Bit().data(),2);
 
@@ -109,6 +111,21 @@ void printer::printCurrentDateTime()
       stringMinute = "0" + stringMinute;
     }
   printer::transmit((void *)stringMinute.toLocal8Bit().data(),2);
+  printer ::transmit(enter,1);
+}
+
+void printer::printStart()
+{
+  printer ::transmit(enter,1);
+  printer::transmit((void *)"========================================",SEGMENT_LENGTH);
+  printer ::transmit(enter,1);
+}
+
+void printer::printEnd()
+{
+  printer::transmit((void *)"========================================",SEGMENT_LENGTH);
+  printer ::transmit(enter,1);
+  printer::transmit((void *)"   ",3);
   printer ::transmit(enter,1);
 }
 
@@ -142,6 +159,7 @@ int printer::transmit(long long data, int size){
     }
   return ret;
 }
+
 int printer::transmit(unsigned long data, int size){
   if (0 == data || size <= 0){
       return 0;
@@ -154,6 +172,7 @@ int printer::transmit(unsigned long data, int size){
     }
   return ret;
 }
+
 int printer::transmit(int data, int size){
   if (0 == data || size <= 0){
       return 0;

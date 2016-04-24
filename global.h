@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QDialog>
 #include <QMessageBox>
+#include <QApplication>
+#include  <QDesktopWidget>
 
 #define SLIDING_PLATE_CHANGE_TIME   10
 #define REFERENCE_BE_LOCATON        1
@@ -39,8 +41,6 @@
 #define SUCCESS_COUNT           2222
 #define DEFEAT_COUNT              2000
 
-#define SEGMENT_LENGTH        30
-
 #define COUNT_MEASUREMENT_MOST_STORAGE 10000
 
 #define COUNT_MEASUREMENT_DATA_COUNT 7
@@ -52,6 +52,10 @@
 #define ERRNO_SILIDING_POSITION   2
 #define ERRNO_DATA_ILLEGAL             3
 #define ALL_RIGHT 0
+
+#define DESKTOP_WIDTH   QApplication::desktop()->width()
+#define DESKTOP_HEIGHT QApplication::desktop()->height()
+
 //#define WIDGET_FONT_SIZE 30;
 //#define DEBUG
 

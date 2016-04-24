@@ -367,8 +367,7 @@ void sampleMeasurement::printer_result(){
 
 //头：测量，参考样
 #if 1
-  printer::transmit((void *)"================================================",SEGMENT_LENGTH);
-  printer ::transmit(enter,1);
+  printer::instance()->printStart();
 
   printer::transmit(samplemeasurement,8);
   printer ::transmit(enter,1);

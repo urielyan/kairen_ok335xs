@@ -12,6 +12,9 @@ showcalibratemeasurement::showcalibratemeasurement(QWidget *parent) :
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
+
+    ui->pushButton->setFixedHeight(FONT_SIZE * 2);
+    ui->pushButton->setFixedWidth(FONT_SIZE * 4);
 }
 
 showcalibratemeasurement::~showcalibratemeasurement()

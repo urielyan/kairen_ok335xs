@@ -8,6 +8,8 @@
 #include <countingmeasurement.h>
 #include <math.h>
 #include <QScrollBar>
+#include <QSqlError>
+#include <QSqlDriver>
 
 //extern QSettings mysettings;
 
@@ -24,37 +26,8 @@ showsamplemeasurement::showsamplemeasurement(QWidget *parent) :
     ui->tableWidget->setColumnWidth(0,this->width()/2);
     ui->tableWidget->setColumnWidth(1,this->width()/2);
 
-#if 0
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("/sdcard/samplemeasurement.db");
-    //db.setConnectOptions("QSQLITE_OPEN_READONLY=0");
-    bool ok = db.open();
-    if(ok == false){
-        //QMessageBox::warning(w,"db err","database open err!");
-        QMessageBox msgbox;
-        msgbox.setText("不能打开含量测量的数据");
-        msgbox.exec();
-    }
-
-    QSqlQuery query;
-    ok = query.exec("SELECT * FROM sample_data;");
-    if(ok == false){
-        ok = query.exec("create table sample_data(people_id,sample_serial,date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient);");
-        if(ok == false){
-            QMessageBox msgbox;
-            msgbox.setText("不能打开含量测量的数据.");
-            msgbox.exec();
-            return;
-        }
-        QMessageBox msgbox;
-        msgbox.setText("创建了含量测量的数据库!");
-        msgbox.exec();
-    }
-#endif
-
     QScrollBar *verticalbar;
     verticalbar = new QScrollBar();
-    //verticalbar->setFixedWidth(this->width()/2);
     verticalbar->setStyleSheet("width:30px");
     ui->tableWidget->setVerticalScrollBar(verticalbar);
 
@@ -220,7 +193,7 @@ void showsamplemeasurement::show_calculate_storage(QString data){
     //存贮数据到数据库中：
     bool ok;
     QStringList data_list = data.split(";");
-    db.transaction();
+    //db.transaction();
 #if 1
     QSqlQuery query;
     query.prepare("INSERT INTO sample_data (people_id ,sample_serial, date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient) "
@@ -239,18 +212,18 @@ void showsamplemeasurement::show_calculate_storage(QString data){
     if(ok == false){
         QMessageBox box;
         box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-        box.setText("数据未存入数据库中！");
+        box.setText(tr("数据未存入数据库中！"));
         box.exec();
     }
     query.finish();
 #endif
-    ok = db.commit();
-    if(ok == false ){
-        QMessageBox box;
-        box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-        box.setText("transaction err!");
-        box.exec();
-    }
+//    ok = db.commit();
+//    if(ok == false ){
+//        QMessageBox box;
+//        box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+//        box.setText(db.lastError().text() + QString::number(db.driver()->hasFeature(QSqlDriver::Transactions)));
+//        box.exec();
+//    }
     printer_result();
     this->showFullScreen();
 }

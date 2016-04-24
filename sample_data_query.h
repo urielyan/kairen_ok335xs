@@ -38,7 +38,7 @@ private:
     Ui::sample_data_query *ui;
     QSqlTableModel *model;
     input_person_sampleSerial *input_serial;
-    void init_tableview();
+    void initTableview();
 };
 
 #endif // SAMPLE_DATA_QUERY_H

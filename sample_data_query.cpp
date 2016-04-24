@@ -25,37 +25,6 @@ sample_data_query::sample_data_query(QWidget *parent) :
   model = new QSqlTableModel();
   input_serial = new input_person_sampleSerial();
 
-#if 1
-  QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-  db.setDatabaseName("/samplemeasurement.db");
-  //db.setConnectOptions("QSQLITE_OPEN_READONLY=0");
-  bool ok = db.open();
-  if(ok == false){
-      //QMessageBox::warning(w,"db err","database open err!");
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText("不能打开含量测量的数据");
-      msgbox.exec();
-    }
-  //printf(",,,%s\n",__FUNCTION__);
-  QSqlQuery query;
-  ok = query.exec("SELECT * FROM sample_data;");
-  if(ok == false){
-      ok = query.exec("create table sample_data(people_id,sample_serial,date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient);");
-      if(ok == false){
-          QMessageBox msgbox;
-          msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-          msgbox.setText("不能打开含量测量的数据.");
-          msgbox.exec();
-          return;
-        }
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText("创建了含量测量的数据库!");
-      msgbox.exec();
-    }
-#endif
-
   #if 1
   QScrollBar *verticalbar;
   verticalbar = new QScrollBar();
@@ -89,7 +58,7 @@ sample_data_query::~sample_data_query()
   delete model;
   delete input_serial;
 }
-void sample_data_query::init_tableview(){
+void sample_data_query::initTableview(){
   delete model;
   //ui->tableView->setColumnWidth(2,1000);
   model = new QSqlTableModel();
@@ -122,7 +91,7 @@ void sample_data_query::init_tableview(){
 
 void sample_data_query::show_and_refresh(){
 
-  init_tableview();
+  initTableview();
   model->select();
 
   ui->tableView->setModel(model);
@@ -138,7 +107,7 @@ void sample_data_query::show_and_refresh(){
 void sample_data_query::wait_input_result(QString recv_data){
   if(recv_data == NULL)return;
 
-  init_tableview();
+  initTableview();
   if(query_flag == QUERY_BY_PEOPLE){
       model->setFilter("people_id=" + QString("\"") + recv_data + "\"");
       //model->setFilter("people_id=" + QString::number(recv_data.toInt()));
@@ -160,7 +129,7 @@ void sample_data_query::on_pushButton_clicked()
 
 void sample_data_query::on_b_datetime_clicked()
 {
-  init_tableview();
+  initTableview();
   model->setSort(2,Qt::AscendingOrder);
   model->select();
   ui->tableView->setModel(model);
@@ -168,7 +137,7 @@ void sample_data_query::on_b_datetime_clicked()
 
 void sample_data_query::on_b_datetime_disorder_clicked()
 {
-  init_tableview();
+  initTableview();
   model->setSort(2,Qt::DescendingOrder);
   model->select();
   ui->tableView->setModel(model);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>629</width>
-    <height>306</height>
+    <width>665</width>
+    <height>435</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,32 +31,67 @@
          </attribute>
          <row>
           <property name="text">
-           <string/>
+           <string>New Row</string>
           </property>
          </row>
          <row>
           <property name="text">
-           <string/>
+           <string>New Row</string>
           </property>
          </row>
          <row>
           <property name="text">
-           <string/>
+           <string>New Row</string>
           </property>
          </row>
          <row>
           <property name="text">
-           <string/>
+           <string>New Row</string>
           </property>
          </row>
          <row>
           <property name="text">
-           <string/>
+           <string>New Row</string>
           </property>
          </row>
          <row>
           <property name="text">
-           <string/>
+           <string>New Row</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>New Row</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>New Row</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>New Row</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>New Row</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>New Row</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>New Row</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>New Row</string>
           </property>
          </row>
          <column>
@@ -79,186 +114,6 @@
            <string/>
           </property>
          </column>
-         <item row="0" column="0">
-          <property name="text">
-           <string>1#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="0" column="2">
-          <property name="text">
-           <string>7#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <italic>false</italic>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="background">
-           <brush brushstyle="NoBrush">
-            <color alpha="255">
-             <red>0</red>
-             <green>0</green>
-             <blue>0</blue>
-            </color>
-           </brush>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="1" column="0">
-          <property name="text">
-           <string>2#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <italic>false</italic>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="1" column="2">
-          <property name="text">
-           <string>8#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <italic>false</italic>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="2" column="0">
-          <property name="text">
-           <string>3#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="2" column="2">
-          <property name="text">
-           <string>9#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="3" column="0">
-          <property name="text">
-           <string>4#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="3" column="2">
-          <property name="text">
-           <string>10#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="4" column="0">
-          <property name="text">
-           <string>5#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="4" column="2">
-          <property name="text">
-           <string>11#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="5" column="0">
-          <property name="text">
-           <string>6#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
-         <item row="5" column="2">
-          <property name="text">
-           <string>12#</string>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsDragEnabled|ItemIsUserCheckable</set>
-          </property>
-         </item>
         </widget>
        </item>
        <item>
@@ -465,19 +320,6 @@
        </item>
       </layout>
      </item>
-     <item row="1" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="issample" name="widget" native="true"/>
-       </item>
-       <item>
-        <widget class="ispreheat" name="widget_2" native="true"/>
-       </item>
-       <item>
-        <widget class="date_widget" name="widget_3" native="true"/>
-       </item>
-      </layout>
-     </item>
     </layout>
    </item>
    <item row="0" column="0">
@@ -492,26 +334,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>date_widget</class>
-   <extends>QWidget</extends>
-   <header>date_widget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>issample</class>
-   <extends>QWidget</extends>
-   <header>issample.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ispreheat</class>
-   <extends>QWidget</extends>
-   <header>ispreheat.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

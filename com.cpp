@@ -37,7 +37,7 @@ Communciation_Com::Communciation_Com(QObject *parent) :
 }
 
 Communciation_Com::~Communciation_Com(){
-  close(fd);
+  //close(fd);
 }
 
 Communciation_Com *Communciation_Com::instance()

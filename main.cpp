@@ -7,6 +7,10 @@
  *      calibratemeasurement_count_record:最近的标定结果记录，是一个轮巡，从1到10循环。保存的数是下一次计算kb值的所要记录在哪里的标记。
  *      calibration_results_in_data_n：一个标定结果所需要的所有数据，有(S%/reference/calibrate;S%/reference/calibrate...)
  *              共count number组数据，count number对应于下面的calibration_results_in_result_n那组数据中的count number
+ *              for example (6 group):
+ *                ("0.0021/1788/13012", "0.0049/1812/13011", "0.0120/1879/13008", "0.0207/1947/13006",
+ *                "0.0550/2225/13005", "0.1006/2600/12990", "0.2522/3839/13035", "0.5043/5822/13041",
+ *                "1.0027/9612/13046", "2.5016/19881/13036", "4.9992/33385/13006")
  *      calibration_results_in_result_n：标定的计算kb值的结果，包括（datetime;work curve;kbr(a0.a1,12);count number）
  *      passwd：密码
  *      s_count_data_n：记录标定时标定样和参考样的数据(标定样/参考样)
@@ -30,6 +34,8 @@
 #include "buzzer.h"
 
 #include <QApplication>
+#include <QDesktopWidget>
+
 #include <QTextCodec>
 #include<QMessageBox>
 #include <QTimer>
@@ -39,14 +45,14 @@
 #include <QDebug>
 #include <QSettings>
 
+#include <QSqlDatabase>
+#include<QSqlDriver>
 
-void settingsInit()
+void initSettings()
 {
 
   QCoreApplication::setOrganizationName("shanghaikairen");
   QCoreApplication::setApplicationName("analysis");
-
-  QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/home/yange/test/");
 
   QSettings mysettings;
   if(!mysettings.contains("count_voltage")){
@@ -62,22 +68,14 @@ void settingsInit()
     }
 }
 
-void LanguageInit(QApplication &a)
+void initLanguage(QApplication &a)
 {
-
-#ifdef  Q_WS_QPA
-  QMessageBox msgBox;
-  msgBox.setText("The document has been modified.");
-  msgBox.setInformativeText("Do you want to save your changes?");
-  msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-  msgBox.setDefaultButton(QMessageBox::Save);
-  int ret = msgBox.exec();
-#endif
-
 #if 1
+
   QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
   //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
   //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+  //QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/test/");
 #endif
 
 
@@ -108,13 +106,47 @@ void LanguageInit(QApplication &a)
   a.installTranslator(&trans);
 
 }
-
+void initDatabase()
+{
+#if 1
+  QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+  qDebug() << db.driver()->hasFeature(QSqlDriver::Transactions);
+  db.setDatabaseName("/samplemeasurement.db");
+  //db.setConnectOptions("QSQLITE_OPEN_READONLY=0");
+  bool ok = db.open();
+  if(ok == false){
+      //QMessageBox::warning(w,"db err","database open err!");
+      QMessageBox msgbox;
+      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+      msgbox.setText("不能打开含量测量的数据");
+      msgbox.exec();
+    }
+  //printf(",,,%s\n",__FUNCTION__);
+  QSqlQuery query;
+  ok = query.exec("SELECT * FROM sample_data;");
+  if(ok == false){
+      ok = query.exec("create table sample_data(people_id,sample_serial,date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient);");
+      if(ok == false){
+          QMessageBox msgbox;
+          msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+          msgbox.setText("不能打开含量测量的数据.");
+          msgbox.exec();
+          return;
+        }
+      QMessageBox msgbox;
+      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+      msgbox.setText("创建了含量测量的数据库!");
+      msgbox.exec();
+    }
+#endif
+}
 int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
 
-  settingsInit();
-  LanguageInit(a);
+  initSettings();
+  initLanguage(a);
+  initDatabase();
 
   buzzer buz;
   buz.stop_music();

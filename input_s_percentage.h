@@ -8,13 +8,13 @@ namespace Ui {
 class input_S_percentage;
 }
 
-class input_S_percentage : public QWidget
+class WidgetInputSPercentage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit input_S_percentage(QWidget *parent = 0);
-    ~input_S_percentage();
+    explicit WidgetInputSPercentage(QWidget *parent = 0);
+    ~WidgetInputSPercentage();
 
     void clear_all_tablewidget();
     //int judge_is_available();
@@ -28,13 +28,16 @@ private slots:
 
     void on_b_backspace_clicked();
 
-    void on_b_point_clicked();
+    void slotPointClicked();
 
     void on_b_sure_clicked();
 
 private:
     Ui::input_S_percentage *ui;
     QSettings mysettings;
+
+    void initTableWidget();
+    void initSignalSlotConnect();
 };
 
 #endif // INPUT_S_PERCENTAGE_H
