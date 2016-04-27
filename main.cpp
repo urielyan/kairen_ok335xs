@@ -57,7 +57,6 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
 
 #include <QSqlDatabase>
 #include<QSqlDriver>
-
 void initSettings()
 {
   QCoreApplication::setOrganizationName("shanghaikairen");
@@ -154,9 +153,14 @@ void initLanguage(QApplication &a)
 {
 #if 1
   QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-  //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-  //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-  //QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/test/");
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+  qDebug() << "test";
+  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+  QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/test/");
+#endif
+
 #endif
 
 
@@ -187,6 +191,7 @@ void initLanguage(QApplication &a)
   a.installTranslator(&trans);
 
 }
+
 void initDatabase()
 {
 #if 1
@@ -203,7 +208,7 @@ void initDatabase()
       msgbox.exec();
     }
   //printf(",,,%s\n",__FUNCTION__);
-  QSqlQuery query;
+  QSqlQuery query(db);
   ok = query.exec("SELECT * FROM sample_data;");
   if(ok == false){
       ok = query.exec("create table sample_data(people_id,sample_serial,date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient);");
@@ -221,12 +226,16 @@ void initDatabase()
     }
 #endif
 }
+
 int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
 
-  a.setStyleSheet("QPushButton{min-width:100;"
-                  "min-height:60}");
+  a.setStyleSheet(QString("QPushButton{min-width:100;"
+                  "min-height:60;}"
+                  "QLabel{"
+                  "min-height:%1"
+                  "}").arg(FONT_SIZE * 3.5));
 
   initSettings();
   initLanguage(a);
