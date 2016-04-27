@@ -60,9 +60,11 @@ void count_kb_value::on_pushButton_clicked()
   int count_input_s = 0;
   for(int i = 1; i <= calibrationmeasurement::count ; i++){
       QString tmp_str = mysettings.value(QString("calibrate_input_s_%1").arg(i)).toString();
+      qDebug() << tmp_str <<i;
       if(  (!(tmp_str==NULL)) &&(!tmp_str.toDouble() == 0.0)  )
         count_input_s++;
     }
+  qDebug() << count_input_s;
   if(count_input_s <3){
       msgbox.setText("请输入正确的硫含量");
       msgbox.exec();

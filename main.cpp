@@ -3,7 +3,7 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
  *1.此程序数据保存采用QSettings类，数据保存在～/.config/shanghaikairen/下，共有两个文件 ，一个是analysis.conf和count_data.conf
  *  其中analysis.conf中保存的内容有：
  *    标定相关:
- *      calibrate_input_s_n：保存用户输入的标定样硫的数据。
+ *      calibrate_input_s_n：保存用户输入的标定样硫的数据。(1-12)
  *      calibratemeasurement_count：记录正在标定第几组数据。会随着清除标定数据使他变为0，
  *              每次按标定的开始键就会自加，若此次标定不成功就会减一保持原值。
  *      calibratemeasurement_count_record:最近的标定结果记录，是一个轮巡，从1到10循环。保存当计算kb值时的保存数据和结果的编号.例如为5时，下一个记录就是:
@@ -63,7 +63,7 @@ void initSettings()
   QCoreApplication::setApplicationName("analysis");
 
   QSettings mysettings;
-  mysettings.clear();
+  //mysettings.clear();
 
   if(!mysettings.contains("calibratemeasurement_count_record")){
       mysettings.setValue("calibratemeasurement_count_record",1);
