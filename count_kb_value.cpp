@@ -151,7 +151,7 @@ void count_kb_value::printer_result(){
   printer ::transmit(enter,1);
 
   QStringList datalist = mysettings.value(QString("calibration_results_in_data_%1")\
-                                          .arg(ui->comboBox->currentText())).toString().split(",");
+                                          .arg(mysettings.value("calibratemeasurement_count_record").toInt() - 1)).toString().split(";");
   qDebug() << datalist;
   for(int i = 1 ; i <= datalist.size() ; i++){
       QStringList one_data = datalist[i - 1].split("/");
