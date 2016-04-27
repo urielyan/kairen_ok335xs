@@ -10,9 +10,7 @@ samplemeasurementquery::samplemeasurementquery(QWidget *parent) :
     ui(new Ui::samplemeasurementquery)
 {
     ui->setupUi(this);
-    if(!mysettings.contains("sample_count")){
-        mysettings.setValue("sample_count",0);
-    }
+
     current_count = mysettings.value("sample_count").toInt();
     refresh_widget(current_count);
 

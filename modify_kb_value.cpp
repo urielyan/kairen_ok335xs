@@ -18,14 +18,7 @@ modify_kb_value::modify_kb_value(QWidget *parent) :
   ui->label_a2->setText("");
   ui->lineEdit_a2->hide();
   ui->lineEdit_ka0->setFocus();
-  if(!mysettings.contains("work_curve_1") || !mysettings.contains("work_curve_9")){
-      for(int i = 1;i <= 5 ; i++){
-          mysettings.setValue(QString("work_curve_%1").arg(i),";;");
-        }
-      for(int i = 6 ; i <= 9 ; i++){
-          mysettings.setValue(QString("work_curve_%1").arg(i),";;");
-        }
-    }
+
   QStringList tmplist = mysettings.value(QString("work_curve_1"))\
       .toString().split(";");
   if(3 == tmplist.size()){

@@ -29,10 +29,6 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
   ui->label_issamlpe->hide();
   ui->label_2->setText(QString("测量时间2×%1秒").arg(CALIBRATE_TIME));
 
-  //judge calibratemeasurement_count  whether is exit;if not exit create it.finally assign count variable.
-  if(!mysettings.contains("calibratemeasurement_count")){
-      mysettings.setValue("calibratemeasurement_count",0);
-    }
   count = mysettings.value("calibratemeasurement_count").toInt();
 
   showcalibratemeasure = new showcalibratemeasurement();

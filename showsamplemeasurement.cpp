@@ -11,7 +11,6 @@
 #include <QSqlError>
 #include <QSqlDriver>
 
-//extern QSettings mysettings;
 
 showsamplemeasurement::showsamplemeasurement(QWidget *parent) :
     QWidget(parent),

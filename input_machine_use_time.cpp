@@ -2,7 +2,6 @@
 #include "ui_input_machine_use_time.h"
 #include "global.h"
 
-//extern QSettings mysettings;
 
 input_machine_use_time::input_machine_use_time(QWidget *parent) :
   QWidget(parent),

@@ -23,10 +23,7 @@ passwd::passwd(QWidget *parent) :
 
 //    //开始一个含量测量和移动滑板会使稳峰测量停止
 //    connect(this,SIGNAL(transmit_stop_auto_count()),ss,SLOT(stop_steady_summit()));
-    //mysettings.clear();
-    if (!mysettings.contains("passwd")){
-        mysettings.setValue("passwd",111111);
-    }
+
     ui->lineEdit->setText("");
 
     //使系统设定里的信号触发这里的信号从而触发自动测量的停止槽函数

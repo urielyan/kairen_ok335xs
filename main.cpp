@@ -2,10 +2,12 @@
 yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-121D/
  *1.此程序数据保存采用QSettings类，数据保存在～/.config/shanghaikairen/下，共有两个文件 ，一个是analysis.conf和count_data.conf
  *  其中analysis.conf中保存的内容有：
+ *    标定相关:
  *      calibrate_input_s_n：保存用户输入的标定样硫的数据。
  *      calibratemeasurement_count：记录正在标定第几组数据。会随着清除标定数据使他变为0，
  *              每次按标定的开始键就会自加，若此次标定不成功就会减一保持原值。
- *      calibratemeasurement_count_record:最近的标定结果记录，是一个轮巡，从1到10循环。保存的数是下一次计算kb值的所要记录在哪里的标记。
+ *      calibratemeasurement_count_record:最近的标定结果记录，是一个轮巡，从1到10循环。保存当计算kb值时的保存数据和结果的编号.例如为5时，下一个记录就是:
+ *          calibration_results_in_data_5 and calibration_results_in_result_5
  *      calibration_results_in_data_n：一个标定结果所需要的所有数据，有(S%/reference/calibrate;S%/reference/calibrate...)
  *              共count number组数据，count number对应于下面的calibration_results_in_result_n那组数据中的count number
  *              for example (6 group):
@@ -13,15 +15,20 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
  *                "0.0550/2225/13005", "0.1006/2600/12990", "0.2522/3839/13035", "0.5043/5822/13041",
  *                "1.0027/9612/13046", "2.5016/19881/13036", "4.9992/33385/13006")
  *      calibration_results_in_result_n：标定的计算kb值的结果，包括（datetime;work curve;kbr(a0.a1,12);count number）
- *      passwd：密码
  *      s_count_data_n：记录标定时标定样和参考样的数据(标定样/参考样)
+ *      work_curve_n：工作曲线记录的数据（kb值或a0,a1,a2）;example:(k=0;b=0r=0    or    a0=1;a1=1;a2=1)
+ *
+ *
+ *    含量测量:
  *      sample_count:总共测量过多少次含量测量
  *      sample_data_n：含量测量记录的数据(work curve; datetime;measurement time;
  *                                    repeat time; average value;standard deviation)
- *      work_curve_n：工作曲线记录的数据（kb值或a0,a1,a2）;example:(k=0;b=0r=0    or    a0=1;a1=1;a2=1)
+ *
  *      count_voltage : 设定计数管高压
  *      light_voltage   : 设定光管高压
  *      light_current   : 设定光管电流
+ *
+ *      passwd：密码
  *  count_data.conf中保存的内容有：
  *      count_count:
  *      count_data_n:
@@ -57,6 +64,56 @@ void initSettings()
   QCoreApplication::setApplicationName("analysis");
 
   QSettings mysettings;
+  mysettings.clear();
+
+  if(!mysettings.contains("calibratemeasurement_count_record")){
+      mysettings.setValue("calibratemeasurement_count_record",1);
+    }
+  if((!mysettings.contains("calibration_results_in_result_1"))\
+     && (!mysettings.contains("calibration_results_in_data_10"))){
+      for(int tmp = 1;tmp <= 10;tmp++){
+          //qDebug() << "calibrate_results";
+          mysettings.setValue(QString("calibration_results_in_result_%1").arg(tmp)," ; ; ; ");
+          mysettings.setValue(QString("calibration_results_in_data_%1").arg(tmp),"");
+        }
+    }
+
+  QString tmpstr = "calibrate_input_s_";
+  if(!mysettings.contains("calibrate_input_s_1")){
+      for(int tmpnumber = 1; tmpnumber <= 12 ;tmpnumber++){
+          tmpstr.append(QString("%1").arg(tmpnumber));
+          qDebug() << tmpstr;
+          mysettings.setValue(tmpstr,"0.0000");
+          tmpstr = "calibrate_input_s_";
+        }
+    }
+
+
+  tmpstr = "s_count_data_";
+  if(!mysettings.contains("s_count_data_1")){
+      for(int tmpnumber = 1; tmpnumber <= 12 ;tmpnumber++){
+          tmpstr.append(QString("%1").arg(tmpnumber));
+          qDebug() << tmpstr;
+          mysettings.setValue(tmpstr,"");
+          tmpstr = "s_count_data_";
+      }
+  }
+
+  if(!mysettings.contains("work_curve_1") || !mysettings.contains("work_curve_9")){
+      for(int i = 1;i <= 5 ; i++){
+          mysettings.setValue(QString("work_curve_%1").arg(i),";;");
+        }
+      for(int i = 6 ; i <= 9 ; i++){
+          mysettings.setValue(QString("work_curve_%1").arg(i),";;");
+        }
+    }
+
+
+  //judge calibratemeasurement_count  whether is exit;if not exit create it.finally assign count variable.
+  if(!mysettings.contains("calibratemeasurement_count")){
+      mysettings.setValue("calibratemeasurement_count",0);
+    }
+
   if(!mysettings.contains("count_voltage")){
       mysettings.setValue("count_voltage",578);
     }
@@ -68,12 +125,34 @@ void initSettings()
   if(!mysettings.contains("light_current")){
       mysettings.setValue("light_current"," ");
     }
+
+
+  if(!mysettings.contains("machine_used_time")){
+      mysettings.setValue("machine_used_time",0);
+    }
+  if(!mysettings.contains("most_use_time")){
+      mysettings.setValue("most_use_time",0);
+    }
+  if (!mysettings.contains("passwd")){
+      mysettings.setValue("passwd",111111);
+  }
+
+  // not set default value
+//    if(!mysettings.contains("proportion_1"))
+//      {
+//        mysettings.setValue("proportion_1", 0.1);
+//        mysettings.setValue("proportion_2", 1);
+//      }
+
+
+  if(!mysettings.contains("sample_count")){
+      mysettings.setValue("sample_count",0);
+  }
 }
 
 void initLanguage(QApplication &a)
 {
 #if 1
-
   QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
   //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
   //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));

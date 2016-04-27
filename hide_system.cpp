@@ -17,13 +17,6 @@ hide_system::hide_system(QWidget *parent) :
 
   query_change_vol = new query_change_voltage();
 
-  if(!mysettings.contains("machine_used_time")){
-      mysettings.setValue("machine_used_time",0);
-    }
-  if(!mysettings.contains("most_use_time")){
-      mysettings.setValue("most_use_time",0);
-    }
-
   timer = new QTimer();
   connect(timer, SIGNAL(timeout()), this, SLOT(time_use_count()));
   timer->start(1000);

@@ -25,15 +25,6 @@ caibrateresultquery::caibrateresultquery(QWidget *parent) :
   ui->setupUi(this);
   //得到一个下一次标定会记录在哪的数，所以减一就是最新的数
   display_number = mysettings.value("calibratemeasurement_count_record").toInt() - 1;
-  //mysettings.clear();
-  if((!mysettings.contains("calibration_results_in_result_1"))\
-     && (!mysettings.contains("calibration_results_in_data_10"))){
-      for(tmp = 1;tmp <= 10;tmp++){
-          //qDebug() << "calibrate_results";
-          mysettings.setValue(QString("calibration_results_in_result_%1").arg(tmp)," ; ; ; ");
-          mysettings.setValue(QString("calibration_results_in_data_%1").arg(tmp),"");
-        }
-    }
   update_page(display_number);
 
   //调整tablewidget的大小以适应屏幕。

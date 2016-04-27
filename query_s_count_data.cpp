@@ -14,21 +14,8 @@ query_s_count_data::query_s_count_data(QWidget *parent) :
     ui(new Ui::query_s_count_data)
 {
     ui->setupUi(this);
-    int tmpnumber , row= 0 , column = 0;
-    QString tmpstr = "s_count_data_";
-    if(!mysettings.contains("s_count_data_1")){
-        for(tmpnumber = 1; tmpnumber <= 12 ;tmpnumber++){
-            tmpstr.append(QString("%1").arg(tmpnumber));
-            qDebug() << tmpstr;
-            mysettings.setValue(tmpstr,"");
-            tmpstr = "calibrate_input_s_";
-        }
-    }
-    //调整表格以适应屏幕大小
-//    ui->tableWidget->setColumnWidth(0,this->size().width()/7);
-//    ui->tableWidget->setColumnWidth(1,this->size().width()/2);
-//    ui->tableWidget->setColumnWidth(2,this->size().width()/7);
-//    ui->tableWidget->setColumnWidth(3,this->size().width()/2);
+    int row= 0 , column = 0;
+
     ui->tableWidget->setColumnWidth(0,FONT_SIZE *3);
     ui->tableWidget->setColumnWidth(1,FONT_SIZE *10);
     ui->tableWidget->setColumnWidth(2,FONT_SIZE *3);
@@ -36,7 +23,7 @@ query_s_count_data::query_s_count_data(QWidget *parent) :
     for(int i = 0;i < 6; i++){
         ui->tableWidget->setRowHeight(i,FONT_SIZE * 1.5);
     }
-    for(tmpnumber = 0 ; tmpnumber <12 ; tmpnumber++){
+    for(int tmpnumber = 0 ; tmpnumber <12 ; tmpnumber++){
         tmpitem[tmpnumber] = new QTableWidgetItem();
     }
     for(column = 1 ; column < 4 ; column += 2){

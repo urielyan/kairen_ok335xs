@@ -1,11 +1,7 @@
 #include "dataquery.h"
 #include "ui_dataquery.h"
 #include"global.h"
-//#include <QSettings>
 #include <stdio.h>
-
-//extern QSettings mysettings;
-//extern struct cmdata global_countingmeasurementdata[6];
 
 dataquery::dataquery(QWidget *parent):
     QWidget(parent),

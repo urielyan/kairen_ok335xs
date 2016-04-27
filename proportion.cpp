@@ -5,20 +5,11 @@
 
 #include <QMessageBox>
 
-//extern QSettings mysettings;
-
 proportion::proportion(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::proportion)
 {
     ui->setupUi(this);
-
-    // not set default value
-//    if(!mysettings.contains("proportion_1"))
-//      {
-//        mysettings.setValue("proportion_1", 0.1);
-//        mysettings.setValue("proportion_2", 1);
-//      }
 
     QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
     for(int i=0;i<allPButtons.count();i++){

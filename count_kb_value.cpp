@@ -12,9 +12,6 @@ count_kb_value::count_kb_value(QWidget *parent):
   QWidget(parent),
   ui(new Ui::count_kb_value)
 {
-  if(!mysettings.contains("calibratemeasurement_count_record")){
-      mysettings.setValue("calibratemeasurement_count_record",1);
-    }
   ui->setupUi(this);
   ui->comboBox->setCurrentIndex(0);
   count_record = mysettings.value("calibratemeasurement_count_record").toInt();

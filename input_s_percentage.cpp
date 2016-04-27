@@ -14,23 +14,6 @@ WidgetInputSPercentage::WidgetInputSPercentage(QWidget *parent) :
 {
   ui->setupUi(this);
 
-  int tmpnumber;
-  QString tmpstr = "calibrate_input_s_";
-
-  //mysettings.clear();
-  /*
-        If mysettings have not calibrate_input_s_ + i ,
-        build them and set them "0.0000".
-    */
-  if(!mysettings.contains("calibrate_input_s_1")){
-      for(tmpnumber = 1; tmpnumber <= 12 ;tmpnumber++){
-          tmpstr.append(QString("%1").arg(tmpnumber));
-          qDebug() << tmpstr;
-          mysettings.setValue(tmpstr,"0.0000");
-          tmpstr = "calibrate_input_s_";
-        }
-    }
-
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
   QList<QLabel *> labellist = this->findChildren<QLabel *>();
   for (int i = 0; i < labellist.count(); ++i) {

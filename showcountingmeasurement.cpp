@@ -8,7 +8,6 @@
 #include <math.h>
 //#include "countingmeasurement.h"
 
-//QSettings count_data("shanghaikairen","count_data");
 
 showcountingmeasurement::showcountingmeasurement(QWidget *parent) :
   QWidget(parent),

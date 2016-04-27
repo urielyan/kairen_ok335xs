@@ -7,7 +7,6 @@
 #include <printer.h>
 
 extern int measurement_flag;
-//extern QSettings mysettings;
 
 sampleMeasurement::sampleMeasurement(QWidget *parent) :
     QWidget(parent),
