@@ -131,8 +131,5 @@ FORMS    += widget.ui \
     query_change_voltage.ui
 
 OTHER_FILES += \
-    Readme \
-    jy.jpg \
-    ../桌面/jy.png
 
 RESOURCES +=

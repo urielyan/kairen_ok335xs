@@ -25,7 +25,9 @@
  *      count_count:
  *      count_data_n:
  *
- *  2.
+ *  2.数据库：
+ *       create table sample_data(people_id TEXT,sample_serial TEXT,date_time DATE,wo    rk_curve INTEGER,measurement_time INTEGER,repeat_time INTEGER,average DOUBLE    ,deviation DOUBLE);
+ *      insert into sample_data values(0,"000001","0000000000000","2015-3-13 10:50:30",1,15,3,0.2222,0.0001);
 */
 #include "widget.h"
 #include "logo.h"
@@ -110,8 +112,8 @@ void initDatabase()
 {
 #if 1
   QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-  qDebug() << db.driver()->hasFeature(QSqlDriver::Transactions);
-  db.setDatabaseName("/samplemeasurement.db");
+  //qDebug() << db.driver()->hasFeature(QSqlDriver::Transactions);
+  db.setDatabaseName("/home/yange/samplemeasurement.db");
   //db.setConnectOptions("QSQLITE_OPEN_READONLY=0");
   bool ok = db.open();
   if(ok == false){
@@ -143,6 +145,9 @@ void initDatabase()
 int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
+
+  a.setStyleSheet("QPushButton{min-width:100;"
+                  "min-height:60}");
 
   initSettings();
   initLanguage(a);
