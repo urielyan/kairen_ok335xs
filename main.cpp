@@ -232,10 +232,19 @@ int main(int argc, char *argv[])
   QApplication a(argc, argv);
 
   a.setStyleSheet(QString("QPushButton{min-width:100;"
-                  "min-height:60;}"
-                  "QLabel{"
-                  "min-height:%1"
-                  "}").arg(FONT_SIZE * 3.5));
+                          "font: 30px;"
+                          "min-height:60;"
+          "}"
+                          "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
+                          "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}"
+                          "QLabel{"
+                          "font: 24px;"
+                          "min-height:%1"
+                          "}"
+                          "QLabel#title{"
+                          "font: 48px;"
+                          "min-height:50"
+                          "}").arg(FONT_SIZE * 1.5));
 
   initSettings();
   initLanguage(a);

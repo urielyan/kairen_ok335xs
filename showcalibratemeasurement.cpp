@@ -15,6 +15,7 @@ showcalibratemeasurement::showcalibratemeasurement(QWidget *parent) :
 
     ui->pushButton->setFixedHeight(FONT_SIZE * 2);
     ui->pushButton->setFixedWidth(FONT_SIZE * 4);
+    ui->label->setObjectName("title");
 }
 
 showcalibratemeasurement::~showcalibratemeasurement()

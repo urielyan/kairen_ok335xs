@@ -12,6 +12,7 @@ setupdatetime::setupdatetime(QWidget *parent) :
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     ui->dateTimeEdit->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
     ui->dateTimeEdit->setButtonSymbols(QAbstractSpinBox::PlusMinus);
+    //ui->label->setObjectName("title");
 }
 
 setupdatetime::~setupdatetime()

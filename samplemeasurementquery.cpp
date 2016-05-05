@@ -16,6 +16,7 @@ samplemeasurementquery::samplemeasurementquery(QWidget *parent) :
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
 
+    ui->label->setObjectName("title");
 }
 
 samplemeasurementquery::~samplemeasurementquery()

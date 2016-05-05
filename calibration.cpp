@@ -22,6 +22,7 @@ calibration::calibration(QWidget *parent) :
         labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       }
     ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
+    ui->label->setObjectName("title");
 }
 
 calibration::~calibration()

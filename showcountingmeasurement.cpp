@@ -27,6 +27,7 @@ showcountingmeasurement::showcountingmeasurement(QWidget *parent) :
       labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     }
   ui->tableWidget->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+  //ui->label->setObjectName("title");
 }
 
 showcountingmeasurement::~showcountingmeasurement()

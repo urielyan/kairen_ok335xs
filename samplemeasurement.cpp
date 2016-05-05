@@ -51,6 +51,7 @@ sampleMeasurement::sampleMeasurement(QWidget *parent) :
     this->setStyleSheet(""
                         "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
                         "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}");
+    ui->label->setObjectName("title");
 }
 
 sampleMeasurement::~sampleMeasurement()

@@ -49,6 +49,7 @@ sample_data_query::sample_data_query(QWidget *parent) :
     }
   ui->tableView->setFont(QFont(FONT_NAME, FONT_SIZE/3 * 2 ,QFont::Normal));
   ui->label->setFont(QFont(FONT_NAME, FONT_SIZE/2,QFont::Normal));
+  ui->label->setObjectName("title");
 }
 
 sample_data_query::~sample_data_query()

@@ -11,6 +11,8 @@ logo::logo(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setFont(QFont(FONT_NAME, FONT_SIZE * 2,QFont::Normal));
+
+    //ui->label->setObjectName("title");
 }
 
 logo::~logo()

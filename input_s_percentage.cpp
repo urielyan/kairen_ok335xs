@@ -24,6 +24,7 @@ WidgetInputSPercentage::WidgetInputSPercentage(QWidget *parent) :
   initTableWidget();
 
   initSignalSlotConnect();
+  ui->label->setObjectName("title");
   }
 
 WidgetInputSPercentage::~WidgetInputSPercentage()
@@ -55,7 +56,7 @@ void WidgetInputSPercentage::clear_all_tablewidget(){
 
 void WidgetInputSPercentage::slot_keyNumPressed(){
   //判断是否是第0列，若not则返回
-  if(ui->tableWidget->currentItem()->column() != 0 )
+  if(ui->tableWidget->currentItem() == NULL || ui->tableWidget->currentItem()->column() != 0 )
     {
       return;
     }

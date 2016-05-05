@@ -43,6 +43,7 @@ query_s_count_data::query_s_count_data(QWidget *parent) :
       }
     ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
     ui->tableWidget->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+    ui->label->setObjectName("title");
 }
 
 query_s_count_data::~query_s_count_data()

@@ -57,6 +57,8 @@ passwd::passwd(QWidget *parent) :
     connect(ui->b_clear, SIGNAL(clicked(bool)),this,SLOT(slotClearClicked()));
     ui->b_backSpace->setText(tr("退格"));
     connect(ui->b_backSpace, SIGNAL(clicked(bool)),this,SLOT(slotBackSpaceClicked()));
+
+    ui->label_title->setObjectName("title");
 }
 
 passwd::~passwd()
