@@ -33,7 +33,7 @@ private:
     countdataquery *showcountdataquery;
     caibrateresultquery *csquery;
     //samplemeasurementquery *samplemeasurement_query;
-    sample_data_query *samp_data_query;
+    WinSqlDataQuery *samp_data_query;
 };
 
 #endif // DATAQUERY_H

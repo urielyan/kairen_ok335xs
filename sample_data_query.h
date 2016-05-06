@@ -8,13 +8,13 @@ namespace Ui {
 class sample_data_query;
 }
 
-class sample_data_query : public QWidget
+class WinSqlDataQuery : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit sample_data_query(QWidget *parent = 0);
-    ~sample_data_query();
+    explicit WinSqlDataQuery(QWidget *parent = 0);
+    ~WinSqlDataQuery();
 
     void show_and_refresh();
 

@@ -52,6 +52,7 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
 //                      "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
 //                      "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}");
   ui->label->setObjectName("title");
+  ui->label_second->setObjectName("countDown");
 }
 int calibrationmeasurement::count;
 

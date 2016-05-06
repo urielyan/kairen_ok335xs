@@ -231,20 +231,39 @@ int main(int argc, char *argv[])
 {
   QApplication a(argc, argv);
 
-  a.setStyleSheet(QString("QPushButton{min-width:100;"
-                          "font: 30px;"
-                          "min-height:60;"
-          "}"
-                          "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
-                          "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}"
+  a.setStyleSheet(QString("QPushButton{"
+                          "min-width:100; font: 30px; min-height:60;"
+                          "}"
+                          "QPushButton#stop{"
+                          "background-color:red; color: rgb(255, 255, 255); font-weight:bold;"
+                          "}"
+                          "QPushButton#start{"
+                          "background-color:green; color: rgb(255, 255, 255); font-weight:bold;"
+                          "}"
+                          "QPushButton#buttonTitle{"
+                          "font: 48px;"
+                          "min-height:50px;"
+                          "}"
+
                           "QLabel{"
                           "font: 24px;"
-                          "min-height:%1"
+                          "min-height:%1;"
+                          "}"
+                          "QLabel#countDown{"
+                          "font: 48px;"
+                          "min-height:50px;"
                           "}"
                           "QLabel#title{"
                           "font: 48px;"
-                          "min-height:50"
-                          "}").arg(FONT_SIZE * 1.5));
+                          "min-height:50px;"
+                          "}"
+
+                          "QComboBox {"
+                          "min-height: 50px;"
+                          "font: 40px;"
+                          "}"
+
+                          ).arg(FONT_SIZE * 1.5));
 
   initSettings();
   initLanguage(a);

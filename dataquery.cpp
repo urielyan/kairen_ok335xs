@@ -12,7 +12,7 @@ dataquery::dataquery(QWidget *parent):
     showcountdataquery = new countdataquery();
     csquery = new caibrateresultquery();
     //samplemeasurement_query = new samplemeasurementquery();
-    samp_data_query = new sample_data_query();
+    samp_data_query = new WinSqlDataQuery();
     //printf("%s\n",__FUNCTION__);
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));

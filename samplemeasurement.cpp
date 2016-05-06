@@ -52,6 +52,8 @@ sampleMeasurement::sampleMeasurement(QWidget *parent) :
                         "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
                         "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}");
     ui->label->setObjectName("title");
+    ui->label_second->setObjectName("countDown");
+    ui->label_second->setText("test");
 }
 
 sampleMeasurement::~sampleMeasurement()
@@ -139,6 +141,7 @@ void sampleMeasurement::on_pushButton_3_clicked()
     //return button
     if(1 == flag)return;
     this->close();
+
 }
 
 

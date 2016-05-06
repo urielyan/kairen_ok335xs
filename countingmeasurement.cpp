@@ -45,6 +45,8 @@ countingMeasurement::countingMeasurement(QWidget *parent) :
 //                        "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
 //                        "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}");
     //ui->label->setObjectName("title");
+    ui->label_seconds->setObjectName("countDown");
+    ui->pushButton_7->setObjectName("buttonTitle");
 }
 countingMeasurement::~countingMeasurement()
 {

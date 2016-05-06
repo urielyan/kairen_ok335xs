@@ -10,7 +10,7 @@
 #define QUERY_BY_PEOPLE 1
 #define QUERY_BY_SAMPLE 2
 
-sample_data_query::sample_data_query(QWidget *parent) :
+WinSqlDataQuery::WinSqlDataQuery(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::sample_data_query)
 {
@@ -48,18 +48,18 @@ sample_data_query::sample_data_query(QWidget *parent) :
       labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     }
   ui->tableView->setFont(QFont(FONT_NAME, FONT_SIZE/3 * 2 ,QFont::Normal));
-  ui->label->setFont(QFont(FONT_NAME, FONT_SIZE/2,QFont::Normal));
-  ui->label->setObjectName("title");
+  //ui->label->setFont(QFont(FONT_NAME, FONT_SIZE/2,QFont::Normal));
+  //ui->label->setObjectName("title");
 }
 
-sample_data_query::~sample_data_query()
+WinSqlDataQuery::~WinSqlDataQuery()
 {
   delete ui;
 
   delete model;
   delete input_serial;
 }
-void sample_data_query::initTableview(){
+void WinSqlDataQuery::initTableview(){
   delete model;
   //ui->tableView->setColumnWidth(2,1000);
   model = new QSqlTableModel();
@@ -90,7 +90,7 @@ void sample_data_query::initTableview(){
   //ui->tableView->setRowHeight(0,this->height()/2);
 }
 
-void sample_data_query::show_and_refresh(){
+void WinSqlDataQuery::show_and_refresh(){
 
   initTableview();
   model->select();
@@ -105,7 +105,7 @@ void sample_data_query::show_and_refresh(){
   this->showFullScreen();
 }
 
-void sample_data_query::wait_input_result(QString recv_data){
+void WinSqlDataQuery::wait_input_result(QString recv_data){
   if(recv_data == NULL)return;
 
   initTableview();
@@ -119,7 +119,7 @@ void sample_data_query::wait_input_result(QString recv_data){
   ui->tableView->setModel(model);
 }
 
-void sample_data_query::on_pushButton_clicked()
+void WinSqlDataQuery::on_pushButton_clicked()
 {
   //按人员编号查询
   query_flag = QUERY_BY_PEOPLE;
@@ -128,7 +128,7 @@ void sample_data_query::on_pushButton_clicked()
 }
 
 
-void sample_data_query::on_b_datetime_clicked()
+void WinSqlDataQuery::on_b_datetime_clicked()
 {
   initTableview();
   model->setSort(2,Qt::AscendingOrder);
@@ -136,7 +136,7 @@ void sample_data_query::on_b_datetime_clicked()
   ui->tableView->setModel(model);
 }
 
-void sample_data_query::on_b_datetime_disorder_clicked()
+void WinSqlDataQuery::on_b_datetime_disorder_clicked()
 {
   initTableview();
   model->setSort(2,Qt::DescendingOrder);
@@ -144,7 +144,7 @@ void sample_data_query::on_b_datetime_disorder_clicked()
   ui->tableView->setModel(model);
 }
 
-void sample_data_query::on_b_sample_clicked()
+void WinSqlDataQuery::on_b_sample_clicked()
 {
   query_flag = QUERY_BY_SAMPLE;
   connect(input_serial,SIGNAL(transmit_data(QString)),this,SLOT(wait_input_result(QString)));
@@ -152,14 +152,14 @@ void sample_data_query::on_b_sample_clicked()
 }
 
 
-void sample_data_query::on_pushButton_3_clicked()
+void WinSqlDataQuery::on_pushButton_3_clicked()
 {
   disconnect(input_serial,SIGNAL(transmit_data(QString)),this,SLOT(wait_input_result(QString)));
   disconnect(input_serial,SIGNAL(transmit_data(QString)),this,SLOT(wait_input_result(QString)));
   this->close();
 }
 
-void sample_data_query::on_tableView_clicked(const QModelIndex &index)
+void WinSqlDataQuery::on_tableView_clicked(const QModelIndex &index)
 {
   if(index.column() != 2){
       return;
