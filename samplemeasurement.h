@@ -47,9 +47,10 @@ private:
     showsamplemeasurement *showsm;
     countingMeasurement *counting_measurement;
     input_person_sampleSerial *input_serial;
+    QSettings mysettings;
+
     void all_combox_disabled(bool);
     void printer_result();
-    QSettings mysettings;
 };
 
 #endif // SAMPLEMEASUREMENT_H

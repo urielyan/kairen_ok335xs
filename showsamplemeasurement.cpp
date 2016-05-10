@@ -22,27 +22,7 @@ showsamplemeasurement::showsamplemeasurement(QWidget *parent) :
     model = new QSqlTableModel();
 
     hide_lable(true);
-//    ui->tableWidget->setColumnWidth(0,this->width()/2);
-//    ui->tableWidget->setColumnWidth(1,this->width()/2);
-
-//    QScrollBar *verticalbar;
-//    verticalbar = new QScrollBar();
-//    verticalbar->setStyleSheet("width:30px");
-    //ui->tableWidget->verticalScrollBar()->setStyleSheet("width:30px");
-
     ui->tableWidget_hide->hide();
-
-    //printer_result();
-
-    //ui->label->setObjectName("title");
-
-    //use font set text size.
-    //    this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    //    QList<QLabel *> labellist = this->findChildren<QLabel *>();
-    //    for (int i = 0; i < labellist.count(); ++i) {
-    //        labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    //      }
-    //    ui->pushButton->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
 }
 
 showsamplemeasurement::~showsamplemeasurement()
@@ -57,7 +37,8 @@ void showsamplemeasurement::add_data(int work_curve_index,QString data,int size)
         ui->tableWidget_hide->clear();
         ui->tableWidget_hide->setRowCount(COUNT_MEASUREMENT_DATA_COUNT);
         for(int i = 0; i < COUNT_MEASUREMENT_DATA_COUNT; i++ ){
-            ui->tableWidget_hide->setItem(i,1,new QTableWidgetItem(countingMeasurement::get_count_5_data().value(i)));
+            ui->tableWidget_hide->setItem(i,1,\
+              new QTableWidgetItem(countingMeasurement::get_count_5_data().value(i)));
           }
         hide_lable(true);
         sum = 0;
@@ -270,6 +251,26 @@ void showsamplemeasurement::printer_result(){
   long long deviation = 0xEEB2ABC6BCD7EAB1ll;
   int di = 0xDAB5;
   long long ciceliang = 0xBFC1E2B2CEB4;
+
+  printer::printEnd();
+
+  //标准偏差
+  printer::transmit(deviation,8);
+  printer::transmit((void *)":    ",5);
+  printer::transmit((void *)ui->label_deviation->text().toLocal8Bit().data(),ui->label_deviation->text().size());
+  printer::transmit((void *)"   ",3);
+  printer::transmit((void *)"%(m/m)",6);
+  printer ::transmit(enter,1);
+
+  //平均值
+  printer::transmit(average,6);
+  printer::transmit((void *)":      ",7);
+  printer::transmit((void *)ui->label_average->text().toLocal8Bit().data(),ui->label_average->text().size());
+  printer::transmit((void *)"   ",3);
+  printer::transmit((void *)"%(m/m)",6);
+  printer ::transmit(enter,1);
+
+  //所有测量数据：
   printer::transmit((void *)"---------------------------------------------------------",SEGMENT_LENGTH );
   printer ::transmit(enter,1);
   for(int i = 0 ;i < ui->tableWidget->rowCount();i++){
@@ -288,26 +289,6 @@ void showsamplemeasurement::printer_result(){
       printer ::transmit(enter,1);
     }
   printer::transmit((void *)"---------------------------------------------------",SEGMENT_LENGTH );
-  printer ::transmit(enter,1);
-
-
-  printer::transmit(average,6);
-  printer::transmit((void *)":      ",7);
-  printer::transmit((void *)ui->label_average->text().toLocal8Bit().data(),ui->label_average->text().size());
-  printer::transmit((void *)"   ",3);
-  printer::transmit((void *)"%(m/m)",6);
-  printer ::transmit(enter,1);
-
-  printer::transmit(deviation,8);
-  printer::transmit((void *)":    ",5);
-  printer::transmit((void *)ui->label_deviation->text().toLocal8Bit().data(),ui->label_deviation->text().size());
-  printer::transmit((void *)"   ",3);
-  printer::transmit((void *)"%(m/m)",6);
-  printer ::transmit(enter,1);
-
-  printer::transmit((void *)"========================================",SEGMENT_LENGTH);
-  printer ::transmit(enter,1);
-  printer::transmit((void *)"   ",3);
   printer ::transmit(enter,1);
 }
 

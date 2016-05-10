@@ -125,8 +125,11 @@ void sampleMeasurement::doing_measurement(){
                     QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm") + ";" +\
                     ui->comboBox_time->currentText() + ";" +\
                     ui->comboBox_count->currentText() + ";";
-            printer_result();
+
+            //倒着打印正确的数据
             showsm->show_calculate_storage(tr_data);
+            printer_result();
+
             all_combox_disabled(false);
             return;
         }
@@ -367,22 +370,15 @@ void sampleMeasurement::printer_result(){
   long long measurement_time = 0xE4BCB1CABFC1E2B2ll;
   long long repeat_time = 0xFDCACEB4B4B8D8D6ll;
 
-//头：测量，参考样
-#if 1
-  printer::instance()->printStart();
-
-  printer::transmit(samplemeasurement,8);
+  //重复次数
+  printer::transmit(repeat_time,8);
+  printer::transmit((void *)":    ",5);
+  printer::transmit((void *)(ui->comboBox_count->currentText().toLocal8Bit().data()),ui->comboBox_count->currentText().size());
+  printer::transmit((void *)"    ",4);
+  printer::transmit(repeat_count,2);
   printer ::transmit(enter,1);
 
-  //日期
-  printer::printCurrentDateTime();
-
-  printer::transmit(work_line1,8);
-  printer::transmit(work_line2,2);
-  printer::transmit((void *)":  ",4);
-  printer::transmit((char)(showsm->get_real_curve() + 0x30));
-  printer ::transmit(enter,1);
-
+  //测量时间
   printer::transmit(measurement_time,8);
   printer::transmit((void *)":    ",5);
   printer::transmit((void *)(ui->comboBox_time->currentText().toLocal8Bit().data()),ui->comboBox_time->currentText().size());
@@ -390,11 +386,18 @@ void sampleMeasurement::printer_result(){
   printer::transmit(second_tr,2);
   printer ::transmit(enter,1);
 
-  printer::transmit(repeat_time,8);
-  printer::transmit((void *)":    ",5);
-  printer::transmit((void *)(ui->comboBox_count->currentText().toLocal8Bit().data()),ui->comboBox_count->currentText().size());
-  printer::transmit((void *)"    ",4);
-  printer::transmit(repeat_count,2);
+  //工作曲线
+  printer::transmit(work_line1,8);
+  printer::transmit(work_line2,2);
+  printer::transmit((void *)":  ",4);
+  printer::transmit((char)(showsm->get_real_curve() + 0x30));
   printer ::transmit(enter,1);
-#endif
+
+  //日期
+  printer::printCurrentDateTime();
+
+  printer::transmit(samplemeasurement,8);
+  printer ::transmit(enter,1);
+
+  printer::instance()->printStart();
 }
