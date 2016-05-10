@@ -52,19 +52,22 @@ private slots:
     void set_sliding_disabled(bool,bool);
 
 private:
-    Ui::spectrummeasurement *ui;
-    QTimer *timer;
-    Communciation_Com *spectrum_com;
-    size_t row,column,flag,try_inspectoscope_flag;
-    countingMeasurement *countmeas;
-    painter_histogram * painter_result;
-    void disable_pushbutton(bool);
-    void printer_result();
-    int summit_value;
-    QString max_volumn,max_data;
-    //int fd;
+        Ui::spectrummeasurement *ui;
 
-    void initTableWidget();
+        int summit_value;
+        QString max_volumn,max_data;
+        size_t row,column,flag,try_inspectoscope_flag;
+
+        QTimer *timer;
+
+        Communciation_Com *spectrum_com;
+        countingMeasurement *countmeas;
+        painter_histogram * painter_result;
+
+        void initTableWidget();
+        void disable_pushbutton(bool);
+        void printer_result();
+        void printPicture();
 };
 
 #endif // SPECTRUMMEASUREMENT_H

@@ -486,60 +486,93 @@ void spectrummeasurement::stop_inspectoscope(){
   countmeas->on_pushButton_2_clicked();
 }
 
-void spectrummeasurement::printer_result(){
-  //QMessageBox::warning(this,"spectrum","printer!");
-#if 1
+void spectrummeasurement::printer_result()
+{
   int enter = 0x0A;
-  long long spectrum = 0xBFC1E2B2D7C6DCC4ll;//right
-  long long reference = 0xf9d1bcbfceb2;
-  long long wait_measurement = 0xF9D1A8B6EAB1;
-  long long summitat = 0xDAD4BBCEE5B7ll;
-  long long countdata_zhi = 0xB5D6FDCAC6BCll;
-  int  sulphur = 0xF2C1;
+     long long spectrum = 0xBFC1E2B2D7C6DCC4ll;//right
+     long long reference = 0xf9d1bcbfceb2;
+     long long wait_measurement = 0xF9D1A8B6EAB1;
+     long long summitat = 0xDAD4BBCEE5B7ll;
+     long long countdata_zhi = 0xB5D6FDCAC6BCll;
+     int  sulphur = 0xF2C1;
+
+     //所有打印的皆需要倒着打。即：先打印尾部再打印头部。
+     printer::printEnd();
+
+     //打印峰值在哪里以及值的大小。
+     printer::transmit(countdata_zhi,6);
+     printer::transmit((void *)"     ",2);
+     printer::transmit((void *)max_data.toLocal8Bit().data(),max_data.size());
+
+     printer::transmit((void *)max_volumn.toLocal8Bit().data(),max_volumn.size());
+     printer ::transmit(enter,1);
+     printer::transmit((void *)"     ",4);
+
+     printer::transmit(sulphur,2);
+     printer::transmit((void *)": ",2);
+     printer::transmit(summitat,6);
+
+     printPicture();
 
 
+     //打印数据
+     for (int column = 6; column >= 0; column -= 2) {
+         for(int row=9;row >= 0;row--){
+             QTableWidgetItem *item= ui->tableWidget->item(row,column);
+             if(item == NULL){
+                 continue;
+             }
+             QString text = item->text();
 
-  printer::transmit((void *)"========================================",SEGMENT_LENGTH);
-  printer ::transmit(enter,1);
+             item= ui->tableWidget->item(row,column + 1);
+             if(item == NULL){
+                 continue;
+             }
+             QString value = item->text();
+             printer::transmit(text.toLocal8Bit().data(),text.size());
+             printer::transmit((void *)"   ",3);
+             printer::transmit(value.toLocal8Bit().data(),value.size());
+             printer ::transmit(enter,1);
+         }
+     }
 
-  //头：能谱测量，参考样
-  printer::transmit(spectrum,8);
-  printer ::transmit(enter,1);
-  if(ui->widget->global_is_sample ==REFERENCE_BE_LOCATON)
-    {
-    printer::transmit(reference,6);
+     //日期
+     printer::printCurrentDateTime();
+
+     //头：能谱测量，参考样
+     if(ui->widget->global_is_sample ==REFERENCE_BE_LOCATON)
+     {
+         printer::transmit(reference,6);
+     }else if(ui->widget->global_is_sample ==WAIT_BE_LOCATION)
+     {
+         printer::transmit(wait_measurement,6);
+     }
+     printer ::transmit(enter,1);
+
+     printer::transmit(spectrum,8);
+     printer ::transmit(enter,1);
+
+     printer::printStart();
+
+}
+
+void spectrummeasurement::initTableWidget()
+{
+  ui->tableWidget->clearContents();
+  int rowHeight = (DESKTOP_HEIGHT - FONT_SIZE * 10) / 10;
+  int columnWidth = (DESKTOP_WIDTH ) / 8 -10;
+  for(int i = 0;i < ui->tableWidget->rowCount();i++){
+      ui->tableWidget->setRowHeight(i,rowHeight);
     }
-  if(ui->widget->global_is_sample ==WAIT_BE_LOCATION)
-    {
-    printer::transmit(wait_measurement,6);
+  for(int i = 0;i < ui->tableWidget->columnCount();i++){
+      ui->tableWidget->setColumnWidth(i,columnWidth);
     }
-  printer ::transmit(enter,1);
+  ui->tableWidget->horizontalHeader()->setFont(QFont("wenquanyi", FONT_SIZE,QFont::Normal));
+}
 
-  //日期
-  printer::printCurrentDateTime();
-
-  //打印数据
-  for (int column = 6; column >= 0; column -= 2) {
-      for(int row=9;row >= 0;row--){
-          QTableWidgetItem *item= ui->tableWidget->item(row,column);
-          if(item == NULL){
-              continue;
-            }
-          QString text = item->text();
-
-          item= ui->tableWidget->item(row,column + 1);
-          if(item == NULL){
-              continue;
-            }
-          QString value = item->text();
-          printer::transmit(text.toLocal8Bit().data(),text.size());
-          printer::transmit((void *)"   ",3);
-          printer::transmit(value.toLocal8Bit().data(),value.size());
-          printer ::transmit(enter,1);
-        }
-    }
-#endif
-#if 0
+void spectrummeasurement::printPicture()
+{
+#if 1
   //打印坐标图
   //沿切纸方向打印 Y 轴
   char tmp_x_reverse = 0x00;
@@ -631,44 +664,10 @@ void spectrummeasurement::printer_result(){
         }
     }
 
-  //painter_histogram::spectrum_data = array_data;// 赋值#include "global.h"
-
   printer::transmit(ll);
   printer::transmit((void *)"   ",3);
-  printer ::transmit(enter,1);
+  printer ::printEnter();
 #endif
-
-  //print  summit
-  printer::transmit(sulphur,2);
-  printer::transmit((void *)": ",2);
-  printer::transmit(summitat,6);
-  printer::transmit((void *)max_volumn.toLocal8Bit().data(),max_volumn.size());
-  printer ::transmit(enter,1);
-  printer::transmit((void *)"     ",4);
-  printer::transmit(countdata_zhi,6);
-  printer::transmit((void *)"     ",2);
-  printer::transmit((void *)max_data.toLocal8Bit().data(),max_data.size());
-
-  printer ::transmit(enter,1);
-  printer::transmit((void *)"   ",3);
-  printer::transmit((void *)"========================================",SEGMENT_LENGTH);
-  printer ::transmit(enter,1);
-  printer::transmit((void *)"   ",3);
-  printer ::transmit(enter,1);
-}
-
-void spectrummeasurement::initTableWidget()
-{
-  ui->tableWidget->clearContents();
-  int rowHeight = (DESKTOP_HEIGHT - FONT_SIZE * 10) / 10;
-  int columnWidth = (DESKTOP_WIDTH ) / 8 -10;
-  for(int i = 0;i < ui->tableWidget->rowCount();i++){
-      ui->tableWidget->setRowHeight(i,rowHeight);
-    }
-  for(int i = 0;i < ui->tableWidget->columnCount();i++){
-      ui->tableWidget->setColumnWidth(i,columnWidth);
-    }
-  ui->tableWidget->horizontalHeader()->setFont(QFont("wenquanyi", FONT_SIZE,QFont::Normal));
 }
 
 #if 1
