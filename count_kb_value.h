@@ -28,10 +28,12 @@ private:
 
     //record the kbr,work_curve,number and datatime;
     static int count_record;
+
     query_s_count_data *query_s_count_d;
-    void printer_result();
     QSettings mysettings;
     spectrum_painter * spec_painter;
+
+    void printer_result();
 };
 
 #endif // COUNT_KB_VALUE_H

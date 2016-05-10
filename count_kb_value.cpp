@@ -133,26 +133,36 @@ void count_kb_value::printer_result(){
 
   long long work_line = 0xDFCFFAC7F7D7A4B9LL;
 
-  printer::instance()->printStart();
+  printer::instance()->printEnd();
 
-#if 1
-  printer::transmit(calibrate_result,8);
-  printer ::transmit(enter,1);
+  //k=? b=? r=?
+  QStringList work_curve_list = mysettings.value(QString("work_curve_%1").arg(ui->comboBox->currentText())).toString().split(";");
+  if(work_curve_list.size() == 3){
+      printer::transmit((void *)work_curve_list[0].split("=")[0].toLocal8Bit().data(),work_curve_list[0].split("=")[0].size());
+      printer::transmit((void *)"   ",3);
+      printer::transmit((void *)work_curve_list[0].split("=")[1].toLocal8Bit().data(),work_curve_list[0].split("=")[1].size());
+      printer ::transmit(enter,1);
 
-  //日期
-  printer::printCurrentDateTime();
+      printer::transmit((void *)work_curve_list[1].split("=")[0].toLocal8Bit().data(),work_curve_list[1].split("=")[0].size());
+      printer::transmit((void *)"   ",3);
+      printer::transmit((void *)work_curve_list[1].split("=")[1].toLocal8Bit().data(),work_curve_list[1].split("=")[1].size());
+      printer ::transmit(enter,1);
 
-  printer::transmit((void *)"            ",5);
-  printer::transmit(sample,4);
-  printer::transmit((void *)"       ",5);
-  printer::transmit(calibrate,6);
-  printer::transmit((void *)"     ",2);
-  printer::transmit(reference,6);
+      printer::transmit((void *)work_curve_list[2].split("=")[0].toLocal8Bit().data(),work_curve_list[2].split("=")[0].size());
+      printer::transmit((void *)"   ",3);
+      printer::transmit((void *)work_curve_list[2].split("=")[1].toLocal8Bit().data(),work_curve_list[2].split("=")[1].size());
+      printer ::transmit(enter,1);
+    }
+
+  //工作曲线：
+  printer::transmit(work_line,8);
+  printer::transmit((void *)"    ",3);
+  printer::transmit((void *)ui->comboBox->currentText().toLocal8Bit().data(),1);
   printer ::transmit(enter,1);
 
   QStringList datalist = mysettings.value(QString("calibration_results_in_data_%1")\
                                           .arg(mysettings.value("calibratemeasurement_count_record").toInt() - 1)).toString().split(";");
-  qDebug() << datalist;
+  //所有的参与计算的硫含量和计数值。
   for(int i = 1 ; i <= datalist.size() ; i++){
       QStringList one_data = datalist[i - 1].split("/");
       if(one_data.size() != 3){
@@ -169,27 +179,23 @@ void count_kb_value::printer_result(){
       printer ::transmit(enter,1);
     }
 
-  printer::transmit(work_line,8);
-  printer::transmit((void *)"    ",3);
-  printer::transmit((void *)ui->comboBox->currentText().toLocal8Bit().data(),1);
+  //含量      标定样     参考样
+  printer::transmit((void *)"            ",5);
+  printer::transmit(sample,4);
+  printer::transmit((void *)"       ",5);
+  printer::transmit(calibrate,6);
+  printer::transmit((void *)"     ",2);
+  printer::transmit(reference,6);
   printer ::transmit(enter,1);
 
-#endif
-  QStringList work_curve_list = mysettings.value(QString("work_curve_%1").arg(ui->comboBox->currentText())).toString().split(";");
-  if(work_curve_list.size() == 3){
-      printer::transmit((void *)work_curve_list[0].split("=")[0].toLocal8Bit().data(),work_curve_list[0].split("=")[0].size());
-      printer::transmit((void *)"   ",3);
-      printer::transmit((void *)work_curve_list[0].split("=")[1].toLocal8Bit().data(),work_curve_list[0].split("=")[1].size());
-      printer ::transmit(enter,1);
 
-      printer::transmit((void *)work_curve_list[1].split("=")[0].toLocal8Bit().data(),work_curve_list[1].split("=")[0].size());
-      printer::transmit((void *)"   ",3);
-      printer::transmit((void *)work_curve_list[1].split("=")[1].toLocal8Bit().data(),work_curve_list[1].split("=")[1].size());
-      printer ::transmit(enter,1);
-      printer::transmit((void *)work_curve_list[2].split("=")[0].toLocal8Bit().data(),work_curve_list[2].split("=")[0].size());
-      printer::transmit((void *)"   ",3);
-      printer::transmit((void *)work_curve_list[2].split("=")[1].toLocal8Bit().data(),work_curve_list[2].split("=")[1].size());
-      printer ::transmit(enter,1);
-    }
-  printer::instance()->printEnd();
+  //日期
+  printer::printCurrentDateTime();
+
+  //标点结果：
+  printer::transmit(calibrate_result,8);
+  printer ::transmit(enter,1);
+
+  printer::instance()->printStart();
+
 }
