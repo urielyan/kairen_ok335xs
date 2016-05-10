@@ -26,6 +26,7 @@ public:
   static void printCurrentDateTime();
   static void printStart();
   static void printEnd();
+  static void printEnter();
 
   static int fd;
   static struct termios options;

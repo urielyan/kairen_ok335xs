@@ -123,10 +123,17 @@ void printer::printStart()
 
 void printer::printEnd()
 {
-  printer::transmit((void *)"========================================",SEGMENT_LENGTH);
-  printer ::transmit(enter,1);
-  printer::transmit((void *)"   ",3);
-  printer ::transmit(enter,1);
+//    printer ::transmit(enter,1);
+//    printer::transmit((void *)"   ",3);
+    printer::transmit((void *)"========================================",SEGMENT_LENGTH);
+    printer ::transmit(enter,1);
+    printer::transmit((void *)"   ",3);
+    printer ::transmit(enter,1);
+}
+
+void printer::printEnter()
+{
+    printer ::transmit(enter,1);
 }
 
 int printer::transmit(char c){
