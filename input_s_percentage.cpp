@@ -229,9 +229,9 @@ void WidgetInputSPercentage::initTableWidget()
           ui->tableWidget->setItem(i, 2, new QTableWidgetItem(""));
         }
 
-      //set column 1,2 disabled.
-      ui->tableWidget->item(i, 1)->setFlags( ui->tableWidget->item(i, 1)->flags() & (~Qt::ItemIsEnabled) );
-      ui->tableWidget->item(i, 2)->setFlags( ui->tableWidget->item(i, 2)->flags() & (~Qt::ItemIsEnabled) );
+      //set column 1,2 disSelectAbled.
+      ui->tableWidget->item(i, 1)->setFlags( ui->tableWidget->item(i, 1)->flags() & (~Qt::ItemIsSelectable) );
+      ui->tableWidget->item(i, 2)->setFlags( ui->tableWidget->item(i, 2)->flags() & (~Qt::ItemIsSelectable) );
 
       //set all item align center;
       for(int columnCount = 0; columnCount < 3; columnCount++)
