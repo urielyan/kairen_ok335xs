@@ -573,27 +573,10 @@ void countingMeasurement::printer_result(){
 
   long long average  = 0xB5D6F9BEBDC6ll;
   long long statistics =0xB5D6C6BCB3CDll;
-  printer::transmit((void *)"========================================",SEGMENT_LENGTH);
-  printer ::transmit(enter,1);
 
-  //头：能谱测量，参考样，日期
-  printer::transmit(count_measurement,8);
-  printer ::transmit(enter,1);
-  if(ui->widget->global_is_sample ==REFERENCE_BE_LOCATON)printer::transmit(reference,6);
-  if(ui->widget->global_is_sample ==WAIT_BE_LOCATION)printer::transmit(wait_measurement,6);
-  printer ::transmit(enter,1);
+  printer::printEnd();
 
-
-  //日期
-  printer::printCurrentDateTime();
-
-  printer::transmit(just_conut,4);
-  printer::transmit(average,6);
-  printer::transmit((void *)":  ",3);
-  printer::transmit((void *)QString::number(show_count_mea->get_average_x()).\
-                    toLocal8Bit().data(),QString::number(show_count_mea->get_average_x()).size());
-  printer ::transmit(enter,1);
-
+  //测量统计值
   printer::transmit(just_conut,4);
   printer::transmit(statistics,6);
   printer::transmit((void *)":  ",3);
@@ -601,9 +584,26 @@ void countingMeasurement::printer_result(){
                     toLocal8Bit().data(),QString::number(show_count_mea->get_y()).size());
   printer ::transmit(enter,1);
 
+  //测量平均值
+  printer::transmit(just_conut,4);
+  printer::transmit(average,6);
+  printer::transmit((void *)":  ",3);
+  printer::transmit((void *)QString::number(show_count_mea->get_average_x()).\
+                    toLocal8Bit().data(),QString::number(show_count_mea->get_average_x()).size());
+  printer ::transmit(enter,1);
 
-  printer::transmit((void *)"========================================",SEGMENT_LENGTH);
+  //日期
+  printer::printCurrentDateTime();
+
+  //参考样
+  if(ui->widget->global_is_sample ==REFERENCE_BE_LOCATON)printer::transmit(reference,6);
+  if(ui->widget->global_is_sample ==WAIT_BE_LOCATION)printer::transmit(wait_measurement,6);
   printer ::transmit(enter,1);
-  printer::transmit((void *)"   ",3);
+
+  //计数测量，
+  printer::transmit(count_measurement,8);
   printer ::transmit(enter,1);
+
+    //头
+  printer::printStart();
 }
