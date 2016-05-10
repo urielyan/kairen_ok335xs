@@ -23,6 +23,8 @@ calibration::calibration(QWidget *parent) :
       }
     ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
     ui->label->setObjectName("title");
+
+    ui->pushButton_3->hide();
 }
 
 calibration::~calibration()

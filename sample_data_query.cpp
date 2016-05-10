@@ -169,7 +169,8 @@ void WinSqlDataQuery::on_tableView_clicked(const QModelIndex &index)
   strlist << "人员编号" << "样品编号" << "测量日期" << "工作曲线" << "测量时间" << "重复次数" << "平均值" << "标准偏差" << "是否自动" << "测量系数";
   table_schema <<"people_id" << "sample_serial" << "date_time" << "work_curve" << "measurement_time" << "repeat_time" << "deviation" << "is_auto" << "current_coefficient";
   QMessageBox msgbox;
-  msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+  msgbox.setFixedHeight(DESKTOP_HEIGHT / 3 * 2);
+  msgbox.setFixedWidth(DESKTOP_WIDTH / 6 * 5);
   QString query_str;
   //query_str= QString("SELECT * FROM sample_data WHERE ").append(table_schema[index.column()].append("=").append("\"").append(index.data().toString()).append("\"").append(";");
   //query_str = QString("SELECT * FROM sample_data WHERE ").append(table_schema[index.column()]).append("=").append("\"").append(index.data().toString()).append("\"").append(";");
@@ -185,7 +186,7 @@ void WinSqlDataQuery::on_tableView_clicked(const QModelIndex &index)
               msgstr += query.value(i).toString();
               msgstr += "\n";
             }
-          msgbox.setStyleSheet("font-size:16px");
+          //msgbox.setStyleSheet("font-size:16px");
           msgbox.setText(msgstr);
           msgbox.exec();
         }

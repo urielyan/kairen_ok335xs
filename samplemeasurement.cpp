@@ -53,7 +53,6 @@ sampleMeasurement::sampleMeasurement(QWidget *parent) :
                         "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}");
     ui->label->setObjectName("title");
     ui->label_second->setObjectName("countDown");
-    ui->label_second->setText("test");
 }
 
 sampleMeasurement::~sampleMeasurement()

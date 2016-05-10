@@ -203,9 +203,9 @@ void WidgetInputSPercentage::initTableWidget()
   ui->tableWidget->horizontalHeaderItem(0)->setText(tr("硫含量"));
   ui->tableWidget->horizontalHeaderItem(1)->setText(tr("标定样计数值"));
   ui->tableWidget->horizontalHeaderItem(2)->setText(tr("参考样计数值"));
-  ui->tableWidget->setColumnWidth(0, DESKTOP_WIDTH/6);
-  ui->tableWidget->setColumnWidth(1, DESKTOP_WIDTH/5);
-  ui->tableWidget->setColumnWidth(2, DESKTOP_WIDTH/5);
+  ui->tableWidget->setColumnWidth(0, DESKTOP_WIDTH/6 - 15);
+  ui->tableWidget->setColumnWidth(1, DESKTOP_WIDTH/5 - 5);
+  ui->tableWidget->setColumnWidth(2, DESKTOP_WIDTH/5 - 5);
 
   //set tableWidget row header ,row height, item isEnabled, item text.
   for(int i = 0; i < 12; i++)

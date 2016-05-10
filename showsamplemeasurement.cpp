@@ -22,24 +22,27 @@ showsamplemeasurement::showsamplemeasurement(QWidget *parent) :
     model = new QSqlTableModel();
 
     hide_lable(true);
-    ui->tableWidget->setColumnWidth(0,this->width()/2);
-    ui->tableWidget->setColumnWidth(1,this->width()/2);
+//    ui->tableWidget->setColumnWidth(0,this->width()/2);
+//    ui->tableWidget->setColumnWidth(1,this->width()/2);
 
-    QScrollBar *verticalbar;
-    verticalbar = new QScrollBar();
-    verticalbar->setStyleSheet("width:30px");
-    ui->tableWidget->setVerticalScrollBar(verticalbar);
+//    QScrollBar *verticalbar;
+//    verticalbar = new QScrollBar();
+//    verticalbar->setStyleSheet("width:30px");
+    //ui->tableWidget->verticalScrollBar()->setStyleSheet("width:30px");
 
     ui->tableWidget_hide->hide();
 
     //printer_result();
-    this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    QList<QLabel *> labellist = this->findChildren<QLabel *>();
-    for (int i = 0; i < labellist.count(); ++i) {
-        labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      }
-    ui->pushButton->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
-    ui->label->setObjectName("title");
+
+    //ui->label->setObjectName("title");
+
+    //use font set text size.
+    //    this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+    //    QList<QLabel *> labellist = this->findChildren<QLabel *>();
+    //    for (int i = 0; i < labellist.count(); ++i) {
+    //        labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+    //      }
+    //    ui->pushButton->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
 }
 
 showsamplemeasurement::~showsamplemeasurement()
@@ -54,8 +57,7 @@ void showsamplemeasurement::add_data(int work_curve_index,QString data,int size)
         ui->tableWidget_hide->clear();
         ui->tableWidget_hide->setRowCount(COUNT_MEASUREMENT_DATA_COUNT);
         for(int i = 0; i < COUNT_MEASUREMENT_DATA_COUNT; i++ ){
-            ui->tableWidget_hide->setItem(i,1,\
-              new QTableWidgetItem(countingMeasurement::get_count_5_data().value(i)));
+            ui->tableWidget_hide->setItem(i,1,new QTableWidgetItem(countingMeasurement::get_count_5_data().value(i)));
           }
         hide_lable(true);
         sum = 0;

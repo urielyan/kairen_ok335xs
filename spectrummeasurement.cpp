@@ -42,26 +42,12 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
   timer = new QTimer();
   connect(timer,SIGNAL(timeout()),this,SLOT(changetable()));
   spectrum_com = new Communciation_Com();
-  ui->tableWidget->clearContents();
-  for(int i = 0;i < ui->tableWidget->rowCount();i++){
-      ui->tableWidget->setRowHeight(i,FONT_SIZE - 2);
-    }
-  for(int i = 0;i < ui->tableWidget->columnCount();i++){
-      ui->tableWidget->setColumnWidth(i,FONT_SIZE * 4 - 10);
-    }
 
   painter_result = new painter_histogram();
-
-  this->setFont(QFont("wenquanyi", FONT_SIZE ,QFont::Normal));
-  QList<QLabel *> labellist = this->findChildren<QLabel *>();
-  for (int i = 0; i < labellist.count(); ++i) {
-      labellist[i]->setFont(QFont("wenquanyi", FONT_SIZE ,QFont::Normal));
-    }
-  ui->tableWidget->setFont(QFont("wenquanyi", FONT_SIZE/5*4 ,QFont::Normal));
-  ui->label->setFont(QFont("wenquanyi", FONT_SIZE*2,QFont::Normal));
-
     set_sliding_disabled(true,false);
     ui->pushButton_6->setDisabled(true);
+
+    initTableWidget();
 
     ui->pushButton_2->setObjectName("stop");
     ui->pushButton->setObjectName("start");
@@ -669,6 +655,20 @@ void spectrummeasurement::printer_result(){
   printer ::transmit(enter,1);
   printer::transmit((void *)"   ",3);
   printer ::transmit(enter,1);
+}
+
+void spectrummeasurement::initTableWidget()
+{
+  ui->tableWidget->clearContents();
+  int rowHeight = (DESKTOP_HEIGHT - FONT_SIZE * 10) / 10;
+  int columnWidth = (DESKTOP_WIDTH ) / 8 -10;
+  for(int i = 0;i < ui->tableWidget->rowCount();i++){
+      ui->tableWidget->setRowHeight(i,rowHeight);
+    }
+  for(int i = 0;i < ui->tableWidget->columnCount();i++){
+      ui->tableWidget->setColumnWidth(i,columnWidth);
+    }
+  ui->tableWidget->horizontalHeader()->setFont(QFont("wenquanyi", FONT_SIZE,QFont::Normal));
 }
 
 #if 1

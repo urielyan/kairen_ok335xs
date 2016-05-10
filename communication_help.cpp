@@ -148,7 +148,7 @@ void communication_help::on_pushButton_3_clicked()
         }else{
           QMessageBox msgbox;
           msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-          msgbox.setText("请确定：\n1、已插入u盘；\n2、u盘中含有new这个更新文件");
+          msgbox.setText(tr("请确定: 1、已插入u盘; 2、u盘中含有new这个更新文件."));
           msgbox.exec();
         }
     }

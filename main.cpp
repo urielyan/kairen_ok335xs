@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
   QApplication a(argc, argv);
 
   a.setStyleSheet(QString("QPushButton{"
-                          "min-width:100; font: 30px; min-height:60;"
+                          "min-width:80; font: 28px; min-height:50;"
                           "}"
                           "QPushButton#stop{"
                           "background-color:red; color: rgb(255, 255, 255); font-weight:bold;"
@@ -263,6 +263,21 @@ int main(int argc, char *argv[])
                           "font: 40px;"
                           "}"
 
+                          "QLineEdit{"
+                          "font: 24px;"
+                          "}"
+
+                          "QTableView{"
+                          "font:20px;"
+                          "}"
+                          "QTableView::item{"
+                          "min-height: 18px;"
+                          "}"
+                          "QHeaderView{font:20px}"
+
+                          "QScrollBar{width:10px;}"
+
+                          "QMessageBox{min-height: }"
                           ).arg(FONT_SIZE * 1.5));
 
   initSettings();

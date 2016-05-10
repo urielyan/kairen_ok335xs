@@ -63,6 +63,8 @@ private:
     int summit_value;
     QString max_volumn,max_data;
     //int fd;
+
+    void initTableWidget();
 };
 
 #endif // SPECTRUMMEASUREMENT_H
