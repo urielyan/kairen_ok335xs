@@ -138,19 +138,19 @@ void count_kb_value::printer_result(){
   //k=? b=? r=?
   QStringList work_curve_list = mysettings.value(QString("work_curve_%1").arg(ui->comboBox->currentText())).toString().split(";");
   if(work_curve_list.size() == 3){
-      printer::transmit((void *)work_curve_list[0].split("=")[0].toLocal8Bit().data(),work_curve_list[0].split("=")[0].size());
-      printer::transmit((void *)"   ",3);
-      printer::transmit((void *)work_curve_list[0].split("=")[1].toLocal8Bit().data(),work_curve_list[0].split("=")[1].size());
+      printer::transmit((void *)work_curve_list[0].split("=")[0].toLocal8Bit().data(), work_curve_list[0].split("=")[0].size());
+      printer::transmit((void *)" =  ",3);
+      printer::transmit((void *)work_curve_list[0].split("=")[1].toLocal8Bit().data(), work_curve_list[0].split("=")[1].size());
       printer ::transmit(enter,1);
 
-      printer::transmit((void *)work_curve_list[1].split("=")[0].toLocal8Bit().data(),work_curve_list[1].split("=")[0].size());
-      printer::transmit((void *)"   ",3);
-      printer::transmit((void *)work_curve_list[1].split("=")[1].toLocal8Bit().data(),work_curve_list[1].split("=")[1].size());
+      printer::transmit((void *)work_curve_list[1].split("=")[0].toLocal8Bit().data(), work_curve_list[1].split("=")[0].size());
+      printer::transmit((void *)" =  ",3);
+      printer::transmit((void *)work_curve_list[1].split("=")[1].toLocal8Bit().data(), work_curve_list[1].split("=")[1].size());
       printer ::transmit(enter,1);
 
-      printer::transmit((void *)work_curve_list[2].split("=")[0].toLocal8Bit().data(),work_curve_list[2].split("=")[0].size());
-      printer::transmit((void *)"   ",3);
-      printer::transmit((void *)work_curve_list[2].split("=")[1].toLocal8Bit().data(),work_curve_list[2].split("=")[1].size());
+      printer::transmit((void *)work_curve_list[2].split("=")[0].toLocal8Bit().data(), work_curve_list[2].split("=")[0].size());
+      printer::transmit((void *)" =  ",3);
+      printer::transmit((void *)work_curve_list[2].split("=")[1].toLocal8Bit().data(), work_curve_list[2].split("=")[1].size());
       printer ::transmit(enter,1);
     }
 
@@ -180,7 +180,7 @@ void count_kb_value::printer_result(){
     }
 
   //含量      标定样     参考样
-  printer::transmit((void *)"            ",5);
+  printer::transmit((void *)"            ",3);
   printer::transmit(sample,4);
   printer::transmit((void *)"       ",5);
   printer::transmit(calibrate,6);

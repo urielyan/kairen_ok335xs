@@ -25,7 +25,7 @@ ispreheat::ispreheat(QWidget *parent) :
   timer = new QTimer(this);
   timer2 = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(check_ispreheat()));
-  timer->start(1000/* * 60*/);//
+  timer->start(1000 * 60);//
 
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
   QList<QLabel *> labellist = this->findChildren<QLabel *>();

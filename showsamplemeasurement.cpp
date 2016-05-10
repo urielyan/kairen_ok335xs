@@ -23,6 +23,8 @@ showsamplemeasurement::showsamplemeasurement(QWidget *parent) :
 
     hide_lable(true);
     ui->tableWidget_hide->hide();
+    ui->tableWidget->setColumnWidth(0, DESKTOP_WIDTH / 3);
+    ui->tableWidget->setColumnWidth(1, DESKTOP_WIDTH / 3);
 }
 
 showsamplemeasurement::~showsamplemeasurement()
