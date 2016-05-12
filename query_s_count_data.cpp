@@ -55,22 +55,19 @@ query_s_count_data::~query_s_count_data()
 //得到以字符串形式的kbr
 QString query_s_count_data::get_kbr_a012(int judge_which){
     int m = mysettings.value("calibratemeasurement_count").toInt();
-    QStringList table_data_list;//标定样和参考样的数据
-    QStringList tmplist;
     QStringList calibrate_data;//存储所有硫含量
     QStringList reference_proportion_wait;//标定样和参考样的比
-    QString input_s_data;
     for(int i = 0; i < m ;i++){
         //得到用户输入的硫的含量，并判断是否是空或者为0.0000
-        input_s_data = mysettings.value( QString("calibrate_input_s_%1").arg(i)).toString();
+        QString input_s_data = mysettings.value( QString("calibrate_input_s_%1").arg(i)).toString();
         if(input_s_data == NULL || !input_s_data.compare("0.0000" ) || input_s_data.toDouble() == 0.0){
             continue;
         }
-       // if()
+        calibrate_data << input_s_data;
+
 
         //得到标定的数据和带测样的数据的比值
-        calibrate_data << input_s_data;
-        tmplist = mysettings.value(QString("s_count_data_%1").arg(i + 1)).toString().split("/");
+        QStringList tmplist = mysettings.value(QString("s_count_data_%1").arg(i + 1)).toString().split("/");
         if((tmplist.size() != 2)){
             return NULL;
         }
