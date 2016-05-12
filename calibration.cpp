@@ -51,7 +51,7 @@ void calibration::on_pushButton_2_clicked()
 void calibration::on_pushButton_4_clicked()
 {
     //4 input S%
-    inputsp->showFullScreen();
+    inputsp->showAndUpdateData();
 }
 
 void calibration::on_pushButton_clicked()

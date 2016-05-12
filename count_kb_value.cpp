@@ -47,27 +47,27 @@ void count_kb_value::on_pushButton_clicked()
   QMessageBox msgbox;
   msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
   if(calibrationmeasurement::count < 3){
-      msgbox.setText("标定样品数据太少");
+      msgbox.setText(tr("标定样品数据太少"));
       msgbox.exec();
       return;
     }
 # if  0
   else if(calibrationmeasurement::count > 12){
-      msgbox.setText("标定样品数据太多");
+      msgbox.setText(tr("标定样品数据太多");
       msgbox.exec();
       return;
     }
 #endif
   int count_input_s = 0;
-  for(int i = 1; i <= calibrationmeasurement::count ; i++){
+  for(int i = 0; i <= 11 ; i++){
       QString tmp_str = mysettings.value(QString("calibrate_input_s_%1").arg(i)).toString();
-      qDebug() << tmp_str <<i;
+      qDebug() << tmp_str << i;
       if(  (!(tmp_str==NULL)) &&(!tmp_str.toDouble() == 0.0)  )
         count_input_s++;
     }
   qDebug() << count_input_s;
   if(count_input_s <3){
-      msgbox.setText("请输入正确的硫含量");
+      msgbox.setText(tr("请输入正确的硫含量"));
       msgbox.exec();
       return;
     }
@@ -138,9 +138,9 @@ void count_kb_value::printer_result(){
   //k=? b=? r=?
   QStringList work_curve_list = mysettings.value(QString("work_curve_%1").arg(ui->comboBox->currentText())).toString().split(";");
   if(work_curve_list.size() == 3){
-      printer::transmit((void *)work_curve_list[0].split("=")[0].toLocal8Bit().data(), work_curve_list[0].split("=")[0].size());
+      printer::transmit((void *)work_curve_list[2].split("=")[0].toLocal8Bit().data(), work_curve_list[2].split("=")[0].size());
       printer::transmit((void *)" =  ",3);
-      printer::transmit((void *)work_curve_list[0].split("=")[1].toLocal8Bit().data(), work_curve_list[0].split("=")[1].size());
+      printer::transmit((void *)work_curve_list[2].split("=")[1].toLocal8Bit().data(), work_curve_list[2].split("=")[1].size());
       printer ::transmit(enter,1);
 
       printer::transmit((void *)work_curve_list[1].split("=")[0].toLocal8Bit().data(), work_curve_list[1].split("=")[0].size());
@@ -148,9 +148,9 @@ void count_kb_value::printer_result(){
       printer::transmit((void *)work_curve_list[1].split("=")[1].toLocal8Bit().data(), work_curve_list[1].split("=")[1].size());
       printer ::transmit(enter,1);
 
-      printer::transmit((void *)work_curve_list[2].split("=")[0].toLocal8Bit().data(), work_curve_list[2].split("=")[0].size());
+      printer::transmit((void *)work_curve_list[0].split("=")[0].toLocal8Bit().data(), work_curve_list[0].split("=")[0].size());
       printer::transmit((void *)" =  ",3);
-      printer::transmit((void *)work_curve_list[2].split("=")[1].toLocal8Bit().data(), work_curve_list[2].split("=")[1].size());
+      printer::transmit((void *)work_curve_list[0].split("=")[1].toLocal8Bit().data(), work_curve_list[0].split("=")[1].size());
       printer ::transmit(enter,1);
     }
 

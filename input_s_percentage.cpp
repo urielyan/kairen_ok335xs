@@ -54,6 +54,13 @@ void WidgetInputSPercentage::clear_all_tablewidget(){
   mysettings.setValue("calibratemeasurement_count",0);
 }
 
+void WidgetInputSPercentage::showAndUpdateData()
+{
+  initTableWidgetData();
+
+  this->showFullScreen();
+}
+
 void WidgetInputSPercentage::slot_keyNumPressed(){
   //判断是否是第0列，若not则返回
   if(ui->tableWidget->currentItem() == NULL || ui->tableWidget->currentItem()->column() != 0 )
@@ -96,6 +103,7 @@ void WidgetInputSPercentage::slot_keyNumPressed(){
 void WidgetInputSPercentage::on_b_abandon_clicked()
 {
   //don't save button
+  initTableWidgetData();
   this->close();
 }
 
@@ -207,15 +215,29 @@ void WidgetInputSPercentage::initTableWidget()
   ui->tableWidget->setColumnWidth(1, DESKTOP_WIDTH/5 - 5);
   ui->tableWidget->setColumnWidth(2, DESKTOP_WIDTH/5 - 5);
 
-  //set tableWidget row header ,row height, item isEnabled, item text.
+  initTableWidgetData();
+
   for(int i = 0; i < 12; i++)
     {
       //set vertical header.
       ui->tableWidget->verticalHeaderItem(i)->setText(QString::number(i + 1) + "#");
+    }
 
+  ui->tableWidget->setCurrentCell(0,0);
+}
+
+void WidgetInputSPercentage::initTableWidgetData()
+{
+  //synchronized mysettings.
+  mysettings.sync();
+
+  //set tableWidget row header ,row height, item isEnabled, item text.
+  ui->tableWidget->clearContents();
+  for(int i = 0; i < 12; i++)
+    {
       //set 0 column text.
       ui->tableWidget->setItem(i, 0,new QTableWidgetItem(
-                                 mysettings.value(QString("calibrate_input_s_") + QString::number(i + 1)).toString()   ));
+                                 mysettings.value(QString("calibrate_input_s_") + QString::number(i)).toString()   ));
 
       //set 1,2 column object and text;
       QStringList stringCalibrateData = mysettings.value(QString("s_count_data_") + QString::number(i + 1)).toString().split("/");
@@ -242,7 +264,6 @@ void WidgetInputSPercentage::initTableWidget()
       //set all row height
       ui->tableWidget->setRowHeight(i, DESKTOP_HEIGHT/17);
     }
-  ui->tableWidget->setCurrentCell(0,0);
 }
 
 void WidgetInputSPercentage::initSignalSlotConnect()

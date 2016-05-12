@@ -17,6 +17,7 @@ public:
     ~WidgetInputSPercentage();
 
     void clear_all_tablewidget();
+    void showAndUpdateData();
     //int judge_is_available();
 
 private slots:
@@ -37,6 +38,7 @@ private:
     QSettings mysettings;
 
     void initTableWidget();
+    void initTableWidgetData();
     void initSignalSlotConnect();
 };
 

@@ -62,7 +62,7 @@ QString query_s_count_data::get_kbr_a012(int judge_which){
     QString input_s_data;
     for(int i = 0; i < m ;i++){
         //得到用户输入的硫的含量，并判断是否是空或者为0.0000
-        input_s_data = mysettings.value( QString("calibrate_input_s_%1").arg(i + 1)).toString();
+        input_s_data = mysettings.value( QString("calibrate_input_s_%1").arg(i)).toString();
         if(input_s_data == NULL || !input_s_data.compare("0.0000" ) || input_s_data.toDouble() == 0.0){
             continue;
         }
@@ -70,7 +70,6 @@ QString query_s_count_data::get_kbr_a012(int judge_which){
 
         //得到标定的数据和带测样的数据的比值
         calibrate_data << input_s_data;
-        //table_data_list << mysettings.value(QString("s_count_data_%1").arg(i + 1)).toString();
         tmplist = mysettings.value(QString("s_count_data_%1").arg(i + 1)).toString().split("/");
         if((tmplist.size() != 2)){
             return NULL;
