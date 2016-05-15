@@ -79,9 +79,8 @@ void initSettings()
 
   QString tmpstr = "calibrate_input_s_";
   if(!mysettings.contains("calibrate_input_s_1")){
-      for(int tmpnumber = 1; tmpnumber <= 12 ;tmpnumber++){
+      for(int tmpnumber = 0; tmpnumber < 12 ;tmpnumber++){
           tmpstr.append(QString("%1").arg(tmpnumber));
-          qDebug() << tmpstr;
           mysettings.setValue(tmpstr,"0.0000");
           tmpstr = "calibrate_input_s_";
         }
@@ -90,7 +89,7 @@ void initSettings()
 
   tmpstr = "s_count_data_";
   if(!mysettings.contains("s_count_data_1")){
-      for(int tmpnumber = 1; tmpnumber <= 12 ;tmpnumber++){
+      for(int tmpnumber = 0; tmpnumber < 12 ;tmpnumber++){
           tmpstr.append(QString("%1").arg(tmpnumber));
           qDebug() << tmpstr;
           mysettings.setValue(tmpstr,"");

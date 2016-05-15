@@ -14,6 +14,7 @@ namespace Ui {
   class systemsetup;
 }
 
+class SetDateTime;
 class systemsetup : public QWidget
 {
   Q_OBJECT
@@ -47,7 +48,8 @@ private slots:
 private:
 
   Ui::systemsetup *ui;
-  setupdatetime *setdt;
+  //setupdatetime *setdt;
+  SetDateTime *setdt;
   calibration *calibrate;
   modify_kb_value *modify_kb;
   countingMeasurement *count_mea;

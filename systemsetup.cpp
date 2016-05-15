@@ -3,6 +3,7 @@
 #include "systemsetup.h"
 #include "ui_systemsetup.h"
 #include "passwd.h"
+#include "setdatetime.h"
 
 systemsetup::systemsetup(QWidget *parent) :
   QWidget(parent),
@@ -10,7 +11,7 @@ systemsetup::systemsetup(QWidget *parent) :
 {
   ui->setupUi(this);
 
-  setdt = new setupdatetime();
+  setdt = new SetDateTime();
   calibrate = new calibration();
   modify_kb = new modify_kb_value();
   count_mea = new countingMeasurement();
@@ -67,7 +68,7 @@ void systemsetup::on_pushButton_2_clicked()
 void systemsetup::on_pushButton_clicked()
 {
   //setup date and time
-  setdt->show_and_refresh();
+  setdt->exec();
 }
 
 void systemsetup::on_pushButton_6_clicked()

@@ -38,7 +38,7 @@ private slots:
 private:
     Ui::calibration *ui;
     calibrationmeasurement *cm;
-    WidgetInputSPercentage *inputsp;
+    WinInputSPercentage *inputsp;
     query_s_count_data *query_s_count;
     count_kb_value *count_kb;
 };

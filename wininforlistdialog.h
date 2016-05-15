@@ -12,7 +12,11 @@ class WinInforListDialog : public QDialog
 public:
   static WinInforListDialog *instance();
 
+  void showMsg(QString text);
   void showMsg(qint32 id);
+
+  QString doubleToCompleteDouble(double num);
+  QString intToCompleteInt(int num);
 signals:
 
 public slots:

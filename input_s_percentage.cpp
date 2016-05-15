@@ -1,6 +1,7 @@
 #include "input_s_percentage.h"
 #include "ui_input_s_percentage.h"
 #include "global.h"
+#include "wininforlistdialog.h"
 
 #include <QTableWidgetItem>
 #include <QMessageBox>
@@ -8,7 +9,7 @@
 
 //extern QSettings mysettings;
 
-WidgetInputSPercentage::WidgetInputSPercentage(QWidget *parent) :
+WinInputSPercentage::WinInputSPercentage(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::input_S_percentage)
 {
@@ -27,12 +28,12 @@ WidgetInputSPercentage::WidgetInputSPercentage(QWidget *parent) :
   ui->label->setObjectName("title");
   }
 
-WidgetInputSPercentage::~WidgetInputSPercentage()
+WinInputSPercentage::~WinInputSPercentage()
 {
   delete ui;
 }
 
-void WidgetInputSPercentage::clear_all_tablewidget(){
+void WinInputSPercentage::clear_all_tablewidget(){
   /*
         clear tablewidget and mysettings.value("calibrate_input_s_ + i");
         It's used to clear data in calibrate widget.
@@ -41,7 +42,7 @@ void WidgetInputSPercentage::clear_all_tablewidget(){
     */
   int tmpnumber,row,column;
   QString tmpstr = "calibrate_input_s_";
-  for(tmpnumber = 1; tmpnumber <= 12 ;tmpnumber++){
+  for(tmpnumber = 0; tmpnumber < 12 ;tmpnumber++){
       tmpstr.append(QString("%1").arg(tmpnumber));
       mysettings.setValue(tmpstr,"0.0000");
       tmpstr = "calibrate_input_s_";
@@ -54,14 +55,14 @@ void WidgetInputSPercentage::clear_all_tablewidget(){
   mysettings.setValue("calibratemeasurement_count",0);
 }
 
-void WidgetInputSPercentage::showAndUpdateData()
+void WinInputSPercentage::showAndUpdateData()
 {
   initTableWidgetData();
 
   this->showFullScreen();
 }
 
-void WidgetInputSPercentage::slot_keyNumPressed(){
+void WinInputSPercentage::slot_keyNumPressed(){
   //判断是否是第0列，若not则返回
   if(ui->tableWidget->currentItem() == NULL || ui->tableWidget->currentItem()->column() != 0 )
     {
@@ -100,14 +101,14 @@ void WidgetInputSPercentage::slot_keyNumPressed(){
   ui->tableWidget->setCurrentCell(tmp_Row,tmp_Column);
 }
 
-void WidgetInputSPercentage::on_b_abandon_clicked()
+void WinInputSPercentage::on_b_abandon_clicked()
 {
   //don't save button
   initTableWidgetData();
   this->close();
 }
 
-void WidgetInputSPercentage::on_b_clear_clicked()
+void WinInputSPercentage::on_b_clear_clicked()
 {
   //clear button
   //判断是否是第0列，若not则返回
@@ -124,7 +125,7 @@ void WidgetInputSPercentage::on_b_clear_clicked()
   ui->tableWidget->setCurrentItem(tmpitem);
 }
 
-void WidgetInputSPercentage::on_b_backspace_clicked()
+void WinInputSPercentage::on_b_backspace_clicked()
 {
   //backspace button
 
@@ -145,7 +146,7 @@ void WidgetInputSPercentage::on_b_backspace_clicked()
   ui->tableWidget->setCurrentItem(tmpitem);
 }
 
-void WidgetInputSPercentage::slotPointClicked()
+void WinInputSPercentage::slotPointClicked()
 {
   //point button
 
@@ -172,7 +173,7 @@ void WidgetInputSPercentage::slotPointClicked()
   ui->tableWidget->setCurrentItem(tmpitem);
 }
 
-void WidgetInputSPercentage::on_b_sure_clicked()
+void WinInputSPercentage::on_b_sure_clicked()
 {
   //to save button
   int row;
@@ -185,7 +186,7 @@ void WidgetInputSPercentage::on_b_sure_clicked()
   if (QMessageBox::Save == ret){
       for(row = 0 ; row < 12 ; row++){
           QString tmpsettingsstr = QString("calibrate_input_s_%1").arg(row);
-          mysettings.setValue(tmpsettingsstr,ui->tableWidget->item(row,0)->text());
+          mysettings.setValue(tmpsettingsstr,  WinInforListDialog::instance()->doubleToCompleteDouble(ui->tableWidget->item(row,0)->text().toDouble()));
         }
       QMessageBox box;
       box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -197,7 +198,7 @@ void WidgetInputSPercentage::on_b_sure_clicked()
   }
 }
 
-void WidgetInputSPercentage::initTableWidget()
+void WinInputSPercentage::initTableWidget()
 {
   //set tableWidget size
   ui->tableWidget->setRowCount(12);
@@ -226,7 +227,7 @@ void WidgetInputSPercentage::initTableWidget()
   ui->tableWidget->setCurrentCell(0,0);
 }
 
-void WidgetInputSPercentage::initTableWidgetData()
+void WinInputSPercentage::initTableWidgetData()
 {
   //synchronized mysettings.
   mysettings.sync();
@@ -240,7 +241,7 @@ void WidgetInputSPercentage::initTableWidgetData()
                                  mysettings.value(QString("calibrate_input_s_") + QString::number(i)).toString()   ));
 
       //set 1,2 column object and text;
-      QStringList stringCalibrateData = mysettings.value(QString("s_count_data_") + QString::number(i + 1)).toString().split("/");
+      QStringList stringCalibrateData = mysettings.value(QString("s_count_data_") + QString::number(i)).toString().split("/");
       if(2 == stringCalibrateData.size())
         {
           ui->tableWidget->setItem(i, 1,new QTableWidgetItem(stringCalibrateData.at(0)));
@@ -266,7 +267,7 @@ void WidgetInputSPercentage::initTableWidgetData()
     }
 }
 
-void WidgetInputSPercentage::initSignalSlotConnect()
+void WinInputSPercentage::initSignalSlotConnect()
 {
   //point signal and slot.
   connect(ui->b_point, SIGNAL(clicked()), this, SLOT(slotPointClicked()));

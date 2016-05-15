@@ -8,13 +8,13 @@ namespace Ui {
 class input_S_percentage;
 }
 
-class WidgetInputSPercentage : public QWidget
+class WinInputSPercentage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit WidgetInputSPercentage(QWidget *parent = 0);
-    ~WidgetInputSPercentage();
+    explicit WinInputSPercentage(QWidget *parent = 0);
+    ~WinInputSPercentage();
 
     void clear_all_tablewidget();
     void showAndUpdateData();

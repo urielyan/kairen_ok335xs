@@ -11,7 +11,7 @@ calibration::calibration(QWidget *parent) :
 {
     ui->setupUi(this);
     cm = new calibrationmeasurement();
-    inputsp = new WidgetInputSPercentage();
+    inputsp = new WinInputSPercentage();
     query_s_count = new query_s_count_data();
     count_kb = new count_kb_value();
     connect(this,SIGNAL(transmit_stop_auto_count()),cm,SIGNAL(transmit_stop_auto_count()));

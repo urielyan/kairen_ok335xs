@@ -67,7 +67,7 @@ QString query_s_count_data::get_kbr_a012(int judge_which){
 
 
         //得到标定的数据和带测样的数据的比值
-        QStringList tmplist = mysettings.value(QString("s_count_data_%1").arg(i + 1)).toString().split("/");
+        QStringList tmplist = mysettings.value(QString("s_count_data_%1").arg(i)).toString().split("/");
         if((tmplist.size() != 2)){
             return NULL;
         }

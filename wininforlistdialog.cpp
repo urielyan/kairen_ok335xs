@@ -1,9 +1,19 @@
 #include "wininforlistdialog.h"
+#include "global.h"
 
+#include <QMessageBox>
 WinInforListDialog *WinInforListDialog::instance()
 {
   static WinInforListDialog Instance;
   return &Instance;
+}
+
+void WinInforListDialog::showMsg(QString text)
+{
+  QMessageBox msgbox;
+  msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+  msgbox.setText(text);
+  msgbox.exec();
 }
 
 void WinInforListDialog::showMsg(qint32 id)
@@ -16,6 +26,21 @@ void WinInforListDialog::showMsg(qint32 id)
     }
 
   this->show();
+}
+
+QString WinInforListDialog::doubleToCompleteDouble(double num)
+{
+  return QString::number(num, 'f', 4);
+}
+
+QString WinInforListDialog::intToCompleteInt(int num)
+{
+  QString tmp =  QString::number(num);
+  while(num < 10000)
+    {
+      tmp = "0" + tmp;
+    }
+  return tmp;
 }
 
 WinInforListDialog::WinInforListDialog(QWidget *parent) : QDialog(parent)

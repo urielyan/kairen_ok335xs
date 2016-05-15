@@ -504,13 +504,13 @@ void spectrummeasurement::printer_result()
      printer::transmit((void *)"     ",2);
      printer::transmit((void *)max_data.toLocal8Bit().data(),max_data.size());
 
-     printer::transmit((void *)max_volumn.toLocal8Bit().data(),max_volumn.size());
-     printer ::transmit(enter,1);
-     printer::transmit((void *)"     ",4);
-
+     //s ,max
      printer::transmit(sulphur,2);
      printer::transmit((void *)": ",2);
      printer::transmit(summitat,6);
+     printer::transmit((void *)max_volumn.toLocal8Bit().data(),max_volumn.size());
+     printer ::transmit(enter,1);
+     printer::transmit((void *)"     ",4);
 
      printPicture();
 
@@ -539,7 +539,7 @@ void spectrummeasurement::printer_result()
      //日期
      printer::printCurrentDateTime();
 
-     //头：能谱测量，参考样
+     //参考样
      if(ui->widget->global_is_sample ==REFERENCE_BE_LOCATON)
      {
          printer::transmit(reference,6);
@@ -549,9 +549,11 @@ void spectrummeasurement::printer_result()
      }
      printer ::transmit(enter,1);
 
+     //能谱测量
      printer::transmit(spectrum,8);
      printer ::transmit(enter,1);
 
+     //头
      printer::printStart();
 
 }
