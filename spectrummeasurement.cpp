@@ -512,7 +512,7 @@ void spectrummeasurement::printer_result()
      printer ::transmit(enter,1);
      printer::transmit((void *)"     ",4);
 
-     printPicture();
+     //printPicture();
 
 
      //打印数据
