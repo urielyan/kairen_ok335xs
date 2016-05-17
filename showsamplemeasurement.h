@@ -39,8 +39,9 @@ private:
   int real_curve;
   QSqlTableModel *model;
   QSqlDatabase db ;
-  void printer_result();
   QSettings mysettings;
+
+  void printer_result();
 };
 
 #endif // SHOWSAMPLEMEASUREMENT_H
