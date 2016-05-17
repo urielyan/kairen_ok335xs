@@ -20,6 +20,7 @@
  *
  ********************************************************************/
 #include "setdatetime.h"
+#include "global.h"
 #include <QPainter>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -504,10 +505,10 @@ void SetDateTime::slotGroupNumClicked(int id)
 void SetDateTime::slotButtonDateClicked()
 {
     buttonDate->setStyleSheet("border-width:2px;border-style:solid; border-color: rgb(229, 236, 246);"\
-                              "font-family:'Microsoft YaHei';font-size:30px; color: rgb(0, 0, 0);"\
+                              "font-family:'Microsoft YaHei';font-size:18px; color: rgb(0, 0, 0);"\
                               "background-color: rgb(229, 236, 246);");
     buttonTime->setStyleSheet("border-width:2px;border-style:solid; border-color: rgb(116, 127, 145);"\
-                              "font-family:'Microsoft YaHei';font-size:30px; color: rgb(124, 139, 162);");
+                              "font-family:'Microsoft YaHei';font-size:18px; color: rgb(124, 139, 162);");
     buttonDate->setAttribute(Qt::WA_TranslucentBackground, false);
     buttonTime->setAttribute(Qt::WA_TranslucentBackground, true);
     dataWidget->setHidden(false);
@@ -525,9 +526,9 @@ void SetDateTime::slotButtonDateClicked()
 void SetDateTime::slotButtonTimeClicked()
 {
     buttonDate->setStyleSheet("border-width:2px;border-style:solid; border-color: rgb(116, 127, 145);"\
-                              "font-family:'Microsoft YaHei';font-size:30px; color: rgb(124, 139, 162);");
+                              "font-family:'Microsoft YaHei';font-size:18px; color: rgb(124, 139, 162);");
     buttonTime->setStyleSheet("border-width:2px;border-style:solid; border-color: rgb(255, 255, 255);"\
-                              "font-family:'Microsoft YaHei';font-size:30px; color: rgb(0, 0, 0);"\
+                              "font-family:'Microsoft YaHei';font-size:18px; color: rgb(0, 0, 0);"\
                               "background-color: rgb(255, 255, 255);");
     buttonDate->setAttribute(Qt::WA_TranslucentBackground, true);
     buttonTime->setAttribute(Qt::WA_TranslucentBackground, false);
@@ -547,7 +548,7 @@ void SetDateTime::slotGroupNumPressed(int id)
                                             "rgb(187, 241, 253), stop: 0.14 rgb(139, 234, 254), stop: 1 "\
                                             "rgb(156, 251, 255));"\
                                             "border-width: 1px; border-style: solid; border-color: rgb(168, 177, 186);"\
-                                            "border-radius: 8px; font-family:'Microsoft YaHei';font-size:30px;");
+                                            "border-radius: 8px; font-family:'Microsoft YaHei';font-size:18px;");
         break;
     case 13:
     case 14:
@@ -556,7 +557,7 @@ void SetDateTime::slotGroupNumPressed(int id)
                                             "rgb(113, 212, 254), stop: 0.14 rgb(58, 197, 255), stop: 1 "\
                                             "rgb(55, 250, 254));color: rgb(255, 255, 255);"\
                                             "border-width: 1px; border-style: solid; border-color: rgb(0, 7, 132);"\
-                                            "border-radius: 10px; font-family:'Microsoft YaHei';font-size:30px;");
+                                            "border-radius: 10px; font-family:'Microsoft YaHei';font-size:18px;");
     default:
         break;
     }
@@ -574,7 +575,7 @@ void SetDateTime::slotGroupNumRelsead(int id)
                                             "rgb(211, 238, 255), stop: 0.14 rgb(182, 227, 255), stop: 1 "\
                                             "rgb(211, 248, 255));"\
                                             "border-width: 1px; border-style: solid; border-color: rgb(168, 177, 186);"\
-                                            "border-radius: 8px; font-family:'Microsoft YaHei';font-size:30px;");
+                                            "border-radius: 8px; font-family:'Microsoft YaHei';font-size:18px;");
         break;
     case 13:
     case 14:
@@ -583,7 +584,7 @@ void SetDateTime::slotGroupNumRelsead(int id)
                                             "rgb(20, 158, 249), stop: 0.14 rgb(0, 143, 248), stop: 1 "\
                                             "rgb(5, 117, 253));color: rgb(255, 255, 255);"\
                                             "border-width: 1px; border-style: solid; border-color: rgb(0, 7, 132);"\
-                                            "border-radius: 10px; font-family:'Microsoft YaHei';font-size:30px;");
+                                            "border-radius: 10px; font-family:'Microsoft YaHei';font-size:18px;");
     default:
         break;
     }
@@ -632,8 +633,8 @@ void SetDateTime::slotBOkClicked()
 void SetDateTime::setWindowsSize()
 {
     setAttribute(Qt::WA_TranslucentBackground, true);
-    currentHeight = QApplication::desktop()->height();
-    currentWidth = QApplication::desktop()->width();
+    currentHeight = DESKTOP_HEIGHT;
+    currentWidth = DESKTOP_WIDTH;
     resize(currentWidth, currentHeight);
 }
 
@@ -671,7 +672,7 @@ void SetDateTime::setCenterWidget()
     buttonDate->setFocusPolicy(Qt::NoFocus);
     buttonDate->setAttribute(Qt::WA_TranslucentBackground, true);
     buttonDate->setStyleSheet("border-width:2px;border-style:solid; border-color: rgb(116, 127, 145);"\
-                              "font-family:'Microsoft YaHei';font-size:30px; color: rgb(124, 139, 162);");
+                              "font-family:'Microsoft YaHei';font-size:18px; color: rgb(124, 139, 162);");
     buttonDate->setText(tr("日期"));
     buttonDate->setGeometry((int)(0.21 * currentWidth), (int)(0.06 * currentHeight),\
                             (int)(0.13 * currentWidth), (int)(0.07 * currentHeight));
@@ -680,7 +681,7 @@ void SetDateTime::setCenterWidget()
     buttonTime->setFocusPolicy(Qt::NoFocus);
     buttonTime->setAttribute(Qt::WA_TranslucentBackground, true);
     buttonTime->setStyleSheet("border-width:2px;border-style:solid; border-color: rgb(116, 127, 145);"\
-                              "font-family:'Microsoft YaHei';font-size:30px; color: rgb(124, 139, 162);");
+                              "font-family:'Microsoft YaHei';font-size:18px; color: rgb(124, 139, 162);");
     buttonTime->setGeometry((int)(0.35 * currentWidth), (int)(0.06 * currentHeight),\
                             (int)(0.13 * currentWidth), (int)(0.07 * currentHeight));
     buttonTime->setText(tr("时间"));
@@ -745,7 +746,7 @@ void SetDateTime::setCenterWidget()
     labelYear->setAttribute(Qt::WA_TranslucentBackground, true);
     labelYear->setGeometry((int)(0.21 * currentWidth), (int)(0.013 * currentHeight),\
                            (int)(0.1 * currentWidth), (int)(0.05 * currentHeight));
-    labelYear->setStyleSheet("QLabel{font-family:'Microsoft YaHei';font-size:30px;}");
+    labelYear->setStyleSheet("QLabel{font-family:'Microsoft YaHei';font-size:18px;}");
     labelYear->setAlignment(Qt::AlignHCenter);
     QString yearName = QString("%1").arg(calendaYear) + QString(" year");
     QByteArray baYear = yearName.toLatin1();
@@ -868,7 +869,7 @@ void SetDateTime::setCenterWidget()
                                    "rgb(211, 238, 255), stop: 0.14 rgb(182, 227, 255), stop: 1 "\
                                    "rgb(211, 248, 255));"\
                                    "border-width: 1px; border-style: solid; border-color: rgb(168, 177, 186);"\
-                                   "border-radius: 8px; font-family:'Microsoft YaHei';font-size:30px;}");
+                                   "border-radius: 8px; font-family:'Microsoft YaHei';font-size:18px;}");
     buttonTimeClear->setText(tr("清除"));
 
     buttonCancel = new QPushButton(bottomWidget);
@@ -880,7 +881,7 @@ void SetDateTime::setCenterWidget()
                                 "rgb(20, 158, 249), stop: 0.14 rgb(0, 143, 248), stop: 1 "\
                                 "rgb(5, 117, 253));;color: rgb(255, 255, 255);"\
                                 "border-width: 1px; border-style: solid; border-color: rgb(0, 7, 132);"\
-                                "border-radius: 10px; font-family:'Microsoft YaHei';font-size:30px;}");
+                                "border-radius: 10px; font-family:'Microsoft YaHei';font-size:18px;}");
 
     buttonCancel->setText(tr("取消"));
 
@@ -893,7 +894,7 @@ void SetDateTime::setCenterWidget()
                             "rgb(20, 158, 249), stop: 0.14 rgb(0, 143, 248), stop: 1 "\
                             "rgb(5, 117, 253));;color: rgb(255, 255, 255);"\
                             "border-width: 1px; border-style: solid; border-color: rgb(0, 7, 132);"\
-                            "border-radius: 10px; font-family:'Microsoft YaHei';font-size:30px;}");
+                            "border-radius: 10px; font-family:'Microsoft YaHei';font-size:18px;}");
 
     buttonOK->setText(tr("确定"));
 
@@ -1018,7 +1019,7 @@ void SetDateTime::setMonthClear()
         groupData->button(id)->setStyleSheet("border-color: rgb(220, 220, 220); "\
                                              "border-width:1px; background-color: "\
                                              "rgb(255, 255, 255); border-style:solid;"\
-                                             "font-family:'Microsoft YaHei';font-size:30px;");
+                                             "font-family:'Microsoft YaHei';font-size:18px;");
     }
 }
 
@@ -2023,7 +2024,7 @@ void SetDateTime::groupNumLayout()
                                      "rgb(211, 238, 255), stop: 0.14 rgb(182, 227, 255), stop: 1 "\
                                      "rgb(211, 248, 255));"\
                                      "border-width: 1px; border-style: solid; border-color: rgb(168, 177, 186);"\
-                                     "border-radius: 8px; font-family:'Microsoft YaHei';font-size:30px;}");
+                                     "border-radius: 8px; font-family:'Microsoft YaHei';font-size:18px;}");
             groupNum->addButton(buttonNum, id);
             ++id;
         }
