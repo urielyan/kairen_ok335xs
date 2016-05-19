@@ -40,7 +40,7 @@ void WinInputSPercentage::clear_all_tablewidget(){
 
         clear calibratemeasurement_count settings;
     */
-  int tmpnumber,row,column;
+  int tmpnumber,row;
   QString tmpstr = "calibrate_input_s_";
   for(tmpnumber = 0; tmpnumber < 12 ;tmpnumber++){
       tmpstr.append(QString("%1").arg(tmpnumber));

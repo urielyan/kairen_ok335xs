@@ -48,7 +48,7 @@ void count_kb_value::on_pushButton_clicked()
 {
   QMessageBox msgbox;
   msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  if(calibrationmeasurement::count < 3){
+  if(mysettings.value("calibratemeasurement_count").toInt() < 3){
       msgbox.setText(tr("标定样品数据太少"));
       msgbox.exec();
       return;
@@ -93,7 +93,7 @@ void count_kb_value::on_pushButton_clicked()
       //把计算出来的kbr值所需要的数据保存起来
       QString tmp_str;
       QMap<int,QString>painter_data;//painter data
-      for(int i = 0; i <= calibrationmeasurement::count ; i++){
+      for(int i = 0; i <= 11; i++){
           QString tmp_s_samplement = mysettings.value(QString("calibrate_input_s_%1").arg(i)).toString();
           //当用户未输入硫含量时，此计数不参与计算kb值,也不保存
           if(tmp_s_samplement == NULL || !tmp_s_samplement.compare("0.0000") || (tmp_s_samplement.toDouble() == 0.0))continue;
