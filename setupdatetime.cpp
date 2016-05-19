@@ -11,8 +11,7 @@ setupdatetime::setupdatetime(QWidget *parent) :
     ui->setupUi(this);
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     ui->dateTimeEdit->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
-    ui->dateTimeEdit->setButtonSymbols(QAbstractSpinBox::PlusMinus);
-    //ui->label->setObjectName("title");
+    ui->dateTimeEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
 }
 
 setupdatetime::~setupdatetime()
@@ -59,4 +58,64 @@ void setupdatetime::show_and_refresh(){
   ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
   ui->dateTimeEdit->setFocus();
   this->showFullScreen();
+}
+
+void setupdatetime::on_p_buttonPlus_clicked()
+{
+    switch (ui->dateTimeEdit->currentSection()) {
+    case QDateTimeEdit::NoSection:
+        break;
+    case QDateTimeEdit::SecondSection:
+        ui->dateTimeEdit->setTime(ui->dateTimeEdit->time().addSecs(5));
+        break;
+    case QDateTimeEdit::MinuteSection:
+        ui->dateTimeEdit->setTime(ui->dateTimeEdit->time().addSecs(60));
+        break;
+    case QDateTimeEdit::HourSection:
+        ui->dateTimeEdit->setTime(ui->dateTimeEdit->time().addSecs(3600));
+        break;
+    case QDateTimeEdit::DaySection:
+        ui->dateTimeEdit->setDate(ui->dateTimeEdit->date().addDays(1));
+        break;
+    case QDateTimeEdit::MonthSection:
+        ui->dateTimeEdit->setDate(ui->dateTimeEdit->date().addMonths(1));
+        break;
+    case QDateTimeEdit::YearSection:
+        ui->dateTimeEdit->setDate(ui->dateTimeEdit->date().addYears(1));
+        break;
+    default:
+        break;
+    }
+
+}
+
+void setupdatetime::on_p_buttonSub_clicked()
+{
+    {
+        switch (ui->dateTimeEdit->currentSection()) {
+        case QDateTimeEdit::NoSection:
+            break;
+        case QDateTimeEdit::SecondSection:
+            ui->dateTimeEdit->setTime(ui->dateTimeEdit->time().addSecs(-5));
+            break;
+        case QDateTimeEdit::MinuteSection:
+            ui->dateTimeEdit->setTime(ui->dateTimeEdit->time().addSecs(-60));
+            break;
+        case QDateTimeEdit::HourSection:
+            ui->dateTimeEdit->setTime(ui->dateTimeEdit->time().addSecs(-3600));
+            break;
+        case QDateTimeEdit::DaySection:
+            ui->dateTimeEdit->setDate(ui->dateTimeEdit->date().addDays(-1));
+            break;
+        case QDateTimeEdit::MonthSection:
+            ui->dateTimeEdit->setDate(ui->dateTimeEdit->date().addMonths(-1));
+            break;
+        case QDateTimeEdit::YearSection:
+            ui->dateTimeEdit->setDate(ui->dateTimeEdit->date().addYears(-1));
+            break;
+        default:
+            break;
+        }
+
+    }
 }

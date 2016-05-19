@@ -11,7 +11,7 @@ systemsetup::systemsetup(QWidget *parent) :
 {
   ui->setupUi(this);
 
-  setdt = new SetDateTime();
+  setdt = new setupdatetime();
   calibrate = new calibration();
   modify_kb = new modify_kb_value();
   count_mea = new countingMeasurement();
@@ -68,7 +68,7 @@ void systemsetup::on_pushButton_2_clicked()
 void systemsetup::on_pushButton_clicked()
 {
   //setup date and time
-  setdt->exec();
+  setdt->show_and_refresh();
 }
 
 void systemsetup::on_pushButton_6_clicked()

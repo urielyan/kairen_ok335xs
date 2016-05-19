@@ -21,6 +21,10 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_p_buttonPlus_clicked();
+
+    void on_p_buttonSub_clicked();
+
 private:
     Ui::setupdatetime *ui;
 };
