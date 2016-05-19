@@ -58,7 +58,6 @@ int calibrationmeasurement::count;
 
 calibrationmeasurement::~calibrationmeasurement()
 {
-  //mysettings.setValue("calibratemeasurement_count",count);
   delete calibrate_com;
   delete query_s_count_data_in_this;
   delete showcalibratemeasure;

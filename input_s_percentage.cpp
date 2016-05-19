@@ -40,18 +40,21 @@ void WinInputSPercentage::clear_all_tablewidget(){
 
         clear calibratemeasurement_count settings;
     */
-  int tmpnumber,row,column;
+  int tmpnumber,row;
   QString tmpstr = "calibrate_input_s_";
   for(tmpnumber = 0; tmpnumber < 12 ;tmpnumber++){
       tmpstr.append(QString("%1").arg(tmpnumber));
       mysettings.setValue(tmpstr,"0.0000");
       tmpstr = "calibrate_input_s_";
+
+      mysettings.setValue(QString("s_count_data_%1").arg(tmpnumber), "");
     }
 
+  //TODO: down 4 line: useless
   for(row = 0;row < 12;row++)
     {
-        ui->tableWidget->item(row,0)->setText("0.0000");
-      }
+      ui->tableWidget->item(row,0)->setText("0.0000");
+    }
   mysettings.setValue("calibratemeasurement_count",0);
 }
 

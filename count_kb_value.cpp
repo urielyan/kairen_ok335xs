@@ -402,12 +402,12 @@ void count_kb_value::printer_result(){
   QStringList datalist = mysettings.value(QString("calibration_results_in_data_%1")\
                                           .arg(mysettings.value("calibratemeasurement_count_record").toInt() - 1)).toString().split(";");
   //所有的参与计算的硫含量和计数值。
-  for(int i = 1 ; i <= datalist.size() ; i++){
+  for(int i = datalist.size() ; i >= 1  ; i--){
       QStringList one_data = datalist[i - 1].split("/");
       if(one_data.size() != 3){
           continue;
         }
-      printer::transmit((char)(i + 0x30));
+      printer::transmit(QString::number(i), QString::number(i).size());
       printer::transmit('#');
       printer::transmit((void *)"     ",2);
       printer::transmit((void *)one_data[0].toLocal8Bit().data(),one_data[0].size());
