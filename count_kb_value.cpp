@@ -419,11 +419,11 @@ void count_kb_value::printer_result(){
     }
 
   //含量      标定样     参考样
-  printer::transmit((void *)"            ",3);
+  printer::transmit((void *)"            ",6);
   printer::transmit(sample,4);
-  printer::transmit((void *)"       ",5);
+  printer::transmit((void *)"       ",4);
   printer::transmit(calibrate,6);
-  printer::transmit((void *)"     ",2);
+  printer::transmit((void *)"        ",3);
   printer::transmit(reference,6);
   printer ::transmit(enter,1);
 
