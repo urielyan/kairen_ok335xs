@@ -277,7 +277,9 @@ void showsamplemeasurement::printer_result(){
   printer ::transmit(enter,1);
   for(int i = ui->tableWidget->rowCount() - 1 ;i >= 0 ;i--){
       printer::transmit(di,2);
-      printer::transmit((char)(i + 0x30 + 1));
+      //printer::transmit((char)(i + 0x30 + 1));
+      QString m_StrCount = QString::number(i);
+      printer::transmit(m_StrCount.toLocal8Bit().data(), m_StrCount.size());
       printer::transmit(ciceliang,6);
       printer::transmit((void *)"   ",3);
 
