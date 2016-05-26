@@ -275,7 +275,7 @@ void showsamplemeasurement::printer_result(){
   //所有测量数据：从最高次到第１次数据倒序打印
   printer::transmit((void *)"---------------------------------------------------------",SEGMENT_LENGTH );
   printer ::transmit(enter,1);
-  for(int i = ui->tableWidget->rowCount() - 1 ;i >= 0 ;i--){
+  for(int i = ui->tableWidget->rowCount() - 1 ;i > 0 ;i--){
       printer::transmit(di,2);
       //printer::transmit((char)(i + 0x30 + 1));
       QString m_StrCount = QString::number(i);

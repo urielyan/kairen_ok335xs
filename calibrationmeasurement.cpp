@@ -5,7 +5,6 @@
 
 #include <QMessageBox>
 
-//extern QSettings mysettings;
 extern int measurement_flag;
 
 #define CALIBRATE_TIME 90
@@ -167,7 +166,8 @@ void calibrationmeasurement::doing_measurement(){
           measurement_flag = MEASUREMENT_NOTHING;
           showcalibratemeasure->add_calibratemeasurement_data(count,NULL,recv_data);
           showcalibratemeasure->showFullScreen();
-          query_s_count_data_in_this->add_s_count_data(count,query_data);
+//          query_s_count_data_in_this->add_s_count_data(count,query_data);
+          mysettings.setValue(QString("s_count_data_%1").arg(count--),query_data);
           mysettings.setValue("calibratemeasurement_count",count);
           return;
         }else{
@@ -190,6 +190,8 @@ void calibrationmeasurement::doing_measurement(){
 
 void calibrationmeasurement::on_pushButton_clicked()
 {
+  //start button
+
 #if 1
   //test
   ui->pushButton->setDisabled(true);
@@ -197,7 +199,6 @@ void calibrationmeasurement::on_pushButton_clicked()
   ui->pushButton_3->setDisabled(true);
   ui->pushButton_4->setDisabled(true);
 #endif
-  //start button
   if(1 == button_flag)return;
   if(ui->widget_2->global_ispreheat > 0){
       QMessageBox msgbox;

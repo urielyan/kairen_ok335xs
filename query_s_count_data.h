@@ -16,7 +16,7 @@ class query_s_count_data : public QWidget
 public:
     explicit query_s_count_data(QWidget *parent = 0);
     ~query_s_count_data();
-    void add_s_count_data(int ,QString);
+    void add_s_count_data(int ,QString);//TODO:: useless
     void clear_data();
     void show_and_refresh();
     QString get_kbr_a012(int);
