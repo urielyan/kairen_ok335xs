@@ -510,7 +510,6 @@ void spectrummeasurement::printer_result()
      printer::transmit(summitat,6);
      printer::transmit((void *)max_volumn.toLocal8Bit().data(),max_volumn.size());
      printer ::transmit(enter,1);
-     printer::transmit((void *)"     ",4);
 
      //printPicture();
 

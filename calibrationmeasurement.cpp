@@ -6,6 +6,7 @@
 #include <QMessageBox>
 
 extern int measurement_flag;
+int calibrationmeasurement::count;
 
 #define CALIBRATE_TIME 90
 calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
@@ -31,7 +32,6 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
   count = mysettings.value("calibratemeasurement_count").toInt();
 
   showcalibratemeasure = new showcalibratemeasurement();
-  query_s_count_data_in_this = new query_s_count_data();
   timer =  new QTimer(this);
   connect(timer,SIGNAL(timeout()),this,SLOT(doing_measurement()));
 
@@ -53,12 +53,10 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
   ui->label->setObjectName("title");
   ui->label_second->setObjectName("countDown");
 }
-int calibrationmeasurement::count;
 
 calibrationmeasurement::~calibrationmeasurement()
 {
   delete calibrate_com;
-  delete query_s_count_data_in_this;
   delete showcalibratemeasure;
   delete timer;
   delete ui;
@@ -69,7 +67,7 @@ void calibrationmeasurement::doing_measurement(){
   ui->label_issamlpe->show();
   static QString query_data;
   QString tmpstr_second,tmpstr_count;
-  tmpstr_count = QString("标定样序号 %1").arg(count);
+  tmpstr_count = QString("标定样序号 %1").arg(count + 1);
   tmpstr_second =QString("%1 秒").arg(second);
   ui->label_number->setText(tmpstr_count);
   ui->label_second->setText(tmpstr_second);
@@ -80,7 +78,7 @@ void calibrationmeasurement::doing_measurement(){
       if(recv_data == NULL){
           QSettings communication_err_data("shanghaikairen","communication_error");
           communication_err_data.setValue("com_err_4",communication_err_data.value("com_err_4").toInt() + 1);
-          count--;
+          //count--;
           WinInforListDialog::instance()->showMsg(tr("未接收到标定数据，已停止测量"));
 //          QMessageBox msgbox;
 //          msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -94,7 +92,7 @@ void calibrationmeasurement::doing_measurement(){
       if(recv_data[0] != (char)0x04){
           QSettings communication_err_data("shanghaikairen","communication_error");
           communication_err_data.setValue("com_err_4",communication_err_data.value("com_err_4").toInt() + 1);
-          count--;
+          //count--;
 //          QMessageBox msgbox;
 //          msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
 //          msgbox.setText(QString("标定数据有误，已停止测量"));
@@ -108,7 +106,7 @@ void calibrationmeasurement::doing_measurement(){
       //检查是否为带测样数据,若是则改变滑板状态
       if(recv_data[3] == (char)0x32 && recv_data.size() == 9){//count_flag == 0 &&
           recv_data.remove(0,4);
-          showcalibratemeasure->add_calibratemeasurement_data(count,recv_data,NULL);//
+          showcalibratemeasure->add_calibratemeasurement_data(count + 1,recv_data,NULL);//
           query_data = recv_data;
           query_data += "/";
 
@@ -120,7 +118,7 @@ void calibrationmeasurement::doing_measurement(){
               if(recv_data == NULL){
                   QSettings communication_err_data("shanghaikairen","communication_error");
                   communication_err_data.setValue("com_err_4",communication_err_data.value("com_err_4").toInt() + 1);
-                  count--;
+                  //count--;
 //                  QMessageBox msgbox;
 //                  msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
 //                  msgbox.setText("err:no receive data!");
@@ -132,7 +130,7 @@ void calibrationmeasurement::doing_measurement(){
                   return;}
             }
           if( recv_data[1] == (char)0x33){//recv_data[0] == (char)0x98 &&
-              count --;
+              //count --;
               on_pushButton_2_clicked();
 
               QMessageBox msgbox;
@@ -150,7 +148,7 @@ void calibrationmeasurement::doing_measurement(){
               QSettings communication_err_data("shanghaikairen","communication_error");
               communication_err_data.setValue("com_err_4",communication_err_data.value("com_err_4").toInt() + 1);
 
-              count--;
+              //count--;
               QMessageBox msgbox;
               msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
               msgbox.setText(SLIDING_PLATE_NO_CHANGE_TEXT+recv_data);
@@ -171,11 +169,11 @@ void calibrationmeasurement::doing_measurement(){
           timer->stop();
           disable_button(false);
           measurement_flag = MEASUREMENT_NOTHING;
-          showcalibratemeasure->add_calibratemeasurement_data(count,NULL,recv_data);
+          showcalibratemeasure->add_calibratemeasurement_data(count + 1,NULL,recv_data);
           showcalibratemeasure->showFullScreen();
 //          query_s_count_data_in_this->add_s_count_data(count,query_data);
-          mysettings.setValue(QString("s_count_data_%1").arg(count--),query_data);
-          mysettings.setValue("calibratemeasurement_count",count);
+          mysettings.setValue(QString("s_count_data_%1").arg(count),query_data);
+          mysettings.setValue("calibratemeasurement_count",++count);
           return;
         }else{
           QSettings communication_err_data("shanghaikairen","communication_error");
@@ -218,11 +216,11 @@ void calibrationmeasurement::on_pushButton_clicked()
     }
   count = mysettings.value("calibratemeasurement_count").toInt();
   if(count >= 12){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      //check preheat condition
-      msgbox.setText("标定样已超过12个");
-      msgbox.exec();
+//      QMessageBox msgbox;
+//      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+//      msgbox.setText("标定样已超过12个");
+//      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr("标定样已超过12个"));
       disable_button(false);
       return;
     }
@@ -277,7 +275,7 @@ void calibrationmeasurement::on_pushButton_clicked()
       timer->start(1000);
       measurement_flag = MEASUREMENT_CALIBRATE;
       tcflush(Communciation_Com::fd,TCIOFLUSH);
-      count++;
+      //count++;
       //started
       return;
     }else{
@@ -294,7 +292,7 @@ void calibrationmeasurement::on_pushButton_clicked()
 void calibrationmeasurement::on_pushButton_4_clicked()
 {
   //query button
-  showcalibratemeasure->add_calibratemeasurement_data(count,NULL,NULL);
+  showcalibratemeasure->add_calibratemeasurement_data(count + 1,NULL,NULL);
   showcalibratemeasure->showFullScreen();
 }
 

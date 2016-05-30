@@ -3,8 +3,7 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
  *1.此程序数据保存采用QSettings类，数据保存在～/.config/shanghaikairen/下，共有两个文件 ，一个是analysis.conf和count_data.conf
  *  其中analysis.conf中保存的内容有：
  *    标定相关:
- *      calibrate_input_s_n：保存用户输入的标定样硫的数据。(1-12)
- *      calibratemeasurement_count：记录正在标定第几组数据。会随着清除标定数据使他变为0，
+ *      calibratemeasurement_count：记录正在标定了几组数据。因为标定数据是从０开始的所以这个数也是标定下次记录的ID
  *              每次按标定的开始键就会自加，若此次标定不成功就会减一保持原值。
  *      calibratemeasurement_count_record:最近的标定结果记录，是一个轮巡，从1到10循环。保存当计算kb值时的保存数据和结果的编号.例如为5时，下一个记录就是:
  *          calibration_results_in_data_5 and calibration_results_in_result_5
@@ -15,7 +14,8 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
  *                "0.0550/2225/13005", "0.1006/2600/12990", "0.2522/3839/13035", "0.5043/5822/13041",
  *                "1.0027/9612/13046", "2.5016/19881/13036", "4.9992/33385/13006")
  *      calibration_results_in_result_n：标定的计算kb值的结果，包括（datetime;work curve;kbr(a0.a1,12);count number）
- *      s_count_data_n：记录标定时标定样和参考样的数据(标定样/参考样)
+ *      s_count_data_n：记录标定时标定样和参考样的数据(标定样/参考样) 0-11
+ *      calibrate_input_s_n：保存用户输入的标定样硫的数据。(0-12)
  *      work_curve_n：工作曲线记录的数据（kb值或a0,a1,a2）;example:(k=0;b=0r=0    or    a0=1;a1=1;a2=1)
  *
  *

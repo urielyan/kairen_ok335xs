@@ -311,9 +311,8 @@ void query_s_count_data::add_s_count_data(int i ,QString str_data){
 void query_s_count_data::clear_data(){
     int tmpnumber,row,column;
     QString tmpstr = "s_count_data_";
-    for(tmpnumber = 1; tmpnumber <= 12;tmpnumber++){
+    for(tmpnumber = 0; tmpnumber < 12;tmpnumber++){
         tmpstr.append(QString("%1").arg(tmpnumber));
-        //qDebug() << tmpstr;
         mysettings.setValue(tmpstr,"");
         tmpstr = "s_count_data_";
     }

@@ -12,7 +12,7 @@ calibration::calibration(QWidget *parent) :
     ui->setupUi(this);
     cm = new calibrationmeasurement();
     inputsp = new WinInputSPercentage();
-    query_s_count = new query_s_count_data();
+    //query_s_count = new query_s_count_data();
     count_kb = new count_kb_value();
     connect(this,SIGNAL(transmit_stop_auto_count()),cm,SIGNAL(transmit_stop_auto_count()));
 
@@ -30,7 +30,7 @@ calibration::calibration(QWidget *parent) :
 calibration::~calibration()
 {
     delete count_kb;
-    delete query_s_count;
+    //delete query_s_count;
     delete inputsp;
     delete cm;
     delete ui;
@@ -66,7 +66,7 @@ void calibration::on_pushButton_clicked()
 
     if (QMessageBox::Yes == ret){
         inputsp->clear_all_tablewidget();
-        query_s_count->clear_data();
+        //query_s_count->clear_data();
         calibrationmeasurement::count = 0;
         QMessageBox box;
         msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -75,10 +75,10 @@ void calibration::on_pushButton_clicked()
     }
 }
 
-void calibration::on_pushButton_3_clicked()
-{
-    query_s_count->show_and_refresh();
-}
+//void calibration::on_pushButton_3_clicked()
+//{
+//    query_s_count->show_and_refresh();
+//}
 
 void calibration::on_pushButton_5_clicked()
 {

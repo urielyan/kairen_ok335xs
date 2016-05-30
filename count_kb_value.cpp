@@ -51,15 +51,9 @@ void count_kb_value::on_pushButton_clicked()
   if(mysettings.value("calibratemeasurement_count").toInt() < 3){
       msgbox.setText(tr("标定样品数据太少"));
       msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr("标定样品数据太少"));
       return;
     }
-# if  0
-  else if(calibrationmeasurement::count > 12){
-      msgbox.setText(tr("标定样品数据太多");
-      msgbox.exec();
-      return;
-    }
-#endif
   int count_input_s = 0;
   for(int i = 0; i < 12 ; i++){
       QString tmp_str = mysettings.value(QString("calibrate_input_s_%1").arg(i)).toString();
@@ -128,7 +122,7 @@ void count_kb_value::on_pushButton_clicked()
 
 QString count_kb_value::countKbrValue(int judge_which)
 {
-    int m = mysettings.value("calibratemeasurement_count").toInt();
+//    int m = mysettings.value("calibratemeasurement_count").toInt();
     QStringList calibrate_data;//存储所有硫含量
     QStringList reference_proportion_wait;//标定样和参考样的比
     for(int i = 0; i <= 11 ;i++){
@@ -141,7 +135,7 @@ QString count_kb_value::countKbrValue(int judge_which)
 
 
         //得到标定的数据和带测样的数据的比值
-        QStringList tmplist = mysettings.value(QString("s_count_data_%1").arg(i+1)).toString().split("/");
+        QStringList tmplist = mysettings.value(QString("s_count_data_%1").arg(i)).toString().split("/");
         if((tmplist.size() != 2)){
             WinInforListDialog::instance()->showMsg(tr("输入的硫含量样品未标定"));
             return NULL;

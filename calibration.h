@@ -31,7 +31,7 @@ private slots:
 
     void on_pushButton_clicked();
 
-    void on_pushButton_3_clicked();
+   // void on_pushButton_3_clicked();
 
     void on_pushButton_5_clicked();
 
@@ -39,7 +39,7 @@ private:
     Ui::calibration *ui;
     calibrationmeasurement *cm;
     WinInputSPercentage *inputsp;
-    query_s_count_data *query_s_count;
+    //query_s_count_data *query_s_count;
     count_kb_value *count_kb;
 };
 
