@@ -141,7 +141,7 @@ QString count_kb_value::countKbrValue(int judge_which)
 
 
         //得到标定的数据和带测样的数据的比值
-        QStringList tmplist = mysettings.value(QString("s_count_data_%1").arg(i)).toString().split("/");
+        QStringList tmplist = mysettings.value(QString("s_count_data_%1").arg(i+1)).toString().split("/");
         if((tmplist.size() != 2)){
             WinInforListDialog::instance()->showMsg(tr("输入的硫含量样品未标定"));
             return NULL;

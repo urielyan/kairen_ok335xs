@@ -244,7 +244,7 @@ void WinInputSPercentage::initTableWidgetData()
                                  mysettings.value(QString("calibrate_input_s_") + QString::number(i)).toString()   ));
 
       //set 1,2 column object and text;
-      QStringList stringCalibrateData = mysettings.value(QString("s_count_data_") + QString::number(i)).toString().split("/");
+      QStringList stringCalibrateData = mysettings.value(QString("s_count_data_") + QString::number(i + 1)).toString().split("/");
       if(2 == stringCalibrateData.size())
         {
           ui->tableWidget->setItem(i, 1,new QTableWidgetItem(stringCalibrateData.at(0)));
