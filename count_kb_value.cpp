@@ -407,7 +407,7 @@ void count_kb_value::printer_result(){
       if(one_data.size() != 3){
           continue;
         }
-      printer::transmit(QString::number(i), QString::number(i).size());
+      printer::transmit(QString::number(i).toLocal8Bit().data(), QString::number(i).size());
       printer::transmit('#');
       printer::transmit((void *)"     ",2);
       printer::transmit((void *)one_data[0].toLocal8Bit().data(),one_data[0].size());

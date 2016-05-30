@@ -9,6 +9,7 @@
 #include "spectrummeasurement.h"
 //#include "passwd.h"
 #include "communication_help.h"
+#include "setupdatetime.h"
 
 namespace Ui {
   class systemsetup;
@@ -49,6 +50,7 @@ private:
 
   Ui::systemsetup *ui;
   setupdatetime *setdt;
+
   //SetDateTime *setdt;
   calibration *calibrate;
   modify_kb_value *modify_kb;

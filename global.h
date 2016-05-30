@@ -8,6 +8,8 @@
 #include <QApplication>
 #include  <QDesktopWidget>
 
+#include "wininforlistdialog.h"
+
 #define SLIDING_PLATE_CHANGE_TIME   10
 #define REFERENCE_BE_LOCATON        1
 #define WAIT_BE_LOCATION            2

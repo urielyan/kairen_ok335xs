@@ -29,7 +29,6 @@ class Communciation_Com : public QObject
   Q_OBJECT
 public:
   explicit Communciation_Com(QObject *parent = 0);
-  ~Communciation_Com();
   static Communciation_Com* instance();
 
   static int fd;

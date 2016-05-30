@@ -81,11 +81,13 @@ void calibrationmeasurement::doing_measurement(){
           QSettings communication_err_data("shanghaikairen","communication_error");
           communication_err_data.setValue("com_err_4",communication_err_data.value("com_err_4").toInt() + 1);
           count--;
-          QMessageBox msgbox;
-          msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-          msgbox.setText("未接收到标定数据，已停止测量");
+          WinInforListDialog::instance()->showMsg(tr("未接收到标定数据，已停止测量"));
+//          QMessageBox msgbox;
+//          msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+//          msgbox.setText("未接收到标定数据，已停止测量");
+//          msgbox.exec();
+
           on_pushButton_2_clicked();//stop button
-          msgbox.exec();
           return;
         }
 #if 1
@@ -93,18 +95,20 @@ void calibrationmeasurement::doing_measurement(){
           QSettings communication_err_data("shanghaikairen","communication_error");
           communication_err_data.setValue("com_err_4",communication_err_data.value("com_err_4").toInt() + 1);
           count--;
-          QMessageBox msgbox;
-          msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-          msgbox.setText(QString("标定数据有误，已停止测量"));
+//          QMessageBox msgbox;
+//          msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+//          msgbox.setText(QString("标定数据有误，已停止测量"));
+//          msgbox.exec();
+          WinInforListDialog::instance()->showMsg(tr("标定数据有误，已停止测量"));
+
           on_pushButton_2_clicked();//stop button
-          msgbox.exec();
           return;
         }
 #endif
       //检查是否为带测样数据,若是则改变滑板状态
       if(recv_data[3] == (char)0x32 && recv_data.size() == 9){//count_flag == 0 &&
           recv_data.remove(0,4);
-          showcalibratemeasure->add_calibratemeasurement_data(count,recv_data,NULL);
+          showcalibratemeasure->add_calibratemeasurement_data(count,recv_data,NULL);//
           query_data = recv_data;
           query_data += "/";
 
@@ -117,11 +121,14 @@ void calibrationmeasurement::doing_measurement(){
                   QSettings communication_err_data("shanghaikairen","communication_error");
                   communication_err_data.setValue("com_err_4",communication_err_data.value("com_err_4").toInt() + 1);
                   count--;
-                  QMessageBox msgbox;
-                  msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-                  msgbox.setText("err:no receive data!");
+//                  QMessageBox msgbox;
+//                  msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+//                  msgbox.setText("err:no receive data!");
+//                  msgbox.exec();
+
+                  WinInforListDialog::instance()->showMsg(tr("没有收到标定数据，数据为空；"));
+
                   on_pushButton_2_clicked();//stop button
-                  msgbox.exec();
                   return;}
             }
           if( recv_data[1] == (char)0x33){//recv_data[0] == (char)0x98 &&

@@ -36,9 +36,6 @@ Communciation_Com::Communciation_Com(QObject *parent) :
     }
 }
 
-Communciation_Com::~Communciation_Com(){
-  //close(fd);
-}
 
 Communciation_Com *Communciation_Com::instance()
 {
