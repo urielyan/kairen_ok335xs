@@ -13,13 +13,18 @@ inspectoscope::inspectoscope(QWidget *parent) :
     ui->widget_2->hide();
     ui->label_state->setText("");
 
-    this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+/*    this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     QList<QLabel *> labellist = this->findChildren<QLabel *>();
     for (int i = 0; i < labellist.count(); ++i) {
         labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       }
-    ui->label_title->setFont(QFont(FONT_NAME, FONT_SIZE*1.5 ,QFont::Normal));
-    //ui->label->setObjectName("title");
+    ui->label_title->setFont(QFont(FONT_NAME, FONT_SIZE*1.5 ,QFont::Normal))*/;
+    ui->label_title->setObjectName("title");
+    ui->label_1sec->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    ui->label_2sec->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    ui->label_1sec->setObjectName("title");
+    ui->label_2sec->setObjectName("title");
+
 }
 
 inspectoscope::~inspectoscope()

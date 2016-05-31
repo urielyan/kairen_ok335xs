@@ -296,8 +296,8 @@ int main(int argc, char *argv[])
   Widget w;
   logo l;
   l.showFullScreen();
-  QTimer::singleShot(3000,&l,SLOT(close()));
+  QTimer::singleShot(5000,&l,SLOT(close()));
   w.setFont(QFont("wenquanyi",FONT_SIZE,QFont::Normal));
-  QTimer::singleShot(2800,&w,SLOT(showFullScreen()));
+  QTimer::singleShot(4800,&w,SLOT(showFullScreen()));
   return a.exec();
 }

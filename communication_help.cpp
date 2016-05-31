@@ -21,13 +21,13 @@ communication_help::communication_help(QWidget *parent) :
         }
     }
 
-  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  QList<QLabel *> labellist = this->findChildren<QLabel *>();
-  for (int i = 0; i < labellist.count(); ++i) {
-      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    }
-  ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
-  ui->label->setObjectName("title");
+//  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+//  QList<QLabel *> labellist = this->findChildren<QLabel *>();
+//  for (int i = 0; i < labellist.count(); ++i) {
+//      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+//    }
+  ui->lableTitle->setObjectName("title");
+  ui->lableVersion->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
 communication_help::~communication_help()
