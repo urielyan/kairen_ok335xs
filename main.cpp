@@ -196,7 +196,7 @@ void initDatabase()
 #if 1
   QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
   //qDebug() << db.driver()->hasFeature(QSqlDriver::Transactions);
-  db.setDatabaseName("/home/yange/samplemeasurement.db");
+  db.setDatabaseName("/samplemeasurement.db");
   //db.setConnectOptions("QSQLITE_OPEN_READONLY=0");
   bool ok = db.open();
   if(ok == false){
@@ -294,10 +294,11 @@ int main(int argc, char *argv[])
 #endif
 
   Widget w;
-  logo l;
-  l.showFullScreen();
-  QTimer::singleShot(5000,&l,SLOT(close()));
-  w.setFont(QFont("wenquanyi",FONT_SIZE,QFont::Normal));
-  QTimer::singleShot(4800,&w,SLOT(showFullScreen()));
+//  logo l;
+//  l.showFullScreen();
+//  QTimer::singleShot(5000,&l,SLOT(close()));
+//  w.setFont(QFont("wenquanyi",FONT_SIZE,QFont::Normal));
+//  QTimer::singleShot(4800,&w,SLOT(showFullScreen()));
+  w.showFullScreen();
   return a.exec();
 }
