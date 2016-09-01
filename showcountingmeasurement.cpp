@@ -15,19 +15,23 @@ showcountingmeasurement::showcountingmeasurement(QWidget *parent) :
 {
   ui->setupUi(this);
 
+#ifdef FRIENDLYARM_TINY210
+  ui->tableWidget->setColumnWidth(0,DESKTOP_WIDTH / 3);
+  for(int i = 0;i < ui->tableWidget->rowCount();i++){
+      ui->tableWidget->setRowHeight(i,this->size().height() / 8);
+    }
+  ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem("计数数据"));
+#endif
+#ifdef FORLIN_OK335XS
   ui->tableWidget->setColumnWidth(0,this->size().width()/3);
   for(int i = 0;i < ui->tableWidget->rowCount();i++){
       ui->tableWidget->setRowHeight(i,this->size().height()/8);
     }
   ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem("计数数据"));
+#endif
 
-  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  QList<QLabel *> labellist = this->findChildren<QLabel *>();
-  for (int i = 0; i < labellist.count(); ++i) {
-      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    }
+  INIT_LABEL_SIZE_FONT;
   ui->tableWidget->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  //ui->label->setObjectName("title");
 }
 
 showcountingmeasurement::~showcountingmeasurement()

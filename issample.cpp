@@ -22,6 +22,7 @@ issample::issample(QWidget *parent) :
     QList<QLabel *> labellist = this->findChildren<QLabel *>();
     for (int i = 0; i < labellist.count(); ++i) {
         labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE/3 * 2 ,QFont::Normal));
+        labellist[i]->setMinimumHeight(FONT_SIZE + 2);
       }
 }
 int issample::global_is_sample;

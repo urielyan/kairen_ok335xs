@@ -27,20 +27,36 @@ caibrateresultquery::caibrateresultquery(QWidget *parent) :
   display_number = mysettings.value("calibratemeasurement_count_record").toInt() - 1;
   update_page(display_number);
 
+
+
+#ifdef FORLIN_OK335XS
   //调整tablewidget的大小以适应屏幕。
   for(int i = 0; i < ui->tableWidget->columnCount();i++){
       ui->tableWidget->setColumnWidth(i,FONT_SIZE * 5);
     }
+
   ui->tableWidget->setRowHeight(0,FONT_SIZE * 2);
   ui->tableWidget->setRowHeight(1,FONT_SIZE * 2);
   ui->tableWidget->setRowHeight(2,FONT_SIZE * 2);
-  //printf("%s\n",__FUNCTION__);
-
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
   QList<QLabel *> label_all = this->findChildren<QLabel *>();
   for(int i = 0;i <label_all.size();i++){
       label_all[i]->setFont(QFont(FONT_NAME, FONT_SIZE/5*4,QFont::Normal));
     }
+#endif
+#ifdef FRIENDLYARM_TINY210
+  //调整tablewidget的大小以适应屏幕。
+  for(int i = 0; i < ui->tableWidget->columnCount();i++){
+      ui->tableWidget->setColumnWidth(i, DESKTOP_WIDTH / 14);
+    }
+
+  for(int i = 0; i < 3; i++)
+    {
+      ui->tableWidget->setRowHeight(i, DESKTOP_HEIGHT / 10);
+    }
+  INIT_LABEL_SIZE_FONT;
+#endif
+
   QList<QPushButton *> buttonlist = this->findChildren<QPushButton *>();
   for (int i = 0; i < buttonlist.count(); ++i) {
       buttonlist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));

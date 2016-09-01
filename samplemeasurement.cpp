@@ -12,51 +12,53 @@ sampleMeasurement::sampleMeasurement(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::sampleMeasurement)
 {
-    ui->setupUi(this);
+  ui->setupUi(this);
 
-    count = 3;
-    second = 60;
-    work_queue = 1;
-    showsm = new showsamplemeasurement();
+  count = 3;
+  second = 60;
+  work_queue = 1;
+  showsm = new showsamplemeasurement();
 
-    /*
+  /*
         flag = 1 ,It's doing measurementing.
         flag = 2 ,It's do nothing.
     */
-    flag = 0;
-    ui->label_count->setText("");
-    ui->label_second->setText("");
-    ui->label_rest->hide();
+  flag = 0;
+  ui->label_count->setText("");
+  ui->label_second->setText("");
+  ui->label_rest->hide();
 
-    timer_measurement = new QTimer();
-    connect(timer_measurement,SIGNAL(timeout()),this,SLOT(doing_measurement()));
+  timer_measurement = new QTimer();
+  connect(timer_measurement,SIGNAL(timeout()),this,SLOT(doing_measurement()));
 
-    counting_measurement = new countingMeasurement();
-    input_serial = new input_person_sampleSerial();
+  counting_measurement = new countingMeasurement();
+  input_serial = new input_person_sampleSerial();
 
-    ui->comboBox_count->setCurrentIndex(1);
-    ui->comboBox_time->setCurrentIndex(2);
 
-    //printer_result();
-    this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    QList<QLabel *> labellist = this->findChildren<QLabel *>();
-    for (int i = 0; i < labellist.count(); ++i) {
-        labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      }
-    ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
-    ui->label_second->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
+  ui->pushButton_2->setObjectName("stop");
+  ui->pushButton->setObjectName("start");
+  this->setStyleSheet(""
+                      "QPushButton#stop{background-color:rgb(255, 0, 0); color: rgb(255, 255, 255);font-weight:bold;}"
+                      "QPushButton#start{background-color:rgb(0, 255, 0); color: rgb(255, 255, 255);font-weight:bold;}");
+  ui->label->setObjectName("title");
+  ui->label_second->setObjectName("countDown");
 
-    ui->pushButton_2->setObjectName("stop");
-    ui->pushButton->setObjectName("start");
-    this->setStyleSheet(""
-                        "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
-                        "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}");
-    ui->label->setObjectName("title");
-    ui->label_second->setObjectName("countDown");
+  ui->label_5->hide();
+  ui->comboBox_standard->hide();
+  ui->comboBox_count->setCurrentIndex(1);
+  ui->comboBox_time->setCurrentIndex(1);
 
-    ui->label_5->hide();
-    ui->comboBox_standard->hide();
-    ui->comboBox_time->setCurrentIndex(1);
+#ifdef FRIENDLYARM_TINY210
+  ui->comboBo_queue->setFont(QFont(FONT_NAME, FONT_SIZE, QFont::Normal));
+#endif
+#ifdef FORLIN_OK335XS
+  ui->comboBo_queue->setFont(QFont(FONT_NAME, FONT_SIZE -  10,QFont::Normal));
+#endif
+
+
+  INIT_LABEL_SIZE_FONT;
+  ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
+  ui->label_second->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
 }
 
 sampleMeasurement::~sampleMeasurement()

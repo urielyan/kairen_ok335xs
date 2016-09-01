@@ -42,16 +42,9 @@ WinSqlDataQuery::WinSqlDataQuery(QWidget *parent) :
   on_b_datetime_disorder_clicked();
   //printf("%s\n",__FUNCTION__);
 
-  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  QList<QPushButton *> labellist = this->findChildren<QPushButton *>();
-  for (int i = 0; i < labellist.count(); ++i) {
-      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    }
+  INIT_LABEL_SIZE_FONT;
+
   ui->tableView->setFont(QFont(FONT_NAME, FONT_SIZE/3 * 2 ,QFont::Normal));
-  //ui->label->setFont(QFont(FONT_NAME, FONT_SIZE/2,QFont::Normal));
-  //ui->label->setObjectName("title");
-
-
 }
 
 WinSqlDataQuery::~WinSqlDataQuery()
@@ -89,7 +82,13 @@ void WinSqlDataQuery::initTableview(){
   //ui->tableView->setColumnWidth(6,this->width() /SUIT_DIVIDE);
   //ui->tableView->setColumnWidth(7,this->width() /SUIT_DIVIDE);
 
-  //ui->tableView->setRowHeight(0,this->height()/2);
+#ifdef FRIENDLYARM_TINY210
+  ui->tableView->setFont(QFont(FONT_NAME, FONT_SIZE*5/6,QFont::Normal));
+#endif
+
+#ifdef FORLIN_OK335XS
+  ui->tableView->setFont(QFont(FONT_NAME, FONT_SIZE*3/4, QFont::Normal));
+#endif
 }
 
 void WinSqlDataQuery::show_and_refresh(){

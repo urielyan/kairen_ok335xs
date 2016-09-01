@@ -52,8 +52,7 @@ SOURCES += main.cpp\
     query_change_voltage.cpp \
     settings_datasave.cpp \
     global.cpp \
-    wininforlistdialog.cpp \
-    setdatetime.cpp
+    wininforlistdialog.cpp
 
 HEADERS  += widget.h \
     date_widget.h \
@@ -94,8 +93,7 @@ HEADERS  += widget.h \
     communication_help.h \
     query_change_voltage.h \
     settings_datasave.h \
-    wininforlistdialog.h \
-    setdatetime.h
+    wininforlistdialog.h
 
 FORMS    += widget.ui \
     date_widget.ui \

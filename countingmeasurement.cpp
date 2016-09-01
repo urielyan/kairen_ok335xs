@@ -29,24 +29,27 @@ countingMeasurement::countingMeasurement(QWidget *parent) :
   timer = new QTimer();
   connect(timer,SIGNAL(timeout()),this,SLOT(count_second()));
 
-  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  QList<QLabel *> labellist = this->findChildren<QLabel *>();
-  for (int i = 0; i < labellist.count(); ++i) {
-      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    }
-  ui->label_seconds->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
-  ui->pushButton_7->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
-
     set_sliding_disabled(true,false);
 
     ui->pushButton_2->setObjectName("stop");
     ui->pushButton->setObjectName("start");
-//    this->setStyleSheet(""
-//                        "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
-//                        "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}");
-    //ui->label->setObjectName("title");
+    this->setStyleSheet(""
+                        "QPushButton#stop{background-color:rgb(255, 0, 0); color: rgb(255, 255, 255);font-weight:bold;}"
+                        "QPushButton#start{background-color:rgb(0, 255, 0); color: rgb(255, 255, 255);font-weight:bold;}");
     ui->label_seconds->setObjectName("countDown");
     ui->pushButton_7->setObjectName("buttonTitle");
+
+    INIT_LABEL_SIZE_FONT;
+     ui->label_seconds->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
+     ui->pushButton_7->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
+
+#ifdef FRIENDLYARM_TINY210
+     QList<QPushButton *> btnList = this->findChildren<QPushButton *>();
+     btnList.removeAt(btnList.indexOf(ui->pushButton_7));
+     for (int i = 0; i < btnList.count(); ++i) {
+         btnList[i]->setFixedHeight(DESKTOP_HEIGHT / 7);
+       }
+#endif
 }
 countingMeasurement::~countingMeasurement()
 {

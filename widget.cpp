@@ -74,12 +74,7 @@ Widget::Widget(QWidget *parent) :
   connect(sm,SIGNAL(transmit_steady_summit_result(double)),\
           this,SLOT(judge_spectrument_measurement_result(double)));
 
-
-  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  QList<QLabel *> labellist = this->findChildren<QLabel *>();
-  for (int i = 0; i < labellist.count(); ++i) {
-      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    }
+  INIT_LABEL_SIZE_FONT;
   ui->label->setFont(QFont("symbol.ttf", FONT_SIZE*2,QFont::Normal));
   ui->label->setObjectName("title");
 }

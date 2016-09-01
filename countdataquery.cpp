@@ -33,11 +33,7 @@ countdataquery::countdataquery(QWidget *parent) :
 //    QCoreApplication::setOrganizationName("shanghaikairen");
 //    QCoreApplication::setApplicationName("analysis");
 
-    this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    QList<QPushButton *> labellist = this->findChildren<QPushButton *>();
-    for (int i = 0; i < labellist.count(); ++i) {
-        labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      }
+    INIT_LABEL_SIZE_FONT;
     ui->tableWidget->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     ui->label->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
     ui->label->setObjectName("title");

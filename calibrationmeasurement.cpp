@@ -37,21 +37,17 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
 
   calibrate_com =  Communciation_Com::instance();
 
-  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  QList<QLabel *> labellist = this->findChildren<QLabel *>();
-  for (int i = 0; i < labellist.count(); ++i) {
-      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    }
-  ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
-  ui->label_second->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
-
   ui->pushButton_2->setObjectName("stop");
   ui->pushButton->setObjectName("start");
-//  this->setStyleSheet(""
-//                      "QPushButton#stop{background-color:red; color: rgb(255, 255, 255);font-weight:bold;}"
-//                      "QPushButton#start{background-color:green; color: rgb(255, 255, 255);font-weight:bold;}");
+  this->setStyleSheet(""
+                      "QPushButton#stop{background-color:rgb(255, 0, 0); color: rgb(255, 255, 255);font-weight:bold;}"
+                      "QPushButton#start{background-color:rgb(0, 255, 0); color: rgb(255, 255, 255);font-weight:bold;}");
   ui->label->setObjectName("title");
   ui->label_second->setObjectName("countDown");
+
+  INIT_LABEL_SIZE_FONT;
+  ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
+  ui->label_second->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
 }
 
 calibrationmeasurement::~calibrationmeasurement()

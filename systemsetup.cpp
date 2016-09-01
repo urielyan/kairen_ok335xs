@@ -3,7 +3,6 @@
 #include "systemsetup.h"
 #include "ui_systemsetup.h"
 #include "passwd.h"
-#include "setdatetime.h"
 
 systemsetup::systemsetup(QWidget *parent) :
   QWidget(parent),
@@ -34,11 +33,7 @@ systemsetup::systemsetup(QWidget *parent) :
   connect(count_mea,SIGNAL(transmit_move_sliding(bool,bool)),this,SIGNAL(change_widget_sliding(bool,bool)));
   connect(count_mea,SIGNAL(transmit_move_sliding(bool,bool)),specture_mea,SLOT(set_sliding_disabled(bool,bool)));
 
-  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  QList<QLabel *> labellist = this->findChildren<QLabel *>();
-  for (int i = 0; i < labellist.count(); ++i) {
-      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    }
+  INIT_LABEL_SIZE_FONT;
   ui->label->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
   ui->label->setObjectName("title");
 }
@@ -53,15 +48,8 @@ systemsetup::~systemsetup()
   delete ui;
 }
 
-
-//static passwd *tmppwd;
 void systemsetup::on_pushButton_2_clicked()
 {
-  //alter password
-//  delete tmppwd;
-//  tmppwd = new passwd();
-//  tmppwd->alterpasswd();
-  //delete tmppwd;
   emit show_alterpasswd(SETUP_ALTER_PASSWD);
 }
 

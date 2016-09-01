@@ -37,14 +37,17 @@ modify_kb_value::modify_kb_value(QWidget *parent) :
         }
     }
 
-  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  QList<QLabel *> labellist = this->findChildren<QLabel *>();
-  for (int i = 0; i < labellist.count(); ++i) {
-      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    }
+  INIT_LABEL_SIZE_FONT;
   ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
   ui->comboBox->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
   ui->label->setObjectName("title");
+
+#ifdef FRIENDLYARM_TINY210
+  ui->comboBox->setFont(QFont(FONT_NAME, FONT_SIZE  + 1,QFont::Normal));
+  ui->comboBox->setFixedHeight(DESKTOP_HEIGHT / 10);
+
+  ui->label_2->setMaximumHeight(DESKTOP_HEIGHT / 10);
+#endif
 }
 
 modify_kb_value::~modify_kb_value()

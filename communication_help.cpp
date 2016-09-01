@@ -21,11 +21,8 @@ communication_help::communication_help(QWidget *parent) :
         }
     }
 
-//  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-//  QList<QLabel *> labellist = this->findChildren<QLabel *>();
-//  for (int i = 0; i < labellist.count(); ++i) {
-//      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-//    }
+  INIT_LABEL_SIZE_FONT;
+  ui->lableTitle->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
   ui->lableTitle->setObjectName("title");
   ui->lableVersion->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 }
@@ -128,12 +125,17 @@ void communication_help::on_pushButton_3_clicked()
   msgbox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
   int ret = msgbox.exec();
   if(ret == QMessageBox::Ok){
+      QString udiskPath;
+      if(GlobalData::instance()->strUdiskPath.size() > 0)
+        udiskPath = GlobalData::instance()->strUdiskPath;
+#ifdef FORLIN_OK335XS
       if(system("ls /media/sda1/new") == 0 &&  system("ls /dev/sda1") == 0){
           int res1 = system("cp  /media/sda1/new  /");
-
-//          if(system("ls /media/mmcblk0p1/new") == 0 &&  system("ls /dev/mmcblk0") == 0){
-//              int res1 = system("cp  /media/mmcblk0p1/new /");
-
+#endif
+#ifdef FRIENDLYARM_TINY210
+          if(system("ls /udisk/new") == 0){
+              int res1 = system("cp  /udisk/new /");
+#endif
           if(res1 == 0){
               system("reboot");
 //              QMessageBox msgbox;

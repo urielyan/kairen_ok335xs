@@ -1,4 +1,4 @@
-/*arm-linux-g++ -lts -Wl,-O1 -Wl,-rpath,/usr/local/arm/qt4.8.5/lib -o new main.o widget.o date_widget.o samplemeasurement.o countingmeasurement.o issample.o ispreheat.o spectrummeasurement.o showcountingmeasurement.o dataquery.o countdataquery.o systemsetup.o passwd.o setupdatetime.o showsamplemeasurement.o calibration.o calibrationmeasurement.o caibrateresultquery.o input_s_percentage.o query_s_count_data.o showcalibratemeasurement.o count_kb_value.o modify_kb_value.o com.o samplemeasurementquery.o hide_system.o input_person_sampleserial.o sample_data_query.o logo.o proportion.o inspectoscope.o printer.o input_machine_use_time.o painter_histogram.o spectrum_painter.o buzzer.o communication_help.o query_change_voltage.o settings_datasave.o global.o wininforlistdialog.o moc_widget.o moc_date_widget.o moc_samplemeasurement.o moc_countingmeasurement.o moc_issample.o moc_ispreheat.o moc_spectrummeasurement.o moc_showcountingmeasurement.o moc_dataquery.o moc_countdataquery.o moc_systemsetup.o moc_passwd.o moc_setupdatetime.o moc_showsamplemeasurement.o moc_calibration.o moc_calibrationmeasurement.o moc_caibrateresultquery.o moc_input_s_percentage.o moc_query_s_count_data.o moc_showcalibratemeasurement.o moc_count_kb_value.o moc_modify_kb_value.o moc_com.o moc_samplemeasurementquery.o moc_hide_system.o moc_input_person_sampleserial.o moc_sample_data_query.o moc_logo.o moc_proportion.o moc_inspectoscope.o moc_printer.o moc_input_machine_use_time.o moc_painter_histogram.o moc_spectrum_painter.o moc_buzzer.o moc_communication_help.o moc_query_change_voltage.o moc_settings_datasave.o moc_wininforlistdialog.o    -L/usr/local/arm/qt4.8.5/lib -lQtSql -L/usr/local/arm/tslib/lib -L/usr/local/arm/qt4.8.5/lib -lQtGui -lQtNetwork -lQtCore -lpthread
+/*arm-linux-g++ -lts -Wl,-O1 -Wl,-rpath,/usr/local/arm/qt4.8.5/lib -o new main.o widget.o date_widget.o samplemeasurement.o countingmeasurement.o issample.o ispreheat.o spectrummeasurement.o showcountingmeasurement.o dataquery.o countdataquery.o systemsetup.o passwd.o setupdatetime.o showsamplemeasurement.o calibration.o calibrationmeasurement.o caibrateresultquery.o input_s_percentage.o query_s_count_data.o showcalibratemeasurement.o count_kb_value.o modify_kb_value.o com.o samplemeasurementquery.o hide_system.o input_person_sampleserial.o sample_data_query.o logo.o proportion.o inspectoscope.o printer.o input_machine_use_time.o painter_histoym.o spectrum_painter.o buzzer.o communication_help.o query_change_voltage.o settings_datasave.o global.o wininforlistdialog.o moc_widget.o moc_date_widget.o moc_samplemeasurement.o moc_countingmeasurement.o moc_issample.o moc_ispreheat.o moc_spectrummeasurement.o moc_showcountingmeasurement.o moc_dataquery.o moc_countdataquery.o moc_systemsetup.o moc_passwd.o moc_setupdatetime.o moc_showsamplemeasurement.o moc_calibration.o moc_calibrationmeasurement.o moc_caibrateresultquery.o moc_input_s_percentage.o moc_query_s_count_data.o moc_showcalibratemeasurement.o moc_count_kb_value.o moc_modify_kb_value.o moc_com.o moc_samplemeasurementquery.o moc_hide_system.o moc_input_person_sampleserial.o moc_sample_data_query.o moc_logo.o moc_proportion.o moc_inspectoscope.o moc_printer.o moc_input_machine_use_time.o moc_painter_histogram.o moc_spectrum_painter.o moc_buzzer.o moc_communication_help.o moc_query_change_voltage.o moc_settings_datasave.o moc_wininforlistdialog.o    -L/usr/local/arm/qt4.8.5/lib -lQtSql -L/usr/local/arm/tslib/lib -L/usr/local/arm/qt4.8.5/lib -lQtGui -lQtNetwork -lQtCore -lpthread
 yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-121D/
  *1.此程序数据保存采用QSettings类，数据保存在～/.config/shanghaikairen/下，共有两个文件 ，一个是analysis.conf和count_data.conf
  *  其中analysis.conf中保存的内容有：
@@ -228,16 +228,71 @@ void initDatabase()
 
 int main(int argc, char *argv[])
 {
+  if(argc > 2)
+    {
+      GlobalData::instance()->strComName = QString(argv[1]);
+      GlobalData::instance()->strUdiskPath = QString(argv[2]);
+    }
   QApplication a(argc, argv);
+#ifdef FRIENDLYARM_TINY210
+  a.setStyleSheet(""
+                  "QPushButton#stop{"
+                  "background-color:(255, 0, 0); color: rgb(255, 255, 255); font-weight:bold;"
+                  "}"
+                  "QPushButton#start{background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;}"  );
 
+  //                          "min-width:80; font: 28px; min-height:60;"
+  //                          "}"
+  //                          "QPushButton#buttonTitle{"
+  //                          "font: 48px;"
+  //                          "min-height:50px;"
+  //                          "}"
+
+  //                          "QLabel{"
+  //                          "font: 10px;"
+  //                          "min-height:15px;"
+  //                          "}"
+  //                          "QLabel#countDown{"
+  //                          "font: 15px;"
+  //                          "min-height:20px;"
+  //                          "}"
+  //                          "QLabel#title{"
+  //                          "font: 15px;"
+  //                          "min-height:20px;"
+  //                          "}"
+
+  //                          "QComboBox {"
+  //                          "min-height: 40px;"
+  //                          "font: 30px;"
+  //                          "}"
+
+  //                          "QLineEdit{"
+  //                          "font: 24px;"
+  //                          "}"
+
+  //                          "QTableView{"
+  //                          "font:15px;"
+  //                          "}"
+  //                          "QTableView::item{"
+  //                          "min-height: 16px;"
+  //                          "}"
+  //                          "QHeaderView{font:7px}"
+
+  //                          "QScrollBar{width:10px;}"
+
+  //                          "QMessageBox{min-height: 50px; min-width: 80px;}"
+
+#endif
+
+#ifdef FORLIN_OK335XS
   a.setStyleSheet(QString("QPushButton{"
                           "min-width:80; font: 28px; min-height:50;"
                           "}"
                           "QPushButton#stop{"
-                          "background-color:red; color: rgb(255, 255, 255); font-weight:bold;"
+                          "background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;"
                           "}"
                           "QPushButton#start{"
-                          "background-color:green; color: rgb(255, 255, 255); font-weight:bold;"
+                          "background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;"
                           "}"
                           "QPushButton#buttonTitle{"
                           "font: 48px;"
@@ -276,8 +331,9 @@ int main(int argc, char *argv[])
 
                           "QScrollBar{width:10px;}"
 
-                          "QMessageBox{min-height: }"
+                          "QMessageBox{min-height: 50}"
                           ).arg(FONT_SIZE * 1.5));
+#endif
 
   initSettings();
   initLanguage(a);

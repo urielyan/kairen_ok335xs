@@ -9,13 +9,11 @@
 #include "spectrummeasurement.h"
 //#include "passwd.h"
 #include "communication_help.h"
-#include "setupdatetime.h"
 
 namespace Ui {
   class systemsetup;
 }
 
-class SetDateTime;
 class systemsetup : public QWidget
 {
   Q_OBJECT
@@ -51,14 +49,11 @@ private:
   Ui::systemsetup *ui;
   setupdatetime *setdt;
 
-  //SetDateTime *setdt;
   calibration *calibrate;
   modify_kb_value *modify_kb;
   countingMeasurement *count_mea;
   spectrummeasurement *specture_mea;
   communication_help *communicate_and_help;
-  //passwd *tmppwd;
-
 };
 
 #endif // SYSTEMSETUP_H

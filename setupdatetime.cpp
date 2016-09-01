@@ -79,9 +79,14 @@ setupdatetime::setupdatetime(QWidget *parent) :
 
     setLabelCurrentDateTime();
     this->setStyleSheet("QFrame#label{max-height: 80;min-height:50;"
-                        "background-color:gray;border:1px solid, black; border-radius: 30px;}"
+                        "background-color:rgb(200, 200, 200);border:1px solid, black; border-radius: 30px;}"
                         "QPushButton{min-height: 60;}"
                         "QPushButton#bottombutton, QPushButton#upbutton{text-align:center;}");
+
+    INIT_LABEL_SIZE_FONT;
+    p_label->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
+    p_label->setObjectName("title");
+
 }
 
 void setupdatetime::slotSaveButtonClicked()

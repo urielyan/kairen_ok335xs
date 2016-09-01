@@ -8,6 +8,8 @@
 #include <QMessageBox>
 #include <QString>
 #include <QTextEdit>
+#include <QHeaderView>
+
 extern int measurement_flag;
 
 static int specture_array_data[SPECTRUM_PAINTER_WIDTH] = {
@@ -51,7 +53,19 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
 
     ui->pushButton_2->setObjectName("stop");
     ui->pushButton->setObjectName("start");
+    this->setStyleSheet(""
+                        "QPushButton#stop{background-color:rgb(255, 0, 0); color: rgb(255, 255, 255);font-weight:bold;}"
+                        "QPushButton#start{background-color:rgb(0, 255, 0); color: rgb(255, 255, 255);font-weight:bold;}");
+
+    INIT_LABEL_SIZE_FONT;
+    ui->label->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
     ui->label->setObjectName("title");
+#ifdef FRIENDLYARM_TINY210
+     QList<QPushButton *> btnList = this->findChildren<QPushButton *>();
+     for (int i = 0; i < btnList.count(); ++i) {
+         btnList[i]->setFixedHeight(DESKTOP_HEIGHT / 7);
+       }
+#endif
 }
 
 spectrummeasurement::~spectrummeasurement()
@@ -559,9 +573,17 @@ void spectrummeasurement::printer_result()
 
 void spectrummeasurement::initTableWidget()
 {
-  ui->tableWidget->clearContents();
-  int rowHeight = (DESKTOP_HEIGHT - FONT_SIZE * 10) / 10;
+#ifdef FRIENDLYARM_TINY210
+  int rowHeight = (DESKTOP_HEIGHT ) / 19;
   int columnWidth = (DESKTOP_WIDTH ) / 8 -10;
+#endif
+#ifdef FORLIN_OK335XS
+  int rowHeight = (DESKTOP_HEIGHT - FONT_SIZE * 10) / 13;
+  int columnWidth = (DESKTOP_WIDTH ) / 8 -10;
+#endif
+
+  ui->tableWidget->clearContents();
+
   for(int i = 0;i < ui->tableWidget->rowCount();i++){
       ui->tableWidget->setRowHeight(i,rowHeight);
     }

@@ -10,6 +10,18 @@
 
 #include "wininforlistdialog.h"
 
+
+#define FRIENDLYARM_TINY210
+//#define FORLIN_OK335XS
+#define INIT_LABEL_SIZE_FONT \
+  do{\
+  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));\
+  QList<QLabel *> labellist = this->findChildren<QLabel *>();\
+  for (int i = 0; i < labellist.count(); ++i) {\
+      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));\
+    }\
+}while(0)
+
 #define SLIDING_PLATE_CHANGE_TIME   10
 #define REFERENCE_BE_LOCATON        1
 #define WAIT_BE_LOCATION            2
@@ -47,7 +59,14 @@
 
 #define COUNT_MEASUREMENT_DATA_COUNT 7
 
+#ifdef FRIENDLYARM_TINY210
+#define FONT_SIZE 7
+#endif
+
+#ifdef FORLIN_OK335XS
 #define FONT_SIZE 24
+#endif
+
 #define FONT_NAME "wenquanyi"
 
 #define ERRNO_COMMUNICATION_1  1
@@ -86,4 +105,17 @@
 //    QLabel *txtLabel;       //错误信息
 //    quint32 m_ErrorNum;     //错误代码号
 //};
+
+#include <QString>
+class GlobalData : public QObject
+{
+public:
+  static GlobalData* instance();
+
+  QString strComName;
+  QString strUdiskPath;
+
+private :
+  GlobalData(QObject *parent = 0);
+};
 #endif // GLOBAL_H
