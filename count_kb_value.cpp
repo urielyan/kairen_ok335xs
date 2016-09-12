@@ -46,11 +46,7 @@ void count_kb_value::on_pushButton_2_clicked()
 
 void count_kb_value::on_pushButton_clicked()
 {
-  QMessageBox msgbox;
-  msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
   if(mysettings.value("calibratemeasurement_count").toInt() < 3){
-      msgbox.setText(tr("标定样品数据太少"));
-      msgbox.exec();
       WinInforListDialog::instance()->showMsg(tr("标定样品数据太少"));
       return;
     }
@@ -63,8 +59,7 @@ void count_kb_value::on_pushButton_clicked()
     }
   qDebug() << count_input_s;
   if(count_input_s <3){
-      msgbox.setText(tr("请输入正确的硫含量"));
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr("请输入正确的硫含量"));
       return;
     }
 
@@ -78,6 +73,7 @@ void count_kb_value::on_pushButton_clicked()
         }
       mysettings.setValue(QString("work_curve_%1").arg(ui->comboBox->currentText().toInt()),kbr_data.replace(" ",";"));
       if(kbr_data == NULL)return;
+      QMessageBox msgbox;
       msgbox.setText(kbr_blank_data);
 
       //最多只能记录20组数据，若已经到21则重新从1开始并覆盖原来的数据

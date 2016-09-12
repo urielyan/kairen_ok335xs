@@ -9,6 +9,7 @@ samplemeasurementquery::samplemeasurementquery(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::samplemeasurementquery)
 {
+  PRINT_DEBUG_INFOR;
     ui->setupUi(this);
 
     current_count = mysettings.value("sample_count").toInt();
@@ -17,6 +18,7 @@ samplemeasurementquery::samplemeasurementquery(QWidget *parent) :
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
 
     //ui->label->setObjectName("title");
+    PRINT_DEBUG_INFOR;
 }
 
 samplemeasurementquery::~samplemeasurementquery()
@@ -61,6 +63,7 @@ void samplemeasurementquery::refresh_widget(int count){
     QStringList data_list = mysettings.value(QString("sample_data_%1").arg(count)).toString().split(";");
     if(data_list.size() != 6){
         mysettings.remove(QString("sample_data_%1").arg(count));
+        return;
     }
     ui->label_curve->setText(data_list[0]);
     ui->label_datetime->setText(data_list[1]);

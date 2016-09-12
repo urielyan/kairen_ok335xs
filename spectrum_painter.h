@@ -28,6 +28,7 @@ private:
   int curve;
   double max_data_y,max_data_x;
   int multiple_size;
+
 };
 
 #endif // SPECTRUM_PAINTER_H

@@ -14,7 +14,7 @@ painter_histogram::painter_histogram(QWidget *parent) :
   different_display_color = 0;
 
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-
+//  connect(ui->b_back, SIGNAL(clicked()), this, SLOT()
 }
 
 painter_histogram::~painter_histogram()
@@ -24,11 +24,15 @@ painter_histogram::~painter_histogram()
 
 
 //#define rect_width 10
+#ifdef FRIENDLYARM_TINY210
+#define DISPLAY_ONT_SIZE 2
+#endif
+#ifdef FORLIN_OK335XS
 #define DISPLAY_ONT_SIZE 5
+#endif
 void painter_histogram::paintEvent(QPaintEvent *)
 {
-    //qDebug() << "lalala";
-
+  PRINT_DEBUG_INFOR;
   if(spectrum_data == NULL)return;
     int rect_width = this->width()/130;
     int side = qMin(width(), height());                                           //创建窗口宽高参数
@@ -51,7 +55,7 @@ void painter_histogram::paintEvent(QPaintEvent *)
         painter.drawLine(0,- i * 25,5,- i * 25);
         //painter.drawRoundRect();
       }
-
+    PRINT_DEBUG_INFOR;
     for(int i = 1;i <= SPECTRUM_PAINTER_WIDTH ;i++){
         int value = -(*(spectrum_data + i - 1))/20;
         painter.drawLine(i*rect_width - rect_width/2 ,0,i*rect_width - rect_width/2,5);//坐标上的line
@@ -70,6 +74,7 @@ void painter_histogram::paintEvent(QPaintEvent *)
         //painter.drawLine(i*rect_width - DISPLAY_ONT_SIZE,3 * i * (i - 15),(i + 1)*rect_width - DISPLAY_ONT_SIZE,   3 * (i+1) * ((i+1) - 15));//throw line
     }
    //spectrum_data = (int [48])0;
+    PRINT_DEBUG_INFOR;
 }
 
 void painter_histogram::on_pushButton_clicked()
@@ -91,20 +96,31 @@ void painter_histogram::spectrum_show_and_update(int summit_value)
 
 void painter_histogram::on_b_forword_clicked()
 {
-  if(different_display_color >= SPECTRUM_PAINTER_WIDTH)return;
+  if(different_display_color >= SPECTRUM_PAINTER_WIDTH - 1)
+    {
+      different_display_color = SPECTRUM_PAINTER_WIDTH - 1;
+      return;
+    }
   different_display_color ++;
-  ui->label->setText(QString("当前阈值:%1V 计数值:%2").arg(QString::number((double)(different_display_color - 1)/10,'f',1))\
-                     .arg(*(spectrum_data + different_display_color - 1)));
+  ui->label->setText(QString("当前阈值:%1V 计数值:%2").arg(QString::number((double)(different_display_color )/10,'f',1))\
+                     .arg(*(spectrum_data + different_display_color)));
   this->update();
 }
 
 void painter_histogram::on_b_back_clicked()
 {
-  if(different_display_color <= 0)return;
-    different_display_color --;
-    ui->label->setText(QString("当前阈值:%1V 计数值:%2").arg(QString::number((double)(different_display_color - 1)/10,'f',1))\
-                       .arg(*(spectrum_data + different_display_color - 1)));
+  PRINT_DEBUG_INFOR;
+  qDebug() << different_display_color;
+  if(different_display_color <= 0)
+    {
+      different_display_color = 0;
+      return;
+    }
+  different_display_color --;
+    ui->label->setText(QString("当前阈值:%1V 计数值:%2").arg(QString::number((double)(different_display_color)/10,'f',1))\
+                       .arg(*(spectrum_data + different_display_color)));
     this->update();
+    PRINT_DEBUG_INFOR;
 }
 
 void painter_histogram::just_updae(){

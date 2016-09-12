@@ -10,12 +10,13 @@
 #include <QScrollBar>
 #include <QSqlError>
 #include <QSqlDriver>
-
+#include "database.h"
 
 showsamplemeasurement::showsamplemeasurement(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::showsamplemeasurement)
 {
+  db = Database::instance()->getDb();
     ui->setupUi(this);
     sum = 0;
     real_curve = 0;
@@ -133,6 +134,9 @@ void showsamplemeasurement::add_data(int work_curve_index,QString data,int size)
         ui->tableWidget->setItem(size-1,1,new QTableWidgetItem(percentage_str));
       }
     sum += ui->tableWidget->item(size -1,1)->text().toDouble();
+
+    resizeTableWidget();
+
 }
 
 void showsamplemeasurement::show_calculate_storage(QString data){
@@ -168,47 +172,9 @@ void showsamplemeasurement::show_calculate_storage(QString data){
     }
     ui->label_deviation->setText(str_deviation);
     data += str_deviation;
-    int tmp = mysettings.value("sample_count").toInt();
-    tmp++;
 
-    //存储数据到文本文件中。
-    //mysettings.setValue(QString("sample_data_%1").arg(tmp),data);
-    mysettings.setValue("sample_count",tmp);
-
-    //存贮数据到数据库中：
-    bool ok;
-    QStringList data_list = data.split(";");
-    //db.transaction();
-#if 1
-    QSqlQuery query;
-    query.prepare("INSERT INTO sample_data (people_id ,sample_serial, date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient) "
-                  "VALUES (?,?,?,?,?,?,?,?,?,?)");
-    query.addBindValue(input_person_sampleSerial::line_people);
-    query.addBindValue(input_person_sampleSerial::line_serial);
-    query.addBindValue(data_list[1]);
-    query.addBindValue(real_curve);
-    query.addBindValue(data_list[2]);
-    query.addBindValue(data_list[3]);
-    query.addBindValue(data_list[4]);
-    query.addBindValue(data_list[5]);
-    query.addBindValue(data_list[0].toInt() == 0 ? "是" : "否");
-    query.addBindValue(mysettings.value("work_curve_" + QString::number(real_curve)).toString());
-    ok  = query.exec();
-    if(ok == false){
-        QMessageBox box;
-        box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-        box.setText(tr("数据未存入数据库中！"));
-        box.exec();
-    }
-    query.finish();
-#endif
-//    ok = db.commit();
-//    if(ok == false ){
-//        QMessageBox box;
-//        box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-//        box.setText(db.lastError().text() + QString::number(db.driver()->hasFeature(QSqlDriver::Transactions)));
-//        box.exec();
-//    }
+    storeDataToQSettings(data);
+    storeDataToDatabase(data);
     printer_result();
     this->showFullScreen();
 }
@@ -237,6 +203,10 @@ void showsamplemeasurement::on_pushButton_clicked()
 {
     this->close();
   ui->tableWidget_hide->hide();
+
+  //测试用的：试试表宽度，和试试是否能往数据库中添加数据．
+//  ui->tableWidget->insertRow(0);
+//  storeDataToDatabase("1;2;3;4;5;6");
 }
 
 void showsamplemeasurement::clear_tablewidget(){
@@ -294,6 +264,56 @@ void showsamplemeasurement::printer_result(){
     }
   printer::transmit((void *)"---------------------------------------------------",SEGMENT_LENGTH );
   printer ::transmit(enter,1);
+}
+
+void showsamplemeasurement::storeDataToQSettings(QString data)
+{
+  //存储数据到文本文件中。
+  int tmp = mysettings.value("sample_count").toInt();
+  tmp++;
+  mysettings.setValue(QString("sample_data_%1").arg(tmp),data);
+  mysettings.setValue("sample_count",tmp);
+}
+
+void showsamplemeasurement::storeDataToDatabase(QString data)
+{
+#ifndef FRIENDLYARM_TINY210_NOSQL
+  //存贮数据到数据库中：
+  //QSqlDatabase db = QSqlDatabase::database();
+  QStringList data_list = data.split(";");
+  db.transaction();
+  QSqlQuery query;
+  query.prepare("INSERT INTO sample_data (people_id ,sample_serial, date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?)");
+  query.addBindValue(input_person_sampleSerial::line_people);
+  query.addBindValue(input_person_sampleSerial::line_serial);
+  query.addBindValue(data_list[1]);
+  query.addBindValue(real_curve);
+  query.addBindValue(data_list[2]);
+  query.addBindValue(data_list[3]);
+  query.addBindValue(data_list[4]);
+  query.addBindValue(data_list[5]);
+  query.addBindValue(data_list[0].toInt() == 0 ? "是" : "否");
+  query.addBindValue(mysettings.value("work_curve_" + QString::number(real_curve)).toString());
+  bool ok1  = query.exec();
+  query.finish();
+    bool ok2 = db.commit();
+    if(ok1 == false  || ok2 == false){
+        QMessageBox box;
+        box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+        box.setText(tr("数据未存入数据库中！") + "\n" + db.lastError().text() );
+        box.exec();
+    }
+#endif
+}
+
+void showsamplemeasurement::resizeTableWidget()
+{
+#ifdef FRIENDLYARM_TINY210
+  for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
+      ui->tableWidget->setRowHeight(row, DESKTOP_HEIGHT / 7);
+    }
+#endif
 }
 
 int showsamplemeasurement::get_real_curve(){

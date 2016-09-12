@@ -1,6 +1,7 @@
 #include "sample_data_query.h"
 #include "ui_sample_data_query.h"
 #include "global.h"
+#include "database.h"
 
 #include <QSqlQuery>
 #include <QDebug>
@@ -17,12 +18,12 @@ WinSqlDataQuery::WinSqlDataQuery(QWidget *parent) :
   //printf("in...%s\n",__FUNCTION__);
   ui->setupUi(this);
 
-  /*
- * 判断当前是什么查询
-*/
-  query_flag = 0;
 
-  model = new QSqlTableModel();
+
+  query_flag = 0; //判断当前是什么查询
+
+  model = new QSqlTableModel(this, Database::instance()->getDb());
+  model->setTable("sample_data");
   input_serial = new input_person_sampleSerial();
 
   #if 1
@@ -55,10 +56,10 @@ WinSqlDataQuery::~WinSqlDataQuery()
   delete input_serial;
 }
 void WinSqlDataQuery::initTableview(){
-  delete model;
+  //delete model;
   //ui->tableView->setColumnWidth(2,1000);
-  model = new QSqlTableModel();
-  model->setTable("sample_data");
+  //model = new QSqlTableModel();
+ // model->setTable("sample_data");
   model->setEditStrategy(QSqlTableModel::OnManualSubmit);
   model->setHeaderData(0, Qt::Horizontal, tr("人员编号"));
   model->setHeaderData(1, Qt::Horizontal, tr("样品编号"));

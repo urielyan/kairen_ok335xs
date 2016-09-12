@@ -7,6 +7,7 @@
 //#include "samplemeasurementquery.h"
 #include "sample_data_query.h"
 
+class samplemeasurementquery;
 namespace Ui {
 class dataquery;
 }
@@ -32,8 +33,8 @@ private:
     Ui::dataquery *ui;
     countdataquery *showcountdataquery;
     caibrateresultquery *csquery;
-    //samplemeasurementquery *samplemeasurement_query;
-    WinSqlDataQuery *samp_data_query;
+    samplemeasurementquery *samplemeasurement_query;
+    WinSqlDataQuery *p_sqlDataQuery;
 };
 
 #endif // DATAQUERY_H

@@ -42,6 +42,13 @@ private:
   QSettings mysettings;
 
   void printer_result();
+
+private:
+//add 2016 9.4 By yange to resolve tiny210 can not add data to database; just using QSettings store data;
+  void storeDataToQSettings(QString data);
+  void storeDataToDatabase(QString data);
+
+  void resizeTableWidget();
 };
 
 #endif // SHOWSAMPLEMEASUREMENT_H

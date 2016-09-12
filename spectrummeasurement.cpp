@@ -23,7 +23,8 @@ static int specture_array_data[SPECTRUM_PAINTER_WIDTH] = {
   1616,939,400,161,80,33,16,33,48,48,48,48,0};
 spectrummeasurement::spectrummeasurement(QWidget *parent) :
   QWidget(parent),
-  ui(new Ui::spectrummeasurement)
+  ui(new Ui::spectrummeasurement),
+  summit_value(1)
 {
   ui->setupUi(this);
   row = 0;
@@ -573,14 +574,8 @@ void spectrummeasurement::printer_result()
 
 void spectrummeasurement::initTableWidget()
 {
-#ifdef FRIENDLYARM_TINY210
-  int rowHeight = (DESKTOP_HEIGHT ) / 19;
+  int rowHeight = (DESKTOP_HEIGHT ) /  20;
   int columnWidth = (DESKTOP_WIDTH ) / 8 -10;
-#endif
-#ifdef FORLIN_OK335XS
-  int rowHeight = (DESKTOP_HEIGHT - FONT_SIZE * 10) / 13;
-  int columnWidth = (DESKTOP_WIDTH ) / 8 -10;
-#endif
 
   ui->tableWidget->clearContents();
 

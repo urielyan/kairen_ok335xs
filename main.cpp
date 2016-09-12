@@ -37,6 +37,7 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
  *       create table sample_data(people_id TEXT,sample_serial TEXT,date_time DATE,wo    rk_curve INTEGER,measurement_time INTEGER,repeat_time INTEGER,average DOUBLE    ,deviation DOUBLE);
  *      insert into sample_data values(0,"000001","0000000000000","2015-3-13 10:50:30",1,15,3,0.2222,0.0001);
 */
+
 #include "widget.h"
 #include "logo.h"
 #include "printer.h"
@@ -62,8 +63,10 @@ void initSettings()
   QCoreApplication::setOrganizationName("shanghaikairen");
   QCoreApplication::setApplicationName("analysis");
 
-  QSettings mysettings;
-  //mysettings.clear();
+  QSettings mysettings("shanghaikairen","analysis");
+//  mysettings.setPath(QSettings::NativeFormat, QSettings::UserScope, "/shanghaikairen");
+  qDebug() << mysettings.fileName();
+  mysettings.clear();
 
   if(!mysettings.contains("calibratemeasurement_count_record")){
       mysettings.setValue("calibratemeasurement_count_record",1);
@@ -193,11 +196,9 @@ void initLanguage(QApplication &a)
 
 void initDatabase()
 {
-#if 1
+#if 0
   QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-  //qDebug() << db.driver()->hasFeature(QSqlDriver::Transactions);
   db.setDatabaseName("/samplemeasurement.db");
-  //db.setConnectOptions("QSQLITE_OPEN_READONLY=0");
   bool ok = db.open();
   if(ok == false){
       //QMessageBox::warning(w,"db err","database open err!");
@@ -286,7 +287,7 @@ int main(int argc, char *argv[])
 
 #ifdef FORLIN_OK335XS
   a.setStyleSheet(QString("QPushButton{"
-                          "min-width:80; font: 28px; min-height:50;"
+                          "min-width:80; font: 28px; min-height:60;"
                           "}"
                           "QPushButton#stop{"
                           "background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;"
@@ -314,7 +315,7 @@ int main(int argc, char *argv[])
 
                           "QComboBox {"
                           "min-height: 50px;"
-                          "font: 40px;"
+                          "font: 25px;"
                           "}"
 
                           "QLineEdit{"
@@ -335,7 +336,7 @@ int main(int argc, char *argv[])
                           ).arg(FONT_SIZE * 1.5));
 #endif
 
-  initSettings();
+  //initSettings();
   initLanguage(a);
   initDatabase();
 
@@ -350,11 +351,11 @@ int main(int argc, char *argv[])
 #endif
 
   Widget w;
-//  logo l;
-//  l.showFullScreen();
-//  QTimer::singleShot(5000,&l,SLOT(close()));
-//  w.setFont(QFont("wenquanyi",FONT_SIZE,QFont::Normal));
-//  QTimer::singleShot(4800,&w,SLOT(showFullScreen()));
+  //  logo l;
+  //  l.showFullScreen();
+  //  QTimer::singleShot(5000,&l,SLOT(close()));
+  //  w.setFont(QFont("wenquanyi",FONT_SIZE,QFont::Normal));
+  //  QTimer::singleShot(4800,&w,SLOT(showFullScreen()));
   w.showFullScreen();
   return a.exec();
 }

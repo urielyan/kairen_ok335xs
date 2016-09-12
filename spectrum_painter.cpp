@@ -1,5 +1,6 @@
 #include "spectrum_painter.h"
 #include "ui_spectrum_painter.h"
+#include "global.h"
 
 #include <QWidget>
 #include <QPainter>
@@ -23,12 +24,18 @@ void spectrum_painter::on_pushButton_clicked()
   this->close();
 }
 
-
+#ifdef FRIENDLYARM_TINY210
+#define DISPLAY_FONT_SIZE 3
+#define POINT_SIZE 3
+#endif
+#ifdef FORLIN_OK335XS
 #define DISPLAY_FONT_SIZE 5
-//#define multiple_size 100
 #define POINT_SIZE 2
+#endif
+//#define multiple_size 100
 static QMap<int,QString>painter_data;//painter data
-void spectrum_painter::paintEvent(QPaintEvent *){
+void spectrum_painter::paintEvent(QPaintEvent *)
+{
   //int rect_width = this->width()/130;
   int side = qMin(width(), height());                                           //创建窗口宽高参数
   QPainter painter(this);

@@ -10,9 +10,8 @@
 
 #include "wininforlistdialog.h"
 
-
-#define FRIENDLYARM_TINY210
-//#define FORLIN_OK335XS
+//#define FRIENDLYARM_TINY210
+#define FORLIN_OK335XS
 #define INIT_LABEL_SIZE_FONT \
   do{\
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));\
@@ -21,6 +20,10 @@
       labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));\
     }\
 }while(0)
+
+#ifdef FRIENDLYARM_TINY210
+//#define FRIENDLYARM_TINY210_NOSQL
+#endif
 
 #define SLIDING_PLATE_CHANGE_TIME   10
 #define REFERENCE_BE_LOCATON        1
@@ -77,8 +80,13 @@
 #define DESKTOP_WIDTH   QApplication::desktop()->width()
 #define DESKTOP_HEIGHT QApplication::desktop()->height()
 
-//#define WIDGET_FONT_SIZE 30;
 //#define DEBUG
+#ifdef DEBUG
+#define PRINT_DEBUG_INFOR qDebug() << __FILE__ << __LINE__;
+#else
+#define PRINT_DEBUG_INFOR
+#endif
+//#define WIDGET_FONT_SIZE 30;
 
 //class WinInfoListDialog : public QDialog
 //{

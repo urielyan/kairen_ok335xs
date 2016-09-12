@@ -52,13 +52,18 @@ sampleMeasurement::sampleMeasurement(QWidget *parent) :
   ui->comboBo_queue->setFont(QFont(FONT_NAME, FONT_SIZE, QFont::Normal));
 #endif
 #ifdef FORLIN_OK335XS
-  ui->comboBo_queue->setFont(QFont(FONT_NAME, FONT_SIZE -  10,QFont::Normal));
+  ui->comboBo_queue->setFont(QFont(FONT_NAME, 10, QFont::Normal));
+  ui->comboBox_time->setFont(QFont(FONT_NAME, 10, QFont::Normal));
 #endif
 
 
   INIT_LABEL_SIZE_FONT;
   ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
   ui->label_second->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
+
+  connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(slotStartClicked()));
+  connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(slotStopClicked()));
+  connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(slotReturnClicked()));
 }
 
 sampleMeasurement::~sampleMeasurement()
@@ -96,7 +101,7 @@ void sampleMeasurement::doing_measurement(){
             QMessageBox msgbox;
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
             msgbox.setText("没有接收到含量测量数据，已停止测量！");
-            on_pushButton_2_clicked();
+            slotStopClicked();
             msgbox.exec();
             return;
         }
@@ -107,7 +112,7 @@ void sampleMeasurement::doing_measurement(){
             QMessageBox msgbox;
             msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
             msgbox.setText("含量测量数据有误，已停止测量！");
-            on_pushButton_2_clicked();
+            slotStopClicked();
             msgbox.exec();
             return;
         }
@@ -144,7 +149,7 @@ void sampleMeasurement::doing_measurement(){
     change_second--;
 }
 
-void sampleMeasurement::on_pushButton_3_clicked()
+void sampleMeasurement::slotReturnClicked()
 {
     //return button
     if(1 == flag)return;
@@ -153,7 +158,7 @@ void sampleMeasurement::on_pushButton_3_clicked()
 }
 
 
-void sampleMeasurement::on_pushButton_clicked()
+void sampleMeasurement::slotStartClicked()
 {
     //start button
   //如果正在进行含量测量则返回
@@ -229,7 +234,7 @@ void sampleMeasurement::on_pushButton_clicked()
         }
      }
     //开始之前停止任何测量,并刷新输入输出缓冲区
-     if(on_pushButton_2_clicked() != ALL_RIGHT)return;
+     if(slotStopClicked() != ALL_RIGHT)return;
 
     //发送测量信号
     measurement_flag = MEASUREMENT_SAMPLE;
@@ -263,7 +268,7 @@ void sampleMeasurement::on_pushButton_clicked()
         QMessageBox msgbox;
         msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
         msgbox.setText(MACHINE_MALFUNCTION_TEXT);
-        on_pushButton_2_clicked();
+        slotStopClicked();
         msgbox.exec();
         return;
     }else if(recv_data[1] == (char)0x32){//recv_data[0] == (char)0x98 &&
@@ -291,13 +296,13 @@ void sampleMeasurement::on_pushButton_clicked()
         QMessageBox msgbox;
         msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
         msgbox.setText(SLIDING_PLATE_NO_CHANGE_TEXT);
-        on_pushButton_2_clicked();
+        slotStopClicked();
         msgbox.exec();
         return;
       }
 }
 
-int sampleMeasurement::on_pushButton_2_clicked()
+int sampleMeasurement::slotStopClicked()
 {
     //stop button
       if(measurement_flag != MEASUREMENT_NOTHING){

@@ -2,17 +2,18 @@
 #include "ui_dataquery.h"
 #include"global.h"
 #include <stdio.h>
+#include "samplemeasurementquery.h"
 
 dataquery::dataquery(QWidget *parent):
     QWidget(parent),
     ui(new Ui::dataquery)
 {
-  printf("in...%s\n",__FUNCTION__);
+  PRINT_DEBUG_INFOR;
     ui->setupUi(this);
     showcountdataquery = new countdataquery();
     csquery = new caibrateresultquery();
-    //samplemeasurement_query = new samplemeasurementquery();
-    samp_data_query = new WinSqlDataQuery();
+    samplemeasurement_query = new samplemeasurementquery();
+    p_sqlDataQuery = new WinSqlDataQuery();
     //printf("%s\n",__FUNCTION__);
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -22,17 +23,17 @@ dataquery::dataquery(QWidget *parent):
       }
     ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
     ui->label->setObjectName("title");
+    PRINT_DEBUG_INFOR;
 }
 
 dataquery::~dataquery()
 {
-    delete samp_data_query;
-    //delete samplemeasurement_query;
+    delete p_sqlDataQuery;
+    delete samplemeasurement_query;
     delete csquery;
     delete showcountdataquery;
     delete ui;
 }
-
 
 void dataquery::on_pushButton_2_clicked()
 {
@@ -53,6 +54,9 @@ void dataquery::on_pushButton_3_clicked()
 
 void dataquery::on_pushButton_clicked()
 {
-    samp_data_query->show_and_refresh();
-    //samplemeasurement_query->show_and_refresh();
+#ifdef FRIENDLYARM_TINY210_NOSQL
+  samplemeasurement_query->show_and_refresh();
+#else
+  p_sqlDataQuery->show_and_refresh();
+#endif
 }

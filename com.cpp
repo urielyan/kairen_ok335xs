@@ -6,7 +6,9 @@
 Communciation_Com::Communciation_Com(QObject *parent) :
     QObject(parent)
 {
-   // fd = open( "/dev/ttyUSB0", O_RDWR|O_NOCTTY|O_NDELAY);
+#ifdef COMPUTE_DESKTOP
+    fd = open( "/dev/ttyUSB0", O_RDWR|O_NOCTTY|O_NDELAY);
+#endif
 #ifdef FORLIN_OK335XS
     fd = open( "/dev/ttyO1", O_RDWR|O_NOCTTY|O_NDELAY);
 #endif

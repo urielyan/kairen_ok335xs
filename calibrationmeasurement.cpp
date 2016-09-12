@@ -48,6 +48,10 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
   INIT_LABEL_SIZE_FONT;
   ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
   ui->label_second->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
+
+  connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(slotStartClicked()));
+  connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(slotStopClicked()));
+  connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(slotReturnClicked()));
 }
 
 calibrationmeasurement::~calibrationmeasurement()
@@ -81,7 +85,7 @@ void calibrationmeasurement::doing_measurement(){
 //          msgbox.setText("未接收到标定数据，已停止测量");
 //          msgbox.exec();
 
-          on_pushButton_2_clicked();//stop button
+          slotStopClicked();//stop button
           return;
         }
 #if 1
@@ -95,7 +99,7 @@ void calibrationmeasurement::doing_measurement(){
 //          msgbox.exec();
           WinInforListDialog::instance()->showMsg(tr("标定数据有误，已停止测量"));
 
-          on_pushButton_2_clicked();//stop button
+          slotStopClicked();//stop button
           return;
         }
 #endif
@@ -114,20 +118,14 @@ void calibrationmeasurement::doing_measurement(){
               if(recv_data == NULL){
                   QSettings communication_err_data("shanghaikairen","communication_error");
                   communication_err_data.setValue("com_err_4",communication_err_data.value("com_err_4").toInt() + 1);
-                  //count--;
-//                  QMessageBox msgbox;
-//                  msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-//                  msgbox.setText("err:no receive data!");
-//                  msgbox.exec();
-
                   WinInforListDialog::instance()->showMsg(tr("没有收到标定数据，数据为空；"));
 
-                  on_pushButton_2_clicked();//stop button
+                  slotStopClicked();//stop button
                   return;}
             }
           if( recv_data[1] == (char)0x33){//recv_data[0] == (char)0x98 &&
               //count --;
-              on_pushButton_2_clicked();
+              slotStopClicked();
 
               QMessageBox msgbox;
               msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -148,7 +146,7 @@ void calibrationmeasurement::doing_measurement(){
               QMessageBox msgbox;
               msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
               msgbox.setText(SLIDING_PLATE_NO_CHANGE_TEXT+recv_data);
-              on_pushButton_2_clicked();//stop button
+              slotStopClicked();//stop button
               msgbox.exec();
               return;
             }
@@ -180,7 +178,7 @@ void calibrationmeasurement::doing_measurement(){
           //check preheat condition
           msgbox.setText("数据不合法1!\n" + recv_data);
           msgbox.exec();
-          on_pushButton_2_clicked();
+          slotStopClicked();
           return;
         }
     }else if (second < 0){
@@ -189,10 +187,8 @@ void calibrationmeasurement::doing_measurement(){
   second--;
 }
 
-void calibrationmeasurement::on_pushButton_clicked()
+void calibrationmeasurement::slotStartClicked()
 {
-  //start button
-
 #if 1
   //test
   ui->pushButton->setDisabled(true);
@@ -225,7 +221,7 @@ void calibrationmeasurement::on_pushButton_clicked()
       emit transmit_stop_auto_count();
     }
 //开始之前停止任何测量
-  if(on_pushButton_2_clicked() != ALL_RIGHT)return;
+  if(slotStopClicked() != ALL_RIGHT)return;
 
   //开始标定测量
   tcflush(Communciation_Com::fd,TCIOFLUSH);
@@ -255,7 +251,7 @@ void calibrationmeasurement::on_pushButton_clicked()
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(MACHINE_MALFUNCTION_TEXT);
-      on_pushButton_2_clicked();
+      slotStopClicked();
       msgbox.exec();
       measurement_flag = MEASUREMENT_NOTHING;
       ui->widget->global_is_sample = REFERENCE_BE_LOCATON;
@@ -280,7 +276,7 @@ void calibrationmeasurement::on_pushButton_clicked()
       QMessageBox msgbox;
       msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
       msgbox.setText(SLIDING_PLATE_NO_CHANGE_TEXT);
-      on_pushButton_2_clicked();
+      slotStopClicked();
       msgbox.exec();
     }
 }
@@ -292,7 +288,7 @@ void calibrationmeasurement::on_pushButton_4_clicked()
   showcalibratemeasure->showFullScreen();
 }
 
-int  calibrationmeasurement::on_pushButton_2_clicked()
+int  calibrationmeasurement::slotStopClicked()
 {
   //stop button
   if(measurement_flag != MEASUREMENT_NOTHING){
@@ -348,7 +344,7 @@ int  calibrationmeasurement::on_pushButton_2_clicked()
   return ALL_RIGHT;
 }
 
-void calibrationmeasurement::on_pushButton_3_clicked()
+void calibrationmeasurement::slotReturnClicked()
 {
   this->close();
 }

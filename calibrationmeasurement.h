@@ -25,13 +25,13 @@ signals:
 
 private slots:
     void doing_measurement();
-    void on_pushButton_clicked();
+    void slotStartClicked();
 
     void on_pushButton_4_clicked();
 
-    int on_pushButton_2_clicked();
+    int slotStopClicked();
 
-    void on_pushButton_3_clicked();
+    void slotReturnClicked();
 
 private:
     Ui::calibrationmeasurement *ui;

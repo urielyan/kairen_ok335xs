@@ -47,7 +47,7 @@ caibrateresultquery::caibrateresultquery(QWidget *parent) :
 #ifdef FRIENDLYARM_TINY210
   //调整tablewidget的大小以适应屏幕。
   for(int i = 0; i < ui->tableWidget->columnCount();i++){
-      ui->tableWidget->setColumnWidth(i, DESKTOP_WIDTH / 14);
+      ui->tableWidget->setColumnWidth(i, DESKTOP_WIDTH / 9);
     }
 
   for(int i = 0; i < 3; i++)
