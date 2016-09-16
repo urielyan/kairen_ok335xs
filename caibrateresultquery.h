@@ -26,7 +26,6 @@ private:
   Ui::caibrateresultquery *ui;
   QStringList calibrate_results;
   int display_number;
-  QSettings mysettings;
 
   void update_page(int);
 };

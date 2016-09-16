@@ -15,6 +15,7 @@ public:
 private:
   DataSave();
   QSettings *settings;
+  void init();
 };
 
 #endif // DATASAVE_H
