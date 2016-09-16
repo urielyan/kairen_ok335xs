@@ -3,7 +3,6 @@
 #include <QDebug>
 #include "global.h"
 
-//extern QSettings mysettings;
 #define MYSETTINGS_RESULT "calibrtation_results_in_result_"
 #define MYSETTINGS_DATA "calibrtation_results_in_data_"
 

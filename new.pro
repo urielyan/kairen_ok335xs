@@ -53,7 +53,8 @@ SOURCES += main.cpp\
     settings_datasave.cpp \
     global.cpp \
     wininforlistdialog.cpp \
-    database.cpp
+    database.cpp \
+    datasave.cpp
 
 HEADERS  += widget.h \
     date_widget.h \
@@ -95,7 +96,8 @@ HEADERS  += widget.h \
     query_change_voltage.h \
     settings_datasave.h \
     wininforlistdialog.h \
-    database.h
+    database.h \
+    datasave.h
 
 FORMS    += widget.ui \
     date_widget.ui \

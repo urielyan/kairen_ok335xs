@@ -43,6 +43,7 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
 #include "printer.h"
 #include "global.h"
 #include "buzzer.h"
+#include "datasave.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -60,6 +61,7 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
 #include<QSqlDriver>
 void initSettings()
 {
+
   QCoreApplication::setOrganizationName("shanghaikairen");
   QCoreApplication::setApplicationName("analysis");
 
@@ -229,6 +231,8 @@ void initDatabase()
 
 int main(int argc, char *argv[])
 {
+  DataSave::instance()->test();
+
   if(argc > 2)
     {
       GlobalData::instance()->strComName = QString(argv[1]);
