@@ -1,41 +1,64 @@
 #include "datasave.h"
 #include "global.h"
-DataSave *DataSave::instance()
-{
-  static DataSave _instance;
-  return &_instance;
-}
 
-void DataSave::test()
+bool MeasurementDataSave::test()
 {
-  setValue("test", 1);
-  qDebug() <<  settings->value("test") << settings->fileName();
-  if(settings->value("test").toInt() != 1)
+  QString testKey = "testThisClass";
+//  setValue(testKey, 1);
+  settings->setValue(testKey, 1);
+  qDebug() <<  settings->value(testKey) << settings->fileName();
+  if(settings->value(testKey).toInt() != 1)
     {
       PRINT_DEBUG_INFOR;
       qDebug() << "QSettings err!";
+
+      return false;
   }
+  settings->remove(testKey);
+
+  return true;
 }
 
-QVariant DataSave::value(QString key)
+void MeasurementDataSave::setValue(QString key, qint64 value)
 {
-  return settings->value(key);
+  if(settings == NULL)
+    return;
+  settings->setValue("key", "value");
 }
 
-void DataSave::setValue(QString key, qint64 value)
+void MeasurementDataSave::setValue(QString key, QString value)
 {
+  if(settings == NULL)
+    return;
   settings->setValue(key, value);
 }
 
-DataSave::DataSave()
+QVariant MeasurementDataSave::value(QString key)
 {
-  settings = new QSettings("./QSettings/test.settings", QSettings::NativeFormat);
-  init();
-  //  QCoreApplication::setOrganizationName("shanghaikairen");
-  //  QCoreApplication::setApplicationName("analysis");
+  if(settings == NULL)
+    return 0;
+  return settings->value(key);
 }
 
-void DataSave::init()
+
+MeasurementDataSave *MeasurementDataSave::instance()
+{
+  static MeasurementDataSave _instance;
+  return &_instance;
+}
+
+MeasurementDataSave::MeasurementDataSave()
+{
+  settings = new QSettings("./QSettings/measurementData.settings", QSettings::NativeFormat);
+  if(!test())
+    {
+      settings = new QSettings("./QSettings/measurementData.settings", QSettings::NativeFormat);
+    }
+  init();
+  Q_ASSERT(test() == true);
+}
+
+void MeasurementDataSave::init()
 {
   if(!settings->contains("calibratemeasurement_count_record")){
       settings->setValue("calibratemeasurement_count_record",1);
@@ -118,4 +141,77 @@ void DataSave::init()
   if(!settings->contains("sample_count")){
       settings->setValue("sample_count",0);
   }
+}
+
+
+ErrorCountSave *ErrorCountSave::instance()
+{
+  static ErrorCountSave _instance;
+  return &_instance;
+}
+
+void ErrorCountSave::init()
+{
+  settings = new QSettings("./QSettings/errorCount.settings", QSettings::NativeFormat);
+
+}
+
+
+void ErrorCountSave::addCount(uint which)
+{
+  QString key = QString("com_err_") + QString::number(which);
+  settings->setValue(key, settings->value(key).toUInt() + 1);
+}
+
+ErrorCountSave::ErrorCountSave()
+{
+  init();
+  if(!settings->contains("com_err_1")){
+      for(int i = 1;i <= 11;i++){
+          settings->setValue(QString("com_err_%1").arg(i),0);
+        }
+    }
+
+  if(!settings->contains("change_count_voltage_count")){
+      settings->setValue("change_count_voltage_count",1);
+    }
+}
+
+bool ErrorCountSave::test()
+{
+  QString testKey = "test";
+  setValue(testKey, 1);
+  qDebug() <<  settings->value(testKey) << settings->fileName();
+  if(settings->value(testKey).toInt() != 1)
+    {
+      PRINT_DEBUG_INFOR;
+      qDebug() << "QSettings err!";
+
+      return false;
+  }
+  settings->remove(testKey);
+
+  return true;
+}
+
+void ErrorCountSave::setValue(QString key, qint64 value)
+{
+  if(settings == NULL)
+    return;
+  //settings->setValue("key", "value");
+}
+
+void ErrorCountSave::setValue(QString key, QString value)
+{
+  if(settings == NULL)
+    return;
+  settings->setValue(key, value);
+}
+
+QVariant ErrorCountSave::value(QString key)
+{
+  if(settings == NULL)
+    return 0;
+  qDebug() << settings->value(key);
+  return settings->value(key);
 }

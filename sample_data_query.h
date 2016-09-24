@@ -1,13 +1,35 @@
 #ifndef SAMPLE_DATA_QUERY_H
 #define SAMPLE_DATA_QUERY_H
 
+#include <QDialog>
 #include <QWidget>
 #include <QSqlTableModel>
+#include <QList>
 #include "input_person_sampleserial.h"
 namespace Ui {
 class sample_data_query;
 }
 
+class QLabel;
+class WinSpecifyIndexDialog : public QDialog
+{
+  Q_OBJECT
+public:
+  explicit WinSpecifyIndexDialog(const QModelIndex &index, QSqlTableModel *model,  QWidget *parent = 0);
+
+private slots:
+  void slotNextButtonClicked();
+  void slotPreviousButtonClicked();
+
+private:
+  void init();
+  void initData(QStringList valueList);
+
+  QModelIndex m_index;
+  QSqlTableModel *m_model;
+
+  QList <QLabel *> m_labelList;
+};
 class WinSqlDataQuery : public QWidget
 {
     Q_OBJECT
@@ -36,7 +58,7 @@ private slots:
 private:
     int query_flag;
     Ui::sample_data_query *ui;
-    QSqlTableModel *model;
+    QSqlTableModel *m_model;
     input_person_sampleSerial *input_serial;
     void initTableview();
 };

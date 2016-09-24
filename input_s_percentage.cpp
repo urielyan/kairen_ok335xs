@@ -191,10 +191,7 @@ void WinInputSPercentage::on_b_sure_clicked()
           QString tmpsettingsstr = QString("calibrate_input_s_%1").arg(row);
           mysettings.setValue(tmpsettingsstr,  WinInforListDialog::instance()->doubleToCompleteDouble(ui->tableWidget->item(row,0)->text().toDouble()));
         }
-      QMessageBox box;
-      box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      box.setText(tr("您已保存了您输入的数据，现在可以计算kb值了!"));
-      box.exec();
+      WinInforListDialog::instance()->showMsg(tr("您已保存了您输入的数据，现在可以计算kb值了"));
       this->close();
     }else{
       this->close();

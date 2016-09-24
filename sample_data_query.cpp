@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QScrollBar>
+#include <QButtonGroup>
 
 #define QUERY_BY_PEOPLE 1
 #define QUERY_BY_SAMPLE 2
@@ -22,9 +23,9 @@ WinSqlDataQuery::WinSqlDataQuery(QWidget *parent) :
 
   query_flag = 0; //判断当前是什么查询
 
-  model = new QSqlTableModel(this, Database::instance()->getDb());
-  model->setTable("sample_data");
-  input_serial = new input_person_sampleSerial();
+  m_model = new QSqlTableModel(this, Database::instance()->getDb());
+  m_model->setTable("sample_data");
+  input_serial = input_person_sampleSerial::instance();
 
   #if 1
   QScrollBar *verticalbar;
@@ -52,7 +53,7 @@ WinSqlDataQuery::~WinSqlDataQuery()
 {
   delete ui;
 
-  delete model;
+  delete m_model;
   delete input_serial;
 }
 void WinSqlDataQuery::initTableview(){
@@ -60,17 +61,18 @@ void WinSqlDataQuery::initTableview(){
   //ui->tableView->setColumnWidth(2,1000);
   //model = new QSqlTableModel();
  // model->setTable("sample_data");
-  model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-  model->setHeaderData(0, Qt::Horizontal, tr("人员编号"));
-  model->setHeaderData(1, Qt::Horizontal, tr("样品编号"));
-  model->setHeaderData(2, Qt::Horizontal, tr("测量日期"));
-  model->setHeaderData(3, Qt::Horizontal, tr("工作曲线"));
-  model->setHeaderData(4, Qt::Horizontal, tr("测量时间"));
-  model->setHeaderData(5, Qt::Horizontal, tr("重复次数"));
-  model->setHeaderData(6, Qt::Horizontal, tr("平均值"));
-  model->setHeaderData(7, Qt::Horizontal, tr("标准偏差"));
-  model->setHeaderData(8, Qt::Horizontal, tr("是否自动"));
-  model->setHeaderData(9, Qt::Horizontal, tr("测量系数"));
+ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+  m_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+  m_model->setHeaderData(0, Qt::Horizontal, tr("人员编号"));
+  m_model->setHeaderData(1, Qt::Horizontal, tr("样品编号"));
+  m_model->setHeaderData(2, Qt::Horizontal, tr("测量日期"));
+  m_model->setHeaderData(3, Qt::Horizontal, tr("工作曲线"));
+  m_model->setHeaderData(4, Qt::Horizontal, tr("测量时间"));
+  m_model->setHeaderData(5, Qt::Horizontal, tr("重复次数"));
+  m_model->setHeaderData(6, Qt::Horizontal, tr("平均值"));
+  m_model->setHeaderData(7, Qt::Horizontal, tr("标准偏差"));
+  m_model->setHeaderData(8, Qt::Horizontal, tr("是否自动"));
+  m_model->setHeaderData(9, Qt::Horizontal, tr("测量系数"));
 
   //ui->tableView->setColumnWidth(2,1000);
 #define SUIT_DIVIDE 6
@@ -95,9 +97,9 @@ void WinSqlDataQuery::initTableview(){
 void WinSqlDataQuery::show_and_refresh(){
 
   initTableview();
-  model->select();
+  m_model->select();
 
-  ui->tableView->setModel(model);
+  ui->tableView->setModel(m_model);
   ui->tableView->setColumnWidth(0,this->width() /SUIT_DIVIDE);
   ui->tableView->setColumnWidth(1,this->width() /SUIT_DIVIDE);
   ui->tableView->setColumnWidth(2,this->width() /3);
@@ -112,13 +114,13 @@ void WinSqlDataQuery::wait_input_result(QString recv_data){
 
   initTableview();
   if(query_flag == QUERY_BY_PEOPLE){
-      model->setFilter("people_id=" + QString("\"") + recv_data + "\"");
+      m_model->setFilter("people_id=" + QString("\"") + recv_data + "\"");
       //model->setFilter("people_id=" + QString::number(recv_data.toInt()));
     }else if(query_flag == QUERY_BY_SAMPLE){
-      model->setFilter("sample_serial="+ QString("\"") + recv_data + "\"");
+      m_model->setFilter("sample_serial="+ QString("\"") + recv_data + "\"");
     }
-  model->select();
-  ui->tableView->setModel(model);
+  m_model->select();
+  ui->tableView->setModel(m_model);
 }
 
 void WinSqlDataQuery::on_pushButton_clicked()
@@ -133,17 +135,17 @@ void WinSqlDataQuery::on_pushButton_clicked()
 void WinSqlDataQuery::on_b_datetime_clicked()
 {
   initTableview();
-  model->setSort(2,Qt::AscendingOrder);
-  model->select();
-  ui->tableView->setModel(model);
+  m_model->setSort(2,Qt::AscendingOrder);
+  m_model->select();
+  ui->tableView->setModel(m_model);
 }
 
 void WinSqlDataQuery::on_b_datetime_disorder_clicked()
 {
   initTableview();
-  model->setSort(2,Qt::DescendingOrder);
-  model->select();
-  ui->tableView->setModel(model);
+  m_model->setSort(2,Qt::DescendingOrder);
+  m_model->select();
+  ui->tableView->setModel(m_model);
 }
 
 void WinSqlDataQuery::on_b_sample_clicked()
@@ -152,7 +154,6 @@ void WinSqlDataQuery::on_b_sample_clicked()
   connect(input_serial,SIGNAL(transmit_data(QString)),this,SLOT(wait_input_result(QString)));
   input_serial->just_show_sample();
 }
-
 
 void WinSqlDataQuery::on_pushButton_3_clicked()
 {
@@ -163,34 +164,112 @@ void WinSqlDataQuery::on_pushButton_3_clicked()
 
 void WinSqlDataQuery::on_tableView_clicked(const QModelIndex &index)
 {
-  if(index.column() != 2){
+          WinSpecifyIndexDialog dialog(index, m_model);
+          dialog.exec();
+}
+
+
+#define DISPLAY_COUNT  7
+WinSpecifyIndexDialog::WinSpecifyIndexDialog(const QModelIndex &index, QSqlTableModel *model, QWidget *parent)
+  : QDialog(parent)
+{
+  m_index = index;
+  m_model = model;
+
+  QVBoxLayout *mainLayout = new QVBoxLayout(this);
+  QStringList strlist;
+  strlist << "测量日期" << "工作曲线" << "测量时间" << "重复次数" << "硫含量平均值" << "标准偏差" <<  "测量系数";
+
+  QLabel *labelTitle[DISPLAY_COUNT];
+  QLabel *labelValue[DISPLAY_COUNT];
+  for (int i = 0; i < DISPLAY_COUNT; ++i) {
+      QHBoxLayout *hboxLayout = new QHBoxLayout();
+      labelTitle[i] = new QLabel(strlist.value(i), this);
+      labelValue[i] = new QLabel(this);
+      m_labelList.append(labelValue[i]);
+      hboxLayout->addWidget(labelTitle[i]);
+      hboxLayout->addWidget(labelValue[i]);
+      mainLayout->addLayout(hboxLayout);
+    }
+
+
+  QPushButton *returnButton = new QPushButton(tr("返回"), this);
+  connect(returnButton, SIGNAL(clicked()), this, SLOT(close()));
+
+  QPushButton *nextButton = new QPushButton(tr("下一个"), this);
+  connect(nextButton, SIGNAL(clicked()), this, SLOT(slotNextButtonClicked()));
+
+  QPushButton *previousButton = new QPushButton(tr("前一个"), this);
+  connect(previousButton, SIGNAL(clicked()), this, SLOT(slotPreviousButtonClicked()));
+
+  QHBoxLayout *hboxLayout = new QHBoxLayout();
+  hboxLayout->addWidget(previousButton);
+  hboxLayout->addWidget(returnButton);
+  hboxLayout->addWidget(nextButton);
+
+  mainLayout->addLayout(hboxLayout);
+  init();
+}
+
+void WinSpecifyIndexDialog::slotNextButtonClicked()
+{
+  if(m_index.row() >= m_model->rowCount() - 1)
+    {
       return;
     }
-  QStringList strlist ;
-  QStringList table_schema;
-  strlist << "人员编号" << "样品编号" << "测量日期" << "工作曲线" << "测量时间" << "重复次数" << "平均值" << "标准偏差" << "是否自动" << "测量系数";
-  table_schema <<"people_id" << "sample_serial" << "date_time" << "work_curve" << "measurement_time" << "repeat_time" << "deviation" << "is_auto" << "current_coefficient";
-  QMessageBox msgbox;
-  msgbox.setFixedHeight(DESKTOP_HEIGHT / 3 * 2);
-  msgbox.setFixedWidth(DESKTOP_WIDTH / 6 * 5);
+  m_index =  m_model->index(m_index.row() + 1, 2);
+  init();
+}
+
+void WinSpecifyIndexDialog::slotPreviousButtonClicked()
+{
+  if(m_index.row() == 0)
+    {
+      return;
+    }
+  m_index =  m_model->index(m_index.row() - 1, 2);
+  init();
+}
+
+void WinSpecifyIndexDialog::init()
+{
+//  QStringList table_schema;
+//  table_schema <<"people_id" << "sample_serial" << "date_time" << "work_curve" << "measurement_time"
+//              << "repeat_time" << "deviation" << "is_auto" << "current_coefficient";
   QString query_str;
-  //query_str= QString("SELECT * FROM sample_data WHERE ").append(table_schema[index.column()].append("=").append("\"").append(index.data().toString()).append("\"").append(";");
-  //query_str = QString("SELECT * FROM sample_data WHERE ").append(table_schema[index.column()]).append("=").append("\"").append(index.data().toString()).append("\"").append(";");
-  query_str = QString("SELECT * FROM sample_data WHERE date_time = ").append("\"").append(index.data().toString()).append("\"").append(";");
-  QSqlQuery query;
+  QStringList valueList;
+  if(m_index.column() != 2)
+    {
+      m_index = m_model->index(m_index.row() , 2);
+    }
+  query_str = QString("SELECT * FROM sample_data WHERE date_time=\"%1\";")
+      .arg(m_index.data().toString());
+  QSqlQuery query(Database::instance()->getDb());
   bool ok = query.exec(query_str);
-  if(ok == true ){
+  if (ok == true ){
       if(query.next()) {
-          QString msgstr;
-          for(int i = 0;i < 10;i++){
-              msgstr += strlist[i];
-              msgstr += ":";
-              msgstr += query.value(i).toString();
-              msgstr += "\n";
+          for (int i = 0; i < 10; i++){
+              QString msgstr = query.value(i).toString();
+              if (6 == i)
+                {
+                  msgstr += "  m/m";
+                }
+              valueList.append(msgstr);
             }
-          //msgbox.setStyleSheet("font-size:16px");
-          msgbox.setText(msgstr);
-          msgbox.exec();
+          valueList.removeAt(8);
+          valueList.removeFirst();
+          valueList.removeFirst();
+          initData(valueList);
         }
+  }
+}
+
+void WinSpecifyIndexDialog::initData(QStringList valueList)
+{
+  Q_ASSERT(valueList.size() == DISPLAY_COUNT);
+  for (int i = 0; i < DISPLAY_COUNT; i ++)
+    {
+      m_labelList.at(i)->setText(valueList.at(i));
     }
 }
+

@@ -5,7 +5,6 @@
 #include <QTableWidgetItem>
 #include <QSqlTableModel>
 #include <QSqlQuery>
-#include <QMessageBox>
 #include <QSqlRelationalTableModel>
 #include <QSqlRecord>
 #include <QSettings>

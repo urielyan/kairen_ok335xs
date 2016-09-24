@@ -203,11 +203,7 @@ void initDatabase()
   db.setDatabaseName("/samplemeasurement.db");
   bool ok = db.open();
   if(ok == false){
-      //QMessageBox::warning(w,"db err","database open err!");
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText("不能打开含量测量的数据");
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr("不能打开含量测量的数据"));
     }
   //printf(",,,%s\n",__FUNCTION__);
   QSqlQuery query(db);
@@ -215,24 +211,16 @@ void initDatabase()
   if(ok == false){
       ok = query.exec("create table sample_data(people_id,sample_serial,date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient);");
       if(ok == false){
-          QMessageBox msgbox;
-          msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-          msgbox.setText("不能打开含量测量的数据.");
-          msgbox.exec();
+          WinInforListDialog::instance()->showMsg(tr("不能打开含量测量的数据"));
           return;
         }
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText("创建了含量测量的数据库!");
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr("创建了含量测量的数据库"));
     }
 #endif
 }
 
 int main(int argc, char *argv[])
 {
-  DataSave::instance()->test();
-
   if(argc > 2)
     {
       GlobalData::instance()->strComName = QString(argv[1]);
@@ -335,8 +323,6 @@ int main(int argc, char *argv[])
                           "QHeaderView{font:20px}"
 
                           "QScrollBar{width:10px;}"
-
-                          "QMessageBox{min-height: 50}"
                           ).arg(FONT_SIZE * 1.5));
 #endif
 

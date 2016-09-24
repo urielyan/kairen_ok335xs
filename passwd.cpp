@@ -3,12 +3,11 @@
 #include "global.h"
 #include "com.h"
 #include "countingmeasurement.h"
+#include "datasave.h"
 
 #include <QList>
 #include <QString>
 #include <QDebug>
-#include <QMessageBox>
-#include <QTimer>
 
 extern int measurement_flag;
 
@@ -103,8 +102,8 @@ void passwd::slot_keyNumPressed()
     }
 
     if(ui->lineEdit->text().size() >= 6){
-        qDebug() << mysettings.value("passwd").toInt();
-        if(ui->lineEdit->text().compare(mysettings.value("passwd").toString()) == 0 ||!ui->lineEdit->text().compare("234516")  ){
+        qDebug() << MeasurementDataSave::instance()->value("passwd").toInt();
+        if(ui->lineEdit->text().compare(MeasurementDataSave::instance()->value("passwd").toString()) == 0 ||!ui->lineEdit->text().compare("234516")  ){
             ss->showFullScreen();
             ui->lineEdit->clear();
             this->close();
@@ -116,14 +115,7 @@ void passwd::slot_keyNumPressed()
         }else{
             ui->lineEdit->text().clear();
             ui->lineEdit->clear();
-            QMessageBox msgbox;
-            msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            QTimer::singleShot(MESSAGEBOX_AUTO_CLOSE_SECOND * 1000,&msgbox,SLOT(close()));
-            //msgbox.removeButton(QMessageBox::Ok);
-            //msgbox.setStandardButtons(QMessageBox::NoButton);
-            msgbox.setText("密码错误，请重新输入");
-            //this->close();
-            msgbox.exec();
+            WinInforListDialog::instance()->showMsg(tr("密码错误，请重新输入"));
         }
     }
 }
@@ -174,10 +166,8 @@ void passwd::on_b_ok_clicked()
         QString line_data = ui->lineEdit->text().toLocal8Bit();
         if(flag == SETUP_COUNT_VOLTAGE){
             if(line_data.toInt() < enumMinCountVoltage){
-                QMessageBox msgbox;
-                msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-                msgbox.setText(QString("设定计数管高压的电压范围在%1-%2V").arg(enumMinCountVoltage).arg(enumMaxCountVoltage));
-                msgbox.exec();
+                WinInforListDialog::instance()->showMsg(tr("设定计数管高压的电压范围在%1-%2V")
+                                                        .arg(enumMinCountVoltage).arg(enumMaxCountVoltage));
                 return;
               }
           }
@@ -202,28 +192,20 @@ void passwd::on_b_ok_clicked()
 
         tcflush(Communciation_Com::fd,TCIOFLUSH);
         if(Communciation_Com::transmit(transmit_data,7) <= 0){
-            QMessageBox msgbox;
-            msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            msgbox.setText(tr("transmit err!"));
-            msgbox.exec();
+            WinInforListDialog::instance()->showMsg(tr("transmit err!"));
             return;
           }
         QString recv_data = Communciation_Com::receive(SETUP_WAIT_TIME);
         if(recv_data == NULL){
-            QSettings communication_err_data("shanghaikairen","communication_error");
-            communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
-            QMessageBox msgbox;
-            msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            msgbox.setText("设定不成功");
-            msgbox.exec();
+            WinInforListDialog::instance()->showMsg(tr("设定不成功"));
+            ErrorCountSave::instance()->addCount(6);
         }else if(recv_data[1] == (char)0x31 || recv_data[1] == (char)0x32){
-            QSettings communication_err_data("shanghaikairen","communication_error");
-            communication_err_data.setValue(QString("change_count_voltage_")+
-                                            communication_err_data.value("change_count_voltage_count").toString(),
+            ErrorCountSave::instance()->setValue(QString("change_count_voltage_")+
+                                            ErrorCountSave::instance()->value("change_count_voltage_count").toString(),
                                             QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss")+ ";" + mysettings.value("count_voltage").toString()
                                             + ";" + line_data);
-            communication_err_data.setValue("change_count_voltage_count",
-                                            communication_err_data.value("change_count_voltage_count").toInt()+1);
+            ErrorCountSave::instance()->setValue("change_count_voltage_count",
+                                            ErrorCountSave::instance()->value("change_count_voltage_count").toInt()+1);
             switch (flag) {
               case SETUP_COUNT_VOLTAGE:
                 mysettings.setValue("count_voltage",line_data.toInt());
@@ -237,24 +219,13 @@ void passwd::on_b_ok_clicked()
               default:
                 break;
               }
-            QMessageBox msgbox;
-            msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            msgbox.setText("设定成功");
-            msgbox.exec();
+            WinInforListDialog::instance()->showMsg(tr("设定成功"));
             countingMeasurement::clear_count_5_data();
         }else if(recv_data[1] == (char)0x33){
-            QMessageBox msgbox;
-            msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            msgbox.setText(MACHINE_MALFUNCTION_TEXT);
-            msgbox.exec();
+            WinInforListDialog::instance()->showMsg(tr(MACHINE_MALFUNCTION_TEXT));
           }else {
-            QSettings communication_err_data("shanghaikairen","communication_error");
-            communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
-            QMessageBox msgbox;
-            msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-            msgbox.setText(TRANSMIT_DATA_ERROR);
-            msgbox.setInformativeText(recv_data);
-            msgbox.exec();
+            ErrorCountSave::instance()->addCount(6);
+            WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR) + recv_data);
           }
         on_b_return_clicked();
     }else if(SETUP_ALTER_PASSWD == flag)
@@ -263,13 +234,9 @@ void passwd::on_b_ok_clicked()
         if(ui->lineEdit->text().size() != 6)
           return;
 
-        mysettings.setValue("passwd",ui->lineEdit->text());
-        qDebug() << mysettings.value("passwd").toString();
-
-        QMessageBox msgbox;
-        msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-        msgbox.setText(tr("修改密码成功，请牢记此密码") + ui->lineEdit->text());
-        msgbox.exec();
+       MeasurementDataSave::instance()->setValue("passwd",ui->lineEdit->text());
+        qDebug() << MeasurementDataSave::instance()->value("passwd").toString();
+        WinInforListDialog::instance()->showMsg(tr("修改密码成功，请牢记此密码") + ui->lineEdit->text());
 
         on_b_return_clicked();
       }
@@ -333,19 +300,12 @@ int passwd::stop_all_measurement(){
     }
   tcflush(Communciation_Com::fd,TCIOFLUSH);
   if (Communciation_Com::transmit(STOP_ORDER,3) <= 0){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont("wenquanyi", FONT_SIZE ,QFont::Normal));
-      msgbox.setText(TRANSMIT_DATA_ERROR);
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(TRANSMIT_DATA_ERROR);
       return ERRNO_COMMUNICATION_1;
     }
   QString recv_data = Communciation_Com::receive(1);
   if(recv_data == NULL){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(SLIDING_PLATE_NO_CHANGE_TEXT);
-      msgbox.setInformativeText("recv NULL");
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("\n recv NULL"));
       return ERRNO_COMMUNICATION_1;
     }
   if(recv_data[1] == (char)0x31){//recv_data[0] == (char)0x98 &&
@@ -353,18 +313,11 @@ int passwd::stop_all_measurement(){
     }else if(recv_data[1] == (char)0x32){
       ui->widget->change_label_content(WAIT_BE_LOCATION);
     }else if(recv_data[1] == (char)0x33){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont("wenquanyi", FONT_SIZE ,QFont::Normal));
-      msgbox.setText(MACHINE_MALFUNCTION_TEXT);
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr(MACHINE_MALFUNCTION_TEXT) + tr("\n 0x33"));
       return ERRNO_SILIDING_POSITION;
     }else{
-      QSettings communication_err_data("shanghaikairen","communication_error");
-      communication_err_data.setValue("com_err_10",communication_err_data.value("com_err_10").toInt() + 1);
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(QString("通信不正常") + ":" + recv_data + "," + QString::number(measurement_flag));
-      msgbox.exec();
+      ErrorCountSave::instance()->addCount(10);
+      WinInforListDialog::instance()->showMsg(tr("通信不正常") + ":" + recv_data + "," + QString::number(measurement_flag));
       return ERRNO_COMMUNICATION_1;
     }
   return ALL_RIGHT;

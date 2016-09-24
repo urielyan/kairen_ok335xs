@@ -6,6 +6,12 @@
 
 #include <QString>
 
+input_person_sampleSerial *input_person_sampleSerial::instance()
+{
+  static input_person_sampleSerial _instance;
+  return &_instance;
+}
+
 input_person_sampleSerial::input_person_sampleSerial(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::input_person_sampleSerial)
@@ -84,6 +90,12 @@ void input_person_sampleSerial::just_show_sample(){
     ui->lineEdit_people->hide();
     ui->label->hide();
     this->showFullScreen();
+}
+
+void input_person_sampleSerial::initData()
+{
+  line_people = "";
+  line_serial = "";
 }
 
 void input_person_sampleSerial::on_pushButton_clicked()

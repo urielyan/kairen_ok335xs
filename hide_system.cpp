@@ -67,16 +67,10 @@ void hide_system::on_b_clear_clicked()
       QSqlQuery myquery;
       bool ok = myquery.exec("delete from sample_data where 1;");
       if(ok == false){
-          QMessageBox box1;
-          box1.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-          box1.setText("未清除含量测量数据");
-          box1.exec();
+          WinInforListDialog::instance()->showMsg(tr("未清除含量测量数据"));
           return;
         }
-      QMessageBox box2;
-      box2.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      box2.setText("已经清除完含量数据");
-      box2.exec();
+      WinInforListDialog::instance()->showMsg(tr("已经清除完含量数据"));
     }else if(result_box == QMessageBox::Cancel){
     }
 }

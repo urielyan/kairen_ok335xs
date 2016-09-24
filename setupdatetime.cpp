@@ -104,14 +104,10 @@ void setupdatetime::slotSaveButtonClicked()
         tmpstr += "\"";
         int a = system(tmpstr.toLocal8Bit());
         int b = system("hwclock --systohc");
-        QMessageBox msgbox;
-        msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
         if(a== -1 || b == -1){
-            msgbox.setText("设置时间不成功");
-            msgbox.exec();
+            WinInforListDialog::instance()->showMsg(tr("设置时间不成功"));
         }else{
-            msgbox.setText("设置时间成功!");
-            msgbox.exec();
+            WinInforListDialog::instance()->showMsg(tr("设置时间成功"));
         }
         this->close();
     }

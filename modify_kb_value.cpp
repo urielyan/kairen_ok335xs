@@ -182,29 +182,20 @@ void modify_kb_value::on_b_sure_clicked()
   int ret = msgbox.exec();
   if(QMessageBox::Save == ret){
       if((ui->lineEdit_ka0->text().size() == 0)  || (ui->lineEdit_ba1->text().size() == 0)){
-          QMessageBox msgboxerr;
-          msgboxerr.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-          msgboxerr.setText("您输入的数据不完整，请重新输入");
-          msgboxerr.exec();
+          WinInforListDialog::instance()->showMsg(tr("您输入的数据不完整，请重新输入"));
           return;
         }
       QString tmpstr = "k=" + ui->lineEdit_ka0->text() + ";" + "b=" + ui->lineEdit_ba1->text() + ";";
       if (ui->comboBox->currentIndex() >= 5){
           if(ui->lineEdit_a2->text().size() == 0){
-              QMessageBox msgboxerr;
-              msgboxerr.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-              msgboxerr.setText("您输入的数据不完整，请重新输入");
-              msgboxerr.exec();
+              WinInforListDialog::instance()->showMsg(tr("您输入的数据不完整，请重新输入"));
               return;
             }
           tmpstr += "r=" + ui->lineEdit_a2->text();
         }
       mysettings.setValue(QString("work_curve_%1").arg(ui->comboBox->currentText().toInt()),tmpstr);
       mysettings.setValue(QString("real_compute_kbr_%1").arg(ui->comboBox->currentText().toInt()),tmpstr);
-      QMessageBox msgbox2;
-      msgbox2.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox2.setText("您输入的数据已保存！");
-      msgbox2.exec();
+      WinInforListDialog::instance()->showMsg(tr("您输入的数据已保存！"));
       on_b_abandon_clicked();
       //this->close();
     }

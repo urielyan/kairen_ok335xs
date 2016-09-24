@@ -2,7 +2,6 @@
 #define CAIBRATERESULTQUERY_H
 
 #include <QWidget>
-#include <QSettings>
 
 namespace Ui {
   class caibrateresultquery;

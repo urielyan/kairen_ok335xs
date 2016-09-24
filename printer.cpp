@@ -187,7 +187,6 @@ int printer::transmit(int data, int size){
   int ret  = write(fd,(void *)&data,size);
 
   if(ret <= 0){
-      //QMessageBox::warning(NULL,"int","write");
       printf("write err \n");
 
       return -1;

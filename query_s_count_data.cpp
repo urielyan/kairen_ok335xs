@@ -75,10 +75,7 @@ QString query_s_count_data::get_kbr_a012(int judge_which){
     }
     //判断用户的正确输入输入了s含量，没有则提醒用户输入
     if(calibrate_data.size() < 3){
-        QMessageBox msgbox;
-        msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-        msgbox.setText("你需要输入硫的含量");
-        msgbox.exec();
+        WinInforListDialog::instance()->showMsg(tr("你需要输入硫的含量"));
         return NULL;
     }
     double r_sum = 0;//参考样/reference的和

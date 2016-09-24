@@ -3,6 +3,7 @@
 //#include "widget.h"
 #include "global.h"
 #include "printer.h"
+#include "datasave.h"
 
 #include <QMessageBox>
 #include <QTimer>
@@ -55,7 +56,7 @@ countingMeasurement::~countingMeasurement()
 {
   delete timer;
   delete show_count_mea;
-  delete ui; //QMessageBox::warning(this,"spectrum","printer!");
+  delete ui;
 }
 
 /*下面四个函数是为了含量测量而设计的最新5个计数的平均值
@@ -206,26 +207,14 @@ void countingMeasurement::count_second(){
   if(turn_second < 0){
       recv_data = Communciation_Com::receive(5);
       if(recv_data == NULL){
-          QSettings communication_err_data("shanghaikairen","communication_error");
-          communication_err_data.setValue("com_err_2",communication_err_data.value("com_err_2").toInt() + 1);
-
-          on_pushButton_2_clicked();
-          QMessageBox box;
-          box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-          QTimer::singleShot(MESSAGEBOX_AUTO_CLOSE_SECOND * 1000,&box,SLOT(close()));
-          box.setText("没有接收到计数数据，已停止测量");
-          box.exec();
+          ErrorCountSave::instance()->addCount(2);
+          WinInforListDialog::instance()->showMsg(tr("没有接收到计数数据，已停止测量"));
+          QTimer::singleShot(MESSAGEBOX_AUTO_CLOSE_SECOND * 1000,WinInforListDialog::instance(),SLOT(close()));
           return;
         }else if(recv_data[0] != (char)0x02){
-          QSettings communication_err_data("shanghaikairen","communication_error");
-          communication_err_data.setValue("com_err_2",communication_err_data.value("com_err_2").toInt() + 1);
-
+          ErrorCountSave::instance()->addCount(2);
+          WinInforListDialog::instance()->showMsg(tr("接收到的计数数据有误，已停止测量") + recv_data);
           on_pushButton_2_clicked();
-          QMessageBox box;
-          box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-          QTimer::singleShot(MESSAGEBOX_AUTO_CLOSE_SECOND * 1000,&box,SLOT(close()));
-          box.setText("接收到的计数数据有误，已停止测量");
-          box.exec();
           return;
         }
       recv_data.remove(0,1);
@@ -239,6 +228,7 @@ void countingMeasurement::count_second(){
           if(1 == try_inspectoscope_flag){
               if(show_count_mea->get_y() <= 0.55 || show_count_mea->get_y() >= 1.45){
                   emit transmit_time(DEFEAT_COUNT);
+
                   QMessageBox msgbox;
                   msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
                   msgbox.setText("计数未通过，需要重新检测么？\n按是重新检测，按取消停止自检");
@@ -320,10 +310,9 @@ void countingMeasurement::on_pushButton_clicked()
   //开始计数测量
   tcflush(Communciation_Com::fd,TCIOFLUSH);
   if(Communciation_Com::transmit(ACTIVATINE_COUNT,3) <= 0){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(TRANSMIT_DATA_ERROR);
-      msgbox.exec();      return;
+      ErrorCountSave::instance()->addCount(2);
+      WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR));
+      return;
     }
   //开始之前清除上一次留下的计数数据
   show_count_mea->clearall();
@@ -360,21 +349,14 @@ int countingMeasurement::on_pushButton_2_clicked()
   flag = 1;
   tcflush(Communciation_Com::fd,TCIOFLUSH);
   if(Communciation_Com::transmit(STOP_ORDER,3) <= 0){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(TRANSMIT_DATA_ERROR);
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR));
       return ERRNO_COMMUNICATION_1;
     }
   QString recv_data = Communciation_Com::receive(1);
   if(recv_data == NULL){
-      QSettings communication_err_data("shanghaikairen","communication_error");
-      communication_err_data.setValue("com_err_10",communication_err_data.value("com_err_10").toInt() + 1);
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(SLIDING_PLATE_NO_CHANGE_TEXT);
-      msgbox.setInformativeText("recv NULL");
-      msgbox.exec();
+      ErrorCountSave::instance()->addCount(10);
+      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv Null"));
+
       return ERRNO_COMMUNICATION_1;
     }
   if(recv_data[1] == (char)0x31){//recv_data[0] == (char)0x98 &&
@@ -382,18 +364,12 @@ int countingMeasurement::on_pushButton_2_clicked()
     }else if(recv_data[1] == (char)0x32){
       ui->widget->change_label_content(WAIT_BE_LOCATION);
     }else if(recv_data[1] == (char)0x33){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(MACHINE_MALFUNCTION_TEXT);
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr(MACHINE_MALFUNCTION_TEXT) + tr("recv 0x33"));
+
       return ERRNO_SILIDING_POSITION;
     }else{
-      QSettings communication_err_data("shanghaikairen","communication_error");
-      communication_err_data.setValue("com_err_10",communication_err_data.value("com_err_10").toInt() + 1);
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(QString("通信不正常") + ":" + recv_data + "," + QString::number(measurement_flag));
-      msgbox.exec();
+      ErrorCountSave::instance()->addCount(10);
+      WinInforListDialog::instance()->showMsg(tr("通信不正常") + ":" + recv_data + "," + QString::number(measurement_flag));
       return ERRNO_COMMUNICATION_1;
     }
   return ALL_RIGHT;
@@ -424,10 +400,7 @@ void countingMeasurement::on_pushButton_6_clicked()
 {
   //移进滑板到待测样
   if(move_sliding_count >= 2){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(SLIDING_PLATE_NOT_ALLOW);
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NOT_ALLOW));
       return;
     }
   if(measurement_flag != MEASUREMENT_NOTHING){
@@ -436,11 +409,7 @@ void countingMeasurement::on_pushButton_6_clicked()
   tcflush(Communciation_Com::fd,TCIOFLUSH);
   measurement_flag = MEASUREMENT_NOTHING;
   if(Communciation_Com::transmit(IN_SLIDING_PLATE,4) < 0){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(TRANSMIT_DATA_ERROR);
-      msgbox.setInformativeText("transmit err");
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR));
       if(last_move_sliding_datetime.secsTo(QDateTime::currentDateTime()) > 5){
           move_sliding_count = 0;
         }
@@ -448,30 +417,19 @@ void countingMeasurement::on_pushButton_6_clicked()
     }
   QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   if(recv_data == NULL){
-      QSettings communication_err_data("shanghaikairen","communication_error");
-      communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
+      ErrorCountSave::instance()->addCount(6);
+      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT));
 
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(SLIDING_PLATE_NO_CHANGE_TEXT);
-      msgbox.exec();
     }else if(recv_data[1] == (char)0x32){//recv_data[0] == (char)0x98 &&
       ui->widget->change_label_content(WAIT_BE_LOCATION);
     }else if( recv_data[1] == (char)0x33){//recv_data[0] == (char)0x98 &&
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(MACHINE_MALFUNCTION_TEXT);
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr(MACHINE_MALFUNCTION_TEXT));
       set_sliding_disabled(false,false);
       emit transmit_move_sliding(false,false);
     }else {
-      QSettings communication_err_data("shanghaikairen","communication_error");
-      communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
-
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(QString(SLIDING_PLATE_NO_CHANGE_TEXT) + ":" + recv_data + "," + QString::number(measurement_flag));
-      msgbox.exec();
+      ErrorCountSave::instance()->addCount(6);
+      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT)
+                                              + recv_data + QString::number(measurement_flag));
     }
 
   set_sliding_disabled(false,true);
@@ -489,10 +447,8 @@ int countingMeasurement::on_pushButton_4_clicked()
 {
   //移出滑板到参考样,
   if(move_sliding_count >= 2){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(SLIDING_PLATE_NOT_ALLOW);
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NOT_ALLOW));
+
       if(last_move_sliding_datetime.secsTo(QDateTime::currentDateTime()) > 5){
           move_sliding_count = 0;
         }
@@ -504,42 +460,27 @@ int countingMeasurement::on_pushButton_4_clicked()
   tcflush(Communciation_Com::fd,TCIOFLUSH);
   measurement_flag = MEASUREMENT_NOTHING;
   if(Communciation_Com::transmit(OUT_SLIDING_PLATE,4) < 0){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(TRANSMIT_DATA_ERROR);
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR));
       return -1;
     }
   QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   //qDebug() <<recv_data.toLocal8Bit().data();
   if(recv_data == NULL){
-      QSettings communication_err_data("shanghaikairen","communication_error");
-      communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
-
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(SLIDING_PLATE_NO_CHANGE_TEXT);
-      msgbox.setInformativeText("recv NULL");
-      msgbox.exec();
+      ErrorCountSave::instance()->addCount(6);
+      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("\n recv Null"));
       return -1;
     }else if(recv_data[1] == (char)0x31){
       ui->widget->change_label_content(REFERENCE_BE_LOCATON);
     }else if(recv_data[1] == (char)0x33){
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(MACHINE_MALFUNCTION_TEXT);
-      msgbox.exec();
+      WinInforListDialog::instance()->showMsg(tr(MACHINE_MALFUNCTION_TEXT) + tr("\n recv 0x33"));
+
       set_sliding_disabled(false,false);
       emit transmit_move_sliding(false,false);
       return -1;
     }else {
-      QSettings communication_err_data("shanghaikairen","communication_error");
-      communication_err_data.setValue("com_err_6",communication_err_data.value("com_errr_6").toInt() + 1);
-
-      QMessageBox msgbox;
-      msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-      msgbox.setText(QString(SLIDING_PLATE_NO_CHANGE_TEXT) + ":" + recv_data + "," + QString::number(measurement_flag));
-      msgbox.exec();
+      ErrorCountSave::instance()->addCount(6);
+      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT)
+                                              + recv_data + "," + QString::number(measurement_flag));
       return -1;
     }
   set_sliding_disabled(true,false);

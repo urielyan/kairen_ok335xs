@@ -175,6 +175,8 @@ void showsamplemeasurement::show_calculate_storage(QString data){
 
     storeDataToQSettings(data);
     storeDataToDatabase(data);
+    input_person_sampleSerial::instance()->initData();
+
     printer_result();
     this->showFullScreen();
 }
@@ -216,8 +218,6 @@ void showsamplemeasurement::clear_tablewidget(){
 }
 
 void showsamplemeasurement::printer_result(){
-  //QMessageBox::warning(this,"showsample","printer");
-
   int enter = 0x0A;
   long long average  = 0xB5D6F9BEBDC6ll;
   long long deviation = 0xEEB2ABC6BCD7EAB1ll;
@@ -285,8 +285,8 @@ void showsamplemeasurement::storeDataToDatabase(QString data)
   QSqlQuery query;
   query.prepare("INSERT INTO sample_data (people_id ,sample_serial, date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient) "
                 "VALUES (?,?,?,?,?,?,?,?,?,?)");
-  query.addBindValue(input_person_sampleSerial::line_people);
-  query.addBindValue(input_person_sampleSerial::line_serial);
+  query.addBindValue(input_person_sampleSerial::instance()->line_people);
+  query.addBindValue(input_person_sampleSerial::instance()->line_serial);
   query.addBindValue(data_list[1]);
   query.addBindValue(real_curve);
   query.addBindValue(data_list[2]);
@@ -299,12 +299,10 @@ void showsamplemeasurement::storeDataToDatabase(QString data)
   query.finish();
     bool ok2 = db.commit();
     if(ok1 == false  || ok2 == false){
-        QMessageBox box;
-        box.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-        box.setText(tr("数据未存入数据库中！") + "\n" + db.lastError().text() );
-        box.exec();
+        WinInforListDialog::instance()->showMsg(tr("数据未存入数据库中！") + "\n" + db.lastError().text());
     }
 #endif
+    input_person_sampleSerial::instance()->initData();
 }
 
 void showsamplemeasurement::resizeTableWidget()

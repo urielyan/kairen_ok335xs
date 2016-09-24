@@ -14,7 +14,8 @@ caibrateresultquery::caibrateresultquery(QWidget *parent) :
 {
   ui->setupUi(this);
   //得到一个下一次标定会记录在哪的数，所以减一就是最新的数
-  display_number = DataSave::instance()->value(MYSETTINGS_COUNT).toInt() - 1;
+  MeasurementDataSave::instance()->setValue("test", "haha");
+  display_number = MeasurementDataSave::instance()->value(MYSETTINGS_COUNT).toInt() - 1;
   update_page(display_number);
 
 
@@ -79,7 +80,7 @@ void caibrateresultquery::update_page(int count){
   QStringList tmp_result_list,tmp_data_list,tmp_data_list2;
 
   //result:
-  tmp_result = DataSave::instance()->value(QString(MYSETTINGS_RESULT) + QString::number(count)).toString();
+  tmp_result = MeasurementDataSave::instance()->value(QString(MYSETTINGS_RESULT) + QString::number(count)).toString();
   tmp_result_list = tmp_result.split(";");
   if(tmp_result_list.size() != 4) return;
   ui->label_datetime->setText(QString(tr("标定测量时间：")) + tmp_result_list[0]);
@@ -88,7 +89,7 @@ void caibrateresultquery::update_page(int count){
   ui->label_number->setText(tmp_result_list[3]);
 
   //data:tablewidget
-  tmp_data = DataSave::instance()->value(QString(MYSETTINGS_DATA) + QString::number(count)).toString();
+  tmp_data = MeasurementDataSave::instance()->value(QString(MYSETTINGS_DATA) + QString::number(count)).toString();
   tmp_data_list = tmp_data.split(";");
   //判断数据是否会出错，即此标定数据的个数与此标定结果的相应数据是否对应
 
@@ -106,7 +107,7 @@ void caibrateresultquery::update_page(int count){
 }
 
 void caibrateresultquery::show_and_update(){
-  display_number = DataSave::instance()->value(MYSETTINGS_COUNT).toInt() - 1;
+  display_number = MeasurementDataSave::instance()->value(MYSETTINGS_COUNT).toInt() - 1;
   update_page(display_number);
   this->showFullScreen();
 }

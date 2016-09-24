@@ -6,7 +6,6 @@
 #include <QTimer>
 #include "showcountingmeasurement.h"
 #include "com.h"
-#include <QSettings>
 
 namespace Ui {
   class countingMeasurement;

@@ -1,5 +1,3 @@
-#include <QMessageBox>
-
 #include "systemsetup.h"
 #include "ui_systemsetup.h"
 #include "passwd.h"

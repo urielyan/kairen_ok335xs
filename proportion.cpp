@@ -64,17 +64,11 @@ void proportion::on_pushButton_3_clicked()
 void proportion::on_b_sure_clicked()
 {
     if(ui->lineEdit->text().size() < 1 || ui->lineEdit_2->text().size() <1){
-        QMessageBox msgbox;
-        msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-        msgbox.setText("您没有输入值，请重新输入");
-        msgbox.exec();
+        WinInforListDialog::instance()->showMsg(tr("您没有输入值，请重新输入"));
     }
     mysettings.setValue("proportion_1",ui->lineEdit->text());
     mysettings.setValue("proportion_2",ui->lineEdit_2->text());
-    QMessageBox msgbox2;
-    msgbox2.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-    msgbox2.setText("自动系数已存储");
-    msgbox2.exec();
+    WinInforListDialog::instance()->showMsg(tr("自动系数已存储"));
     this->on_pushButton_3_clicked();
 }
 

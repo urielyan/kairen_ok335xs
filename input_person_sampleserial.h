@@ -15,6 +15,7 @@ signals:
     void transmit_data(QString);
 
 public:
+    static input_person_sampleSerial* instance();
     explicit input_person_sampleSerial(QWidget *parent = 0);
     ~input_person_sampleSerial();
 
@@ -22,6 +23,7 @@ public:
 
     void just_show_people();
     void just_show_sample();
+    void initData();
 private slots:
     void on_b_return_clicked();
 
