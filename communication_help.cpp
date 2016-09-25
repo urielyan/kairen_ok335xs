@@ -2,6 +2,7 @@
 #include "ui_communication_help.h"
 #include "global.h"
 #include "datasave.h"
+#include "database.h"
 
 #include <QMessageBox>
 #include <QFile>
@@ -36,17 +37,20 @@ void communication_help::on_pushButton_clicked()
       if (!file1.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
         return;
       QTextStream out(&file1);
-      //QTextStream::
-      int display_number = mysettings.value("calibratemeasurement_count_record").toInt() - 1;
+
+      int display_number = MeasurementDataSave::instance()->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt() - 1;
       for(int i = 0;i < CALIBRATE_RESULT_MAX_RECORD;i++){
           //得到一个下一次标定会记录在哪的数，所以减一就是最新的数
-          QStringList strlist = mysettings.value(QString("calibration_results_in_result_%1").arg(display_number)).toString().split(";");
+          QString calibrateResults = MeasurementDataSave::instance()->value(QString(MYSETTINGS_CALIBRATE_RESULT_RESULT) + QString::number(display_number)).toString();
+          QStringList strlist = calibrateResults.split(";");
           if(strlist.size() != 4)break;
-          out << strlist[0] << ": "  << strlist[2] << "   ->   " << strlist[1] << "\n   "  << mysettings.value(QString("calibration_results_in_data_%1").arg(display_number)).toString() <<"\n \n";
-          if(--display_number ==  0)display_number = CALIBRATE_RESULT_MAX_RECORD;
+          QString calibrateDatakey = QString(MYSETTINGS_CALIBRATE_RESULT_DATA) + QString::number(display_number);
+          out << strlist[0] << ": "  << strlist[2] << "   ->   " << strlist[1] << "\n   "  << MeasurementDataSave::instance()->value(calibrateDatakey).toString() <<"\n \n";
+          if(--display_number ==  0)
+          {
+              display_number = CALIBRATE_RESULT_MAX_RECORD;
+          }
         }
-      //out <<"标定结果1:" << mysettings.value("calibration_results_in_result_1").toString() << "\n标定1所需数据:" << mysettings.value("calibration_results_in_data_1").toString() <<"\n";
-      //out << "The magic number is: " << 49 << "\n";
       file1.close();
 
 
@@ -59,10 +63,8 @@ void communication_help::on_pushButton_clicked()
       if (!file2.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
         return;
       QTextStream out2(&file2);
-      QString query_str;
-      query_str = QString("SELECT * FROM sample_data");
-      QSqlQuery query;
-      bool ok = query.exec(query_str);
+      QSqlQuery query(Database::instance()->getDb());
+      bool ok = query.exec("SELECT * FROM sample_data");
       if(ok == true ){
           while(query.next()) {
               QString msgstr;

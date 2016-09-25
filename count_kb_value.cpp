@@ -15,10 +15,12 @@ count_kb_value::count_kb_value(QWidget *parent):
   QWidget(parent),
   ui(new Ui::count_kb_value)
 {
+  p_mysettings = MeasurementDataSave::instance();
+
   ui->setupUi(this);
   ui->comboBox->setCurrentIndex(0);
-  count_record = MeasurementDataSave::instance()->value("test").toInt();
-  count_record = MeasurementDataSave::instance()->value("calibratemeasurement_count_record").toInt();
+  count_record = p_mysettings->value("test").toInt();
+  count_record = p_mysettings->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt();
   connect(this,SIGNAL(destroyed()),this,SLOT(on_pushButton_2_clicked()));
   //query_s_count_d = new query_s_count_data();
   spec_painter = new spectrum_painter();
@@ -48,13 +50,13 @@ void count_kb_value::on_pushButton_2_clicked()
 
 void count_kb_value::on_pushButton_clicked()
 {
-  if(MeasurementDataSave::instance()->value("calibratemeasurement_count").toInt() < 3){
+  if(p_mysettings->value(MYSETTINGS_CALIBRATE_COUNT).toInt() < 3){
       WinInforListDialog::instance()->showMsg(tr("标定样品数据太少"));
       return;
     }
   int count_input_s = 0;
   for(int i = 0; i < 12 ; i++){
-      QString tmp_str = MeasurementDataSave::instance()->value(QString("calibrate_input_s_%1").arg(i)).toString();
+      QString tmp_str = p_mysettings->value(QString("calibrate_input_s_%1").arg(i)).toString();
       qDebug() << tmp_str << i;
       if(  (!(tmp_str==NULL)) &&(!tmp_str.toDouble() == 0.0)  )
         count_input_s++;
@@ -73,7 +75,7 @@ void count_kb_value::on_pushButton_clicked()
       if(kbr_data == NULL){
           return;
         }
-      MeasurementDataSave::instance()->setValue(QString("work_curve_%1").arg(ui->comboBox->currentText().toInt()), kbr_data.replace(" ",";"));
+      p_mysettings->setValue(QString("work_curve_%1").arg(ui->comboBox->currentText().toInt()), kbr_data.replace(" ",";"));
       if(kbr_data == NULL)return;
 
       //最多只能记录20组数据，若已经到21则重新从1开始并覆盖原来的数据
@@ -84,29 +86,31 @@ void count_kb_value::on_pushButton_clicked()
       QString tmp_str;
       QMap<int,QString>painter_data;//painter data
       for(int i = 0; i <= 11; i++){
-          QString tmp_s_samplement = MeasurementDataSave::instance()->value(QString("calibrate_input_s_%1").arg(i)).toString();
+          QString tmp_s_samplement = p_mysettings->value(QString("calibrate_input_s_%1").arg(i)).toString();
           //当用户未输入硫含量时，此计数不参与计算kb值,也不保存
           if(tmp_s_samplement == NULL || !tmp_s_samplement.compare("0.0000") || (tmp_s_samplement.toDouble() == 0.0))continue;
           tmp_str += tmp_s_samplement;
           tmp_str += QString("/");
-          tmp_str += MeasurementDataSave::instance()->value(QString("s_count_data_%1").arg(i)).toString();
-          painter_data.insert(i,tmp_s_samplement + "/" + MeasurementDataSave::instance()->value(QString("s_count_data_%1").arg(i)).toString());
+          tmp_str += p_mysettings->value(QString("s_count_data_%1").arg(i)).toString();
+          painter_data.insert(i,tmp_s_samplement + "/" + p_mysettings->value(QString("s_count_data_%1").arg(i)).toString());
           tmp_str += ";";
         }
       tmp_str.chop(1);//删除最后一个分号
-      MeasurementDataSave::instance()->setValue(QString("calibration_results_in_data_%1").arg(count_record),tmp_str);
+      QString calibrateDatakey = QString(MYSETTINGS_CALIBRATE_RESULT_DATA) + QString::number(count_record);
+      p_mysettings->setValue(calibrateDatakey,tmp_str);
 
       //保存此次计算的kbr值
-      MeasurementDataSave::instance()->setValue(QString("calibration_results_in_result_%1").arg(count_record),\
-                          QString("%1;%2;%3;%4")\
-                          .arg(QDateTime::currentDateTime().toString("yy-MM-dd hh:mm"))\
-                          .arg(ui->comboBox->currentText().toInt())\
-                          .arg(kbr_blank_data)\
-                          .arg(tmp_str.split(";").size()));
+      QString tmp_storeKey = QString(MYSETTINGS_CALIBRATE_RESULT_RESULT) + QString::number(count_record);
+      p_mysettings->setValue(tmp_storeKey,
+                                                QString("%1;%2;%3;%4")
+                                                .arg(QDateTime::currentDateTime().toString("yy-MM-dd hh:mm"))
+                                                .arg(ui->comboBox->currentText().toInt())
+                                                .arg(kbr_blank_data)
+                                                .arg(tmp_str.split(";").size()));
 
 
       //保存刚刚标定完成的是第几组数据再加一，以便下次计算kb值
-      MeasurementDataSave::instance()->setValue("calibratemeasurement_count_record",++count_record);
+      p_mysettings->setValue(MYSETTINGS_CALIBRATE_RESULT_COUNT,++count_record);
       WinInforListDialog::instance()->showMsg(QString("标定结果已经存入工作曲线%1").arg(ui->comboBox->currentText().toInt()));
 
       spec_painter->show_special_curve(ui->comboBox->currentIndex()+1,painter_data,kbr_data);
@@ -117,12 +121,11 @@ void count_kb_value::on_pushButton_clicked()
 
 QString count_kb_value::countKbrValue(int judge_which)
 {
-//    int m = DataSave::instance()->value("calibratemeasurement_count").toInt();
     QStringList calibrate_data;//存储所有硫含量
     QStringList reference_proportion_wait;//标定样和参考样的比
     for(int i = 0; i <= 11 ;i++){
         //得到用户输入的硫的含量，并判断是否是空或者为0.0000
-        QString input_s_data = MeasurementDataSave::instance()->value( QString("calibrate_input_s_%1").arg(i)).toString();
+        QString input_s_data = p_mysettings->value( QString("calibrate_input_s_%1").arg(i)).toString();
         if(input_s_data == NULL || !input_s_data.compare("0.0000" ) || input_s_data.toDouble() == 0.0){
             continue;
         }
@@ -130,7 +133,7 @@ QString count_kb_value::countKbrValue(int judge_which)
 
 
         //得到标定的数据和带测样的数据的比值
-        QStringList tmplist = MeasurementDataSave::instance()->value(QString("s_count_data_%1").arg(i)).toString().split("/");
+        QStringList tmplist = p_mysettings->value(QString("s_count_data_%1").arg(i)).toString().split("/");
         if((tmplist.size() != 2)){
             WinInforListDialog::instance()->showMsg(tr("输入的硫含量样品未标定"));
             return NULL;
@@ -169,7 +172,7 @@ QString count_kb_value::countKbrValue(int judge_which)
         r = rw_sub_avrg_sum /pow(r_sub_avrg_2_sum * w_sub_avrg_2_sum,0.5);
 
         //存储正真用于计算的数据
-        MeasurementDataSave::instance()->setValue(QString("real_compute_kbr_%1").arg(judge_which),QString("k=%1;b=%2;r=%3").arg(k).arg(b).arg(r));
+        p_mysettings->setValue(QString("real_compute_kbr_%1").arg(judge_which),QString("k=%1;b=%2;r=%3").arg(k).arg(b).arg(r));
 
         //使得展示给用户的kbr为小数点后4位
         QString k_str = QString::number(k - (int)k);
@@ -266,7 +269,7 @@ QString count_kb_value::countKbrValue(int judge_which)
         double a2 = ((B1 * A2 - B2 *  A1) * (A1 * A3 - A2 * A2) - (B2 * A3 - B3 * A2) * (A0 * A2 - A1 * A1)) / (( A1 * A1 - A0 * A2) *(A3 * A3 - A2 * A4) - (A1 * A3 - A2 * A2) * (A1 * A3 - A2 * A2));
         double a1 = (B1 - A0 * a0 - A2 * a2) / A1;
 
-        MeasurementDataSave::instance()->setValue(QString("real_compute_kbr_%1").arg(judge_which),QString("a0=%1;a1=%2;a2=%3").arg(a0).arg(a1).arg(a2));
+        p_mysettings->setValue(QString("real_compute_kbr_%1").arg(judge_which),QString("a0=%1;a1=%2;a2=%3").arg(a0).arg(a1).arg(a2));
 
         QString chop_a0 = QString::number(a0 - (int)a0);
         QString chop_a1 = QString::number(a1 - (int)a1);
@@ -360,7 +363,7 @@ void count_kb_value::printer_result(){
   printer::instance()->printEnd();
 
   //k=? b=? r=?
-  QStringList work_curve_list = MeasurementDataSave::instance()->value(QString("work_curve_%1").arg(ui->comboBox->currentText())).toString().split(";");
+  QStringList work_curve_list = p_mysettings->value(QString("work_curve_%1").arg(ui->comboBox->currentText())).toString().split(";");
   if(work_curve_list.size() == 3){
       printer::transmit((void *)work_curve_list[2].split("=")[0].toLocal8Bit().data(), work_curve_list[2].split("=")[0].size());
       printer::transmit((void *)" =  ",3);
@@ -384,8 +387,9 @@ void count_kb_value::printer_result(){
   printer::transmit((void *)ui->comboBox->currentText().toLocal8Bit().data(),1);
   printer ::transmit(enter,1);
 
-  QStringList datalist = MeasurementDataSave::instance()->value(QString("calibration_results_in_data_%1")\
-                                          .arg(MeasurementDataSave::instance()->value("calibratemeasurement_count_record").toInt() - 1)).toString().split(";");
+  QString tmpCalibrateDataKey = QString(MYSETTINGS_CALIBRATE_RESULT_DATA)
+      + QString::number(p_mysettings->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt() - 1);
+  QStringList datalist = p_mysettings->value(tmpCalibrateDataKey).toString().split(";");
   //所有的参与计算的硫含量和计数值。
   for(int i = datalist.size() ; i >= 1  ; i--){
       QStringList one_data = datalist[i - 1].split("/");

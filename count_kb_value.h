@@ -30,7 +30,7 @@ private:
     static int count_record;
 
     //query_s_count_data *query_s_count_d;
-    QSettings mysettings;
+    QSettings *p_mysettings;
     spectrum_painter * spec_painter;
 
     QString countKbrValue(int judge_which);

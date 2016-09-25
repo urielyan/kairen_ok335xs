@@ -1,6 +1,7 @@
 #include "query_s_count_data.h"
 #include "ui_query_s_count_data.h"
 #include "global.h"
+#include "datasave.h"
 
 #include <QDebug>
 #include <calibrationmeasurement.h>
@@ -13,6 +14,7 @@ query_s_count_data::query_s_count_data(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::query_s_count_data)
 {
+  p_mysettings = MeasurementDataSave::instance();
     ui->setupUi(this);
     int row= 0 , column = 0;
 
@@ -29,8 +31,8 @@ query_s_count_data::query_s_count_data(QWidget *parent) :
     for(column = 1 ; column < 4 ; column += 2){
         for(row = 0 ; row < 6 ; row++){
             int tmp = (1 == column) ? (row + column) : (row + column +4);
-            QString tmpsettingsstr = QString("s_count_data_%1").arg(tmp);
-            QString tmpsettings = mysettings.value(tmpsettingsstr).toString();
+            QString tmpcalibrateDataKey = QString("s_count_data_%1").arg(tmp);
+            QString tmpsettings = p_mysettings->value(tmpcalibrateDataKey).toString();
             tmpitem[tmp - 1]->setText(tmpsettings);
             ui->tableWidget->setItem(row,column,tmpitem[tmp - 1]);
         }
@@ -54,12 +56,12 @@ query_s_count_data::~query_s_count_data()
 
 //得到以字符串形式的kbr
 QString query_s_count_data::get_kbr_a012(int judge_which){
-    int m = mysettings.value("calibratemeasurement_count").toInt();
+    int m = p_mysettings->value(MYSETTINGS_CALIBRATE_COUNT).toInt();
     QStringList calibrate_data;//存储所有硫含量
     QStringList reference_proportion_wait;//标定样和参考样的比
     for(int i = 0; i < m ;i++){
         //得到用户输入的硫的含量，并判断是否是空或者为0.0000
-        QString input_s_data = mysettings.value( QString("calibrate_input_s_%1").arg(i)).toString();
+        QString input_s_data = p_mysettings->value( QString("calibrate_input_s_%1").arg(i)).toString();
         if(input_s_data == NULL || !input_s_data.compare("0.0000" ) || input_s_data.toDouble() == 0.0){
             continue;
         }
@@ -67,7 +69,7 @@ QString query_s_count_data::get_kbr_a012(int judge_which){
 
 
         //得到标定的数据和带测样的数据的比值
-        QStringList tmplist = mysettings.value(QString("s_count_data_%1").arg(i)).toString().split("/");
+        QStringList tmplist = p_mysettings->value(QString("s_count_data_%1").arg(i)).toString().split("/");
         if((tmplist.size() != 2)){
             return NULL;
         }
@@ -106,7 +108,7 @@ QString query_s_count_data::get_kbr_a012(int judge_which){
         r = rw_sub_avrg_sum /pow(r_sub_avrg_2_sum * w_sub_avrg_2_sum,0.5);
 
         //存储正真用于计算的数据
-        mysettings.setValue(QString("real_compute_kbr_%1").arg(judge_which),QString("k=%1;b=%2;r=%3").arg(k).arg(b).arg(r));
+        p_mysettings->setValue(QString("real_compute_kbr_%1").arg(judge_which),QString("k=%1;b=%2;r=%3").arg(k).arg(b).arg(r));
 
         //使得展示给用户的kbr为小数点后4位
         QString k_str = QString::number(k - (int)k);
@@ -203,7 +205,7 @@ QString query_s_count_data::get_kbr_a012(int judge_which){
         double a2 = ((B1 * A2 - B2 *  A1) * (A1 * A3 - A2 * A2) - (B2 * A3 - B3 * A2) * (A0 * A2 - A1 * A1)) / (( A1 * A1 - A0 * A2) *(A3 * A3 - A2 * A4) - (A1 * A3 - A2 * A2) * (A1 * A3 - A2 * A2));
         double a1 = (B1 - A0 * a0 - A2 * a2) / A1;
 
-        mysettings.setValue(QString("real_compute_kbr_%1").arg(judge_which),QString("a0=%1;a1=%2;a2=%3").arg(a0).arg(a1).arg(a2));
+        p_mysettings->setValue(QString("real_compute_kbr_%1").arg(judge_which),QString("a0=%1;a1=%2;a2=%3").arg(a0).arg(a1).arg(a2));
 
         QString chop_a0 = QString::number(a0 - (int)a0);
         QString chop_a1 = QString::number(a1 - (int)a1);
@@ -291,7 +293,7 @@ void query_s_count_data::show_and_refresh(){
         for(row = 0 ; row < 6 ; row++){
             int tmp = (1 == column) ? (row + column) : (row + column +4);
             QString tmpsettingsstr = QString("s_count_data_%1").arg(tmp);
-            QString tmpsettings = mysettings.value(tmpsettingsstr).toString();
+            QString tmpsettings = p_mysettings->value(tmpsettingsstr).toString();
             tmpitem[tmp - 1]->setText(tmpsettings);
             //ui->tableWidget->setItem(row,column,tmpitem[tmp - 1]);
         }
@@ -302,7 +304,7 @@ void query_s_count_data::show_and_refresh(){
 
 void query_s_count_data::add_s_count_data(int i ,QString str_data){
     if(i > 12)return;//judge whether count greater than 12,if yes don't store to mysetting.
-    mysettings.setValue(QString("s_count_data_%1").arg(i),str_data);
+    p_mysettings->setValue(QString("s_count_data_%1").arg(i),str_data);
 }
 
 void query_s_count_data::clear_data(){
@@ -310,7 +312,7 @@ void query_s_count_data::clear_data(){
     QString tmpstr = "s_count_data_";
     for(tmpnumber = 0; tmpnumber < 12;tmpnumber++){
         tmpstr.append(QString("%1").arg(tmpnumber));
-        mysettings.setValue(tmpstr,"");
+        p_mysettings->setValue(tmpstr,"");
         tmpstr = "s_count_data_";
     }
     for(row = 0;row < 6;row++)

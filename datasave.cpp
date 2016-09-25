@@ -23,7 +23,7 @@ void MeasurementDataSave::setValue(QString key, qint64 value)
 {
   if(settings == NULL)
     return;
-  settings->setValue("key", "value");
+  settings->setValue(key, value);
 }
 
 void MeasurementDataSave::setValue(QString key, QString value)
@@ -63,7 +63,7 @@ void MeasurementDataSave::init()
   if(!settings->contains("calibratemeasurement_count_record")){
       settings->setValue("calibratemeasurement_count_record",1);
     }
-  if((!settings->contains("calibration_results_in_result_1"))\
+  if((!settings->contains("calibration_results_in_result_1"))
      && (!settings->contains("calibration_results_in_data_10"))){
       for(int tmp = 1;tmp <= 10;tmp++){
           //qDebug() << "calibrate_results";
@@ -198,7 +198,7 @@ void ErrorCountSave::setValue(QString key, qint64 value)
 {
   if(settings == NULL)
     return;
-  //settings->setValue("key", "value");
+  settings->setValue("key", "value");
 }
 
 void ErrorCountSave::setValue(QString key, QString value)

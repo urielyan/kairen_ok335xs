@@ -4,6 +4,14 @@
 #include <QDebug>
 #include <QSettings>
 
+//relavnt calibrate measure
+#define MYSETTINGS_CALIBRATE_COUNT "calibratemeasurement_count"
+
+//relavnt calibrate results
+#define MYSETTINGS_CALIBRATE_RESULT_COUNT "calibratemeasurement_count_record"
+#define MYSETTINGS_CALIBRATE_RESULT_RESULT "calibration_results_in_result_"
+#define MYSETTINGS_CALIBRATE_RESULT_DATA "calibration_results_in_data_"
+
 class MeasurementDataSave
 {
 

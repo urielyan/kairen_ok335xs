@@ -4,21 +4,15 @@
 #include "global.h"
 #include "datasave.h"
 
-#define MYSETTINGS_COUNT "calibratemeasurement_count_record"
-#define MYSETTINGS_RESULT "calibration_results_in_result_"
-#define MYSETTINGS_DATA "calibration_results_in_data_"
-
 caibrateresultquery::caibrateresultquery(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::caibrateresultquery)
 {
   ui->setupUi(this);
   //得到一个下一次标定会记录在哪的数，所以减一就是最新的数
-  MeasurementDataSave::instance()->setValue("test", "haha");
-  display_number = MeasurementDataSave::instance()->value(MYSETTINGS_COUNT).toInt() - 1;
+  //MeasurementDataSave::instance()->setValue("test", "haha");
+  display_number = MeasurementDataSave::instance()->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt() - 1;
   update_page(display_number);
-
-
 
 #ifdef FORLIN_OK335XS
   //调整tablewidget的大小以适应屏幕。
@@ -76,12 +70,9 @@ void caibrateresultquery::update_page(int count){
   //init
   ui->tableWidget->clearContents();
 
-  QString tmp_result,tmp_data;
-  QStringList tmp_result_list,tmp_data_list,tmp_data_list2;
-
   //result:
-  tmp_result = MeasurementDataSave::instance()->value(QString(MYSETTINGS_RESULT) + QString::number(count)).toString();
-  tmp_result_list = tmp_result.split(";");
+  QString tmp_result = MeasurementDataSave::instance()->value(QString(MYSETTINGS_CALIBRATE_RESULT_RESULT) + QString::number(count)).toString();
+  QStringList  tmp_result_list = tmp_result.split(";");
   if(tmp_result_list.size() != 4) return;
   ui->label_datetime->setText(QString(tr("标定测量时间：")) + tmp_result_list[0]);
   ui->label_work_curve->setText(tmp_result_list[1]);
@@ -89,14 +80,14 @@ void caibrateresultquery::update_page(int count){
   ui->label_number->setText(tmp_result_list[3]);
 
   //data:tablewidget
-  tmp_data = MeasurementDataSave::instance()->value(QString(MYSETTINGS_DATA) + QString::number(count)).toString();
-  tmp_data_list = tmp_data.split(";");
+  QString tmp_data = MeasurementDataSave::instance()->value(QString(MYSETTINGS_CALIBRATE_RESULT_DATA) + QString::number(count)).toString();
+  QStringList tmp_data_list = tmp_data.split(";");
   //判断数据是否会出错，即此标定数据的个数与此标定结果的相应数据是否对应
 
   int i,j;
 
   for(i = 0;i < tmp_data_list.size()  ;i++){
-      tmp_data_list2 = tmp_data_list[i].split("/");
+      QStringList tmp_data_list2 = tmp_data_list[i].split("/");
       if(tmp_data_list2.size() != 3) continue;
       for(j = 0 ; j < 3 ; j++){
           QTableWidgetItem *item = new QTableWidgetItem(tmp_data_list2[j]);
@@ -107,7 +98,7 @@ void caibrateresultquery::update_page(int count){
 }
 
 void caibrateresultquery::show_and_update(){
-  display_number = MeasurementDataSave::instance()->value(MYSETTINGS_COUNT).toInt() - 1;
+  display_number = MeasurementDataSave::instance()->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt() - 1;
   update_page(display_number);
   this->showFullScreen();
 }

@@ -29,7 +29,7 @@ private slots:
 private:
     Ui::query_s_count_data *ui;
     QTableWidgetItem *tmpitem[12];
-    QSettings mysettings;
+    QSettings *p_mysettings;
 };
 
 #endif // QUERY_S_COUNT_DATA_H

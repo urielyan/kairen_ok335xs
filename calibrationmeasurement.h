@@ -40,7 +40,7 @@ private:
     showcalibratemeasurement *showcalibratemeasure;
     Communciation_Com *calibrate_com;
     void disable_button(bool);
-    QSettings mysettings;
+    QSettings *p_mysettings;
 };
 
 #endif // CALIBRATIONMEASUREMENT_H

@@ -12,6 +12,8 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::calibrationmeasurement)
 {
+  p_mysettings = MeasurementDataSave::instance();
+
   ui->setupUi(this);
 
   second = CALIBRATE_TIME;
@@ -28,7 +30,7 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
   ui->label_issamlpe->hide();
   ui->label_2->setText(QString("测量时间2×%1秒").arg(CALIBRATE_TIME));
 
-  count = mysettings.value("calibratemeasurement_count").toInt();
+  count = p_mysettings->value(MYSETTINGS_CALIBRATE_COUNT).toInt();
 
   showcalibratemeasure = new showcalibratemeasurement();
   timer =  new QTimer(this);
@@ -141,8 +143,8 @@ void calibrationmeasurement::doing_measurement(){
           showcalibratemeasure->add_calibratemeasurement_data(count + 1,NULL,recv_data);
           showcalibratemeasure->showFullScreen();
 //          query_s_count_data_in_this->add_s_count_data(count,query_data);
-          mysettings.setValue(QString("s_count_data_%1").arg(count),query_data);
-          mysettings.setValue("calibratemeasurement_count",++count);
+          p_mysettings->setValue(QString("s_count_data_%1").arg(count),query_data);
+          p_mysettings->setValue(MYSETTINGS_CALIBRATE_COUNT, ++count);
           return;
         }else{
           ErrorCountSave::instance()->addCount(4);
@@ -171,7 +173,7 @@ void calibrationmeasurement::slotStartClicked()
       disable_button(false);
       return;
     }
-  count = mysettings.value("calibratemeasurement_count").toInt();
+  count = p_mysettings->value(MYSETTINGS_CALIBRATE_COUNT).toInt();
   if(count >= 12){
       WinInforListDialog::instance()->showMsg(tr("标定样已超过12个"));
       disable_button(false);
