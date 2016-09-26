@@ -33,6 +33,11 @@ void MeasurementDataSave::setValue(QString key, QString value)
   settings->setValue(key, value);
 }
 
+void MeasurementDataSave::addCount(uint)
+{
+  qDebug() << "Not support";
+}
+
 QVariant MeasurementDataSave::value(QString key)
 {
   if(settings == NULL)
@@ -60,8 +65,8 @@ MeasurementDataSave::MeasurementDataSave()
 
 void MeasurementDataSave::init()
 {
-  if(!settings->contains("calibratemeasurement_count_record")){
-      settings->setValue("calibratemeasurement_count_record",1);
+  if(!settings->contains("calibration_results_count")){
+      settings->setValue("calibration_results_count",1);
     }
   if((!settings->contains("calibration_results_in_result_1"))
      && (!settings->contains("calibration_results_in_data_10"))){

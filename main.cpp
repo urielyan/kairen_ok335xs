@@ -5,7 +5,7 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
  *    标定相关:
  *      calibratemeasurement_count：记录正在标定了几组数据。因为标定数据是从０开始的所以这个数也是标定下次记录的ID
  *              每次按标定的开始键就会自加，若此次标定不成功就会减一保持原值。
- *      calibratemeasurement_count_record:最近的标定结果记录，是一个轮巡，从1到10循环。保存当计算kb值时的保存数据和结果的编号.例如为5时，下一个记录就是:
+ *      calibration_results_count:最近的标定结果记录，是一个轮巡，从1到20循环。保存当计算kb值时的保存数据和结果的编号.例如为5时，下一个记录就是:
  *          calibration_results_in_data_5 and calibration_results_in_result_5
  *      calibration_results_in_data_n：一个标定结果所需要的所有数据，有(S%/reference/calibrate;S%/reference/calibrate...)
  *              共count number组数据，count number对应于下面的calibration_results_in_result_n那组数据中的count number
@@ -70,8 +70,8 @@ void initSettings()
   qDebug() << mysettings.fileName();
   mysettings.clear();
 
-  if(!mysettings.contains("calibratemeasurement_count_record")){
-      mysettings.setValue("calibratemeasurement_count_record",1);
+  if(!mysettings.contains("calibration_results_count")){
+      mysettings.setValue("calibration_results_count",1);
     }
   if((!mysettings.contains("calibration_results_in_result_1"))\
      && (!mysettings.contains("calibration_results_in_data_10"))){

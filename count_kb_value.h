@@ -10,6 +10,7 @@ namespace Ui {
 class count_kb_value;
 }
 
+class AbstractDataSave;
 class count_kb_value : public QWidget
 {
     Q_OBJECT
@@ -30,7 +31,8 @@ private:
     static int count_record;
 
     //query_s_count_data *query_s_count_d;
-    QSettings *p_mysettings;
+    //QSettings *p_mysettings;
+    AbstractDataSave *p_mysettings;
     spectrum_painter * spec_painter;
 
     QString countKbrValue(int judge_which);

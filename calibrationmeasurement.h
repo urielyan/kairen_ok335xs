@@ -12,6 +12,7 @@ namespace Ui {
 class calibrationmeasurement;
 }
 
+class AbstractDataSave;
 class calibrationmeasurement : public QWidget
 {
     Q_OBJECT
@@ -40,7 +41,8 @@ private:
     showcalibratemeasurement *showcalibratemeasure;
     Communciation_Com *calibrate_com;
     void disable_button(bool);
-    QSettings *p_mysettings;
+    //QSettings *p_mysettings;
+    AbstractDataSave *p_mysettings;
 };
 
 #endif // CALIBRATIONMEASUREMENT_H

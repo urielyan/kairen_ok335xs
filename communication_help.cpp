@@ -41,10 +41,11 @@ void communication_help::on_pushButton_clicked()
       int display_number = MeasurementDataSave::instance()->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt() - 1;
       for(int i = 0;i < CALIBRATE_RESULT_MAX_RECORD;i++){
           //得到一个下一次标定会记录在哪的数，所以减一就是最新的数
-          QString calibrateResults = MeasurementDataSave::instance()->value(QString(MYSETTINGS_CALIBRATE_RESULT_RESULT) + QString::number(display_number)).toString();
+          QString calibrateResults = MeasurementDataSave::instance()->value(MYSETTINGS_CALIBRATE_RESULT_RESULT(display_number)).toString();
           QStringList strlist = calibrateResults.split(";");
-          if(strlist.size() != 4)break;
-          QString calibrateDatakey = QString(MYSETTINGS_CALIBRATE_RESULT_DATA) + QString::number(display_number);
+          if(strlist.size() != 4)
+            break;
+          QString calibrateDatakey = MYSETTINGS_CALIBRATE_RESULT_DATA(display_number);
           out << strlist[0] << ": "  << strlist[2] << "   ->   " << strlist[1] << "\n   "  << MeasurementDataSave::instance()->value(calibrateDatakey).toString() <<"\n \n";
           if(--display_number ==  0)
           {

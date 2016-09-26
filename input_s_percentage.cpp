@@ -2,17 +2,17 @@
 #include "ui_input_s_percentage.h"
 #include "global.h"
 #include "wininforlistdialog.h"
+#include "datasave.h"
 
 #include <QTableWidgetItem>
 #include <QMessageBox>
 #include <QDebug>
 
-//extern QSettings mysettings;
-
 WinInputSPercentage::WinInputSPercentage(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::input_S_percentage)
 {
+  p_mySettings = MeasurementDataSave::instance();
   ui->setupUi(this);
 
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -35,27 +35,22 @@ WinInputSPercentage::~WinInputSPercentage()
 
 void WinInputSPercentage::clear_all_tablewidget(){
   /*
-        clear tablewidget and mysettings.value("calibrate_input_s_ + i");
+        clear tablewidget and p_mySettings->value("calibrate_input_s_ + i");
         It's used to clear data in calibrate widget.
 
         clear calibratemeasurement_count settings;
     */
-  int tmpnumber,row;
-  QString tmpstr = "calibrate_input_s_";
-  for(tmpnumber = 0; tmpnumber < 12 ;tmpnumber++){
-      tmpstr.append(QString("%1").arg(tmpnumber));
-      mysettings.setValue(tmpstr,"0.0000");
-      tmpstr = "calibrate_input_s_";
-
-      mysettings.setValue(QString("s_count_data_%1").arg(tmpnumber), "");
+  for(int tmpNumber = 0; tmpNumber < 12 ;tmpNumber++){
+      p_mySettings->setValue(MYSETTINGS_CALIBRATE_S_INPUT(tmpNumber), "0.0000");
+      p_mySettings->setValue(MYSETTINGS_CALIBRATE_S_DATA(tmpNumber), "");
     }
 
   //TODO: down 4 line: useless
-  for(row = 0;row < 12;row++)
+  for(int row = 0;row < 12;row++)
     {
       ui->tableWidget->item(row,0)->setText("0.0000");
     }
-  mysettings.setValue("calibratemeasurement_count",0);
+  p_mySettings->setValue(MYSETTINGS_CALIBRATE_COUNT, 0);
 }
 
 void WinInputSPercentage::showAndUpdateData()
@@ -188,8 +183,8 @@ void WinInputSPercentage::on_b_sure_clicked()
   int ret = msgbox.exec();
   if (QMessageBox::Save == ret){
       for(row = 0 ; row < 12 ; row++){
-          QString tmpsettingsstr = QString("calibrate_input_s_%1").arg(row);
-          mysettings.setValue(tmpsettingsstr,  WinInforListDialog::instance()->doubleToCompleteDouble(ui->tableWidget->item(row,0)->text().toDouble()));
+          QString calibrateInputKey = MYSETTINGS_CALIBRATE_S_INPUT(row);
+          p_mySettings->setValue(calibrateInputKey,  WinInforListDialog::instance()->doubleToCompleteDouble(ui->tableWidget->item(row,0)->text().toDouble()));
         }
       WinInforListDialog::instance()->showMsg(tr("您已保存了您输入的数据，现在可以计算kb值了"));
       this->close();
@@ -229,19 +224,16 @@ void WinInputSPercentage::initTableWidget()
 
 void WinInputSPercentage::initTableWidgetData()
 {
-  //synchronized mysettings.
-  mysettings.sync();
-
   //set tableWidget row header ,row height, item isEnabled, item text.
   ui->tableWidget->clearContents();
   for(int i = 0; i < 12; i++)
     {
       //set 0 column text.
       ui->tableWidget->setItem(i, 0,new QTableWidgetItem(
-                                 mysettings.value(QString("calibrate_input_s_") + QString::number(i)).toString()   ));
+                                 p_mySettings->value(MYSETTINGS_CALIBRATE_S_INPUT(i)).toString() ));
 
       //set 1,2 column object and text;
-      QStringList stringCalibrateData = mysettings.value(QString("s_count_data_") + QString::number(i)).toString().split("/");
+      QStringList stringCalibrateData = p_mySettings->value(MYSETTINGS_CALIBRATE_S_DATA(i)).toString().split("/");
       if(2 == stringCalibrateData.size())
         {
           ui->tableWidget->setItem(i, 1,new QTableWidgetItem(stringCalibrateData.at(0)));

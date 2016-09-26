@@ -8,6 +8,7 @@ namespace Ui {
 class input_S_percentage;
 }
 
+class AbstractDataSave;
 class WinInputSPercentage : public QWidget
 {
     Q_OBJECT
@@ -35,7 +36,8 @@ private slots:
 
 private:
     Ui::input_S_percentage *ui;
-    QSettings mysettings;
+    //QSettings mysettings;
+    AbstractDataSave *p_mySettings;
 
     void initTableWidget();
     void initTableWidgetData();

@@ -71,7 +71,7 @@ void caibrateresultquery::update_page(int count){
   ui->tableWidget->clearContents();
 
   //result:
-  QString tmp_result = MeasurementDataSave::instance()->value(QString(MYSETTINGS_CALIBRATE_RESULT_RESULT) + QString::number(count)).toString();
+  QString tmp_result = MeasurementDataSave::instance()->value(MYSETTINGS_CALIBRATE_RESULT_RESULT(count)).toString();
   QStringList  tmp_result_list = tmp_result.split(";");
   if(tmp_result_list.size() != 4) return;
   ui->label_datetime->setText(QString(tr("标定测量时间：")) + tmp_result_list[0]);
@@ -80,7 +80,7 @@ void caibrateresultquery::update_page(int count){
   ui->label_number->setText(tmp_result_list[3]);
 
   //data:tablewidget
-  QString tmp_data = MeasurementDataSave::instance()->value(QString(MYSETTINGS_CALIBRATE_RESULT_DATA) + QString::number(count)).toString();
+  QString tmp_data = MeasurementDataSave::instance()->value(MYSETTINGS_CALIBRATE_RESULT_DATA(count)).toString();
   QStringList tmp_data_list = tmp_data.split(";");
   //判断数据是否会出错，即此标定数据的个数与此标定结果的相应数据是否对应
 

@@ -56,7 +56,7 @@ void count_kb_value::on_pushButton_clicked()
     }
   int count_input_s = 0;
   for(int i = 0; i < 12 ; i++){
-      QString tmp_str = p_mysettings->value(QString("calibrate_input_s_%1").arg(i)).toString();
+      QString tmp_str = p_mysettings->value(MYSETTINGS_CALIBRATE_S_INPUT(i)).toString();
       qDebug() << tmp_str << i;
       if(  (!(tmp_str==NULL)) &&(!tmp_str.toDouble() == 0.0)  )
         count_input_s++;
@@ -86,21 +86,22 @@ void count_kb_value::on_pushButton_clicked()
       QString tmp_str;
       QMap<int,QString>painter_data;//painter data
       for(int i = 0; i <= 11; i++){
-          QString tmp_s_samplement = p_mysettings->value(QString("calibrate_input_s_%1").arg(i)).toString();
+          QString tmpCalibrateInput = p_mysettings->value(MYSETTINGS_CALIBRATE_S_INPUT(i)).toString();
+          QString tmpCalibrateData = p_mysettings->value(MYSETTINGS_CALIBRATE_S_DATA(i)).toString();
           //当用户未输入硫含量时，此计数不参与计算kb值,也不保存
-          if(tmp_s_samplement == NULL || !tmp_s_samplement.compare("0.0000") || (tmp_s_samplement.toDouble() == 0.0))continue;
-          tmp_str += tmp_s_samplement;
+          if(tmpCalibrateInput == NULL || !tmpCalibrateInput.compare("0.0000") || (tmpCalibrateInput.toDouble() == 0.0))continue;
+          tmp_str += tmpCalibrateInput;
           tmp_str += QString("/");
-          tmp_str += p_mysettings->value(QString("s_count_data_%1").arg(i)).toString();
-          painter_data.insert(i,tmp_s_samplement + "/" + p_mysettings->value(QString("s_count_data_%1").arg(i)).toString());
+          tmp_str += tmpCalibrateData;
+          painter_data.insert(i, tmpCalibrateInput + "/" + tmpCalibrateData);
           tmp_str += ";";
         }
       tmp_str.chop(1);//删除最后一个分号
-      QString calibrateDatakey = QString(MYSETTINGS_CALIBRATE_RESULT_DATA) + QString::number(count_record);
+      QString calibrateDatakey = MYSETTINGS_CALIBRATE_RESULT_DATA(count_record);
       p_mysettings->setValue(calibrateDatakey,tmp_str);
 
       //保存此次计算的kbr值
-      QString tmp_storeKey = QString(MYSETTINGS_CALIBRATE_RESULT_RESULT) + QString::number(count_record);
+      QString tmp_storeKey = MYSETTINGS_CALIBRATE_RESULT_RESULT(count_record);
       p_mysettings->setValue(tmp_storeKey,
                                                 QString("%1;%2;%3;%4")
                                                 .arg(QDateTime::currentDateTime().toString("yy-MM-dd hh:mm"))
@@ -125,7 +126,7 @@ QString count_kb_value::countKbrValue(int judge_which)
     QStringList reference_proportion_wait;//标定样和参考样的比
     for(int i = 0; i <= 11 ;i++){
         //得到用户输入的硫的含量，并判断是否是空或者为0.0000
-        QString input_s_data = p_mysettings->value( QString("calibrate_input_s_%1").arg(i)).toString();
+        QString input_s_data = p_mysettings->value(MYSETTINGS_CALIBRATE_S_INPUT(i)).toString();
         if(input_s_data == NULL || !input_s_data.compare("0.0000" ) || input_s_data.toDouble() == 0.0){
             continue;
         }
@@ -133,7 +134,7 @@ QString count_kb_value::countKbrValue(int judge_which)
 
 
         //得到标定的数据和带测样的数据的比值
-        QStringList tmplist = p_mysettings->value(QString("s_count_data_%1").arg(i)).toString().split("/");
+        QStringList tmplist = p_mysettings->value(MYSETTINGS_CALIBRATE_S_DATA(i)).toString().split("/");
         if((tmplist.size() != 2)){
             WinInforListDialog::instance()->showMsg(tr("输入的硫含量样品未标定"));
             return NULL;
@@ -387,8 +388,7 @@ void count_kb_value::printer_result(){
   printer::transmit((void *)ui->comboBox->currentText().toLocal8Bit().data(),1);
   printer ::transmit(enter,1);
 
-  QString tmpCalibrateDataKey = QString(MYSETTINGS_CALIBRATE_RESULT_DATA)
-      + QString::number(p_mysettings->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt() - 1);
+  QString tmpCalibrateDataKey = QString(MYSETTINGS_CALIBRATE_RESULT_DATA( p_mysettings->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt() - 1) );
   QStringList datalist = p_mysettings->value(tmpCalibrateDataKey).toString().split(";");
   //所有的参与计算的硫含量和计数值。
   for(int i = datalist.size() ; i >= 1  ; i--){

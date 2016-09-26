@@ -143,8 +143,8 @@ void calibrationmeasurement::doing_measurement(){
           showcalibratemeasure->add_calibratemeasurement_data(count + 1,NULL,recv_data);
           showcalibratemeasure->showFullScreen();
 //          query_s_count_data_in_this->add_s_count_data(count,query_data);
-          p_mysettings->setValue(QString("s_count_data_%1").arg(count),query_data);
-          p_mysettings->setValue(MYSETTINGS_CALIBRATE_COUNT, ++count);
+          p_mysettings->setValue(MYSETTINGS_CALIBRATE_S_DATA(count), query_data);
+          p_mysettings->setValue(MYSETTINGS_CALIBRATE_COUNT,  ++count);
           return;
         }else{
           ErrorCountSave::instance()->addCount(4);
