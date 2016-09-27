@@ -169,7 +169,8 @@ void WinSqlDataQuery::on_tableView_clicked(const QModelIndex &index)
 }
 
 
-#define DISPLAY_COUNT  7
+
+#define DISPLAY_COUNT  9
 WinSpecifyIndexDialog::WinSpecifyIndexDialog(const QModelIndex &index, QSqlTableModel *model, QWidget *parent)
   : QDialog(parent)
 {
@@ -177,21 +178,38 @@ WinSpecifyIndexDialog::WinSpecifyIndexDialog(const QModelIndex &index, QSqlTable
   m_model = model;
 
   QVBoxLayout *mainLayout = new QVBoxLayout(this);
-  QStringList strlist;
-  strlist << "测量日期" << "工作曲线" << "测量时间" << "重复次数" << "硫含量平均值" << "标准偏差" <<  "测量系数";
+  QHBoxLayout *labelLayout = new QHBoxLayout;
+  QVBoxLayout *titleLayout = new QVBoxLayout;
+  QVBoxLayout *valueLayout = new QVBoxLayout;
+  QVBoxLayout *unitLayout = new QVBoxLayout;
+
+  QStringList titleList;
+  titleList << tr("人员编号:") << tr("样品编号:") << tr("测量日期:") << tr("工作曲线:") << tr("测量时间:") << tr("重复次数:") << tr("硫含量平均值:") << tr("标准偏差:") <<  tr("系数:");
+
+  QStringList unitList;
+  unitList << "" << "" << "" << "" << tr("秒") << tr("次") << "%(m/m)" << "%(m/m" <<  "";
 
   QLabel *labelTitle[DISPLAY_COUNT];
   QLabel *labelValue[DISPLAY_COUNT];
+  QLabel *labelUnit[DISPLAY_COUNT];
   for (int i = 0; i < DISPLAY_COUNT; ++i) {
-      QHBoxLayout *hboxLayout = new QHBoxLayout();
-      labelTitle[i] = new QLabel(strlist.value(i), this);
-      labelValue[i] = new QLabel(this);
-      m_labelList.append(labelValue[i]);
-      hboxLayout->addWidget(labelTitle[i]);
-      hboxLayout->addWidget(labelValue[i]);
-      mainLayout->addLayout(hboxLayout);
-    }
+      labelTitle[i] = new QLabel(titleList.value(i), this);
+      titleLayout->addWidget(labelTitle[i]);
 
+      labelValue[i] = new QLabel(this);
+      valueLayout->addWidget(labelValue[i]);
+      m_labelList.append(labelValue[i]);
+
+      if(unitList.size() != 0)
+        {
+          labelUnit[i] = new QLabel(unitList.value(i), this);
+          labelUnit[i]->setAlignment(Qt::AlignCenter);
+          unitLayout->addWidget(labelUnit[i]);
+        }
+    }
+  labelLayout->addLayout(titleLayout);
+  labelLayout->addLayout(valueLayout);
+  labelLayout->addLayout(unitLayout);
 
   QPushButton *returnButton = new QPushButton(tr("返回"), this);
   connect(returnButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -207,6 +225,7 @@ WinSpecifyIndexDialog::WinSpecifyIndexDialog(const QModelIndex &index, QSqlTable
   hboxLayout->addWidget(returnButton);
   hboxLayout->addWidget(nextButton);
 
+  mainLayout->addLayout(labelLayout);
   mainLayout->addLayout(hboxLayout);
   init();
 }
@@ -250,15 +269,9 @@ void WinSpecifyIndexDialog::init()
       if(query.next()) {
           for (int i = 0; i < 10; i++){
               QString msgstr = query.value(i).toString();
-              if (6 == i)
-                {
-                  msgstr += "  m/m";
-                }
               valueList.append(msgstr);
             }
           valueList.removeAt(8);
-          valueList.removeFirst();
-          valueList.removeFirst();
           initData(valueList);
         }
   }
