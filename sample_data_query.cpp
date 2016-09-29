@@ -181,17 +181,12 @@ WinSpecifyIndexDialog::WinSpecifyIndexDialog(const QModelIndex &index, QSqlTable
   QHBoxLayout *labelLayout = new QHBoxLayout;
   QVBoxLayout *titleLayout = new QVBoxLayout;
   QVBoxLayout *valueLayout = new QVBoxLayout;
-  QVBoxLayout *unitLayout = new QVBoxLayout;
 
   QStringList titleList;
   titleList << tr("人员编号:") << tr("样品编号:") << tr("测量日期:") << tr("工作曲线:") << tr("测量时间:") << tr("重复次数:") << tr("硫含量平均值:") << tr("标准偏差:") <<  tr("系数:");
 
-  QStringList unitList;
-  unitList << "" << "" << "" << "" << tr("秒") << tr("次") << "%(m/m)" << "%(m/m" <<  "";
-
   QLabel *labelTitle[DISPLAY_COUNT];
   QLabel *labelValue[DISPLAY_COUNT];
-  QLabel *labelUnit[DISPLAY_COUNT];
   for (int i = 0; i < DISPLAY_COUNT; ++i) {
       labelTitle[i] = new QLabel(titleList.value(i), this);
       titleLayout->addWidget(labelTitle[i]);
@@ -199,17 +194,9 @@ WinSpecifyIndexDialog::WinSpecifyIndexDialog(const QModelIndex &index, QSqlTable
       labelValue[i] = new QLabel(this);
       valueLayout->addWidget(labelValue[i]);
       m_labelList.append(labelValue[i]);
-
-      if(unitList.size() != 0)
-        {
-          labelUnit[i] = new QLabel(unitList.value(i), this);
-          labelUnit[i]->setAlignment(Qt::AlignCenter);
-          unitLayout->addWidget(labelUnit[i]);
-        }
     }
   labelLayout->addLayout(titleLayout);
   labelLayout->addLayout(valueLayout);
-  labelLayout->addLayout(unitLayout);
 
   QPushButton *returnButton = new QPushButton(tr("返回"), this);
   connect(returnButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -228,6 +215,11 @@ WinSpecifyIndexDialog::WinSpecifyIndexDialog(const QModelIndex &index, QSqlTable
   mainLayout->addLayout(labelLayout);
   mainLayout->addLayout(hboxLayout);
   init();
+
+  setMaximumHeight(DESKTOP_HEIGHT -10);
+  setMaximumWidth(DESKTOP_WIDTH - 10);
+  this->setWindowFlags(Qt::FramelessWindowHint);
+
 }
 
 void WinSpecifyIndexDialog::slotNextButtonClicked()
@@ -279,10 +271,14 @@ void WinSpecifyIndexDialog::init()
 
 void WinSpecifyIndexDialog::initData(QStringList valueList)
 {
-  Q_ASSERT(valueList.size() == DISPLAY_COUNT);
-  for (int i = 0; i < DISPLAY_COUNT; i ++)
+    Q_ASSERT(valueList.size() == DISPLAY_COUNT);
+
+    QStringList unitList;
+    unitList << "" << "" << "" << "" << tr("秒") << tr("次") << "%(m/m)" << "%(m/m" <<  "";
+
+    for (int i = 0; i < DISPLAY_COUNT; i ++)
     {
-      m_labelList.at(i)->setText(valueList.at(i));
+        m_labelList.at(i)->setText(valueList.at(i) + " " + unitList.at(i));
     }
 }
 
