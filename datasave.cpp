@@ -217,6 +217,15 @@ QVariant ErrorCountSave::value(QString key)
 {
   if(settings == NULL)
     return 0;
-  qDebug() << settings->value(key);
   return settings->value(key);
+}
+
+bool AbstractDataSave::contains(QString key)
+{
+    if(settings == NULL)
+    {
+        return false;
+    }
+
+    return settings->contains(key);
 }

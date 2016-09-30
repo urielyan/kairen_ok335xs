@@ -24,6 +24,10 @@ public:
   virtual void setValue(QString key, QString value)  = 0;
   virtual void addCount(uint /*which*/) = 0;
 
+    virtual bool contains(QString key);
+
+protected:
+    QSettings *settings;
 };
 
 class MeasurementDataSave : public AbstractDataSave
@@ -41,7 +45,7 @@ public:
 
 protected:
   //virtual void init() = 0;
-  QSettings *settings;
+  //QSettings *settings;
 
 private:
   MeasurementDataSave();
@@ -63,7 +67,6 @@ public:
 
 protected:
   //virtual void init() = 0;
-  QSettings *settings;
 
 
 private:

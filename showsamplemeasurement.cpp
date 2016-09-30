@@ -292,7 +292,8 @@ void showsamplemeasurement::storeDataToDatabase(QString data)
   query.addBindValue(data_list[4]);
   query.addBindValue(data_list[5]);
   query.addBindValue(data_list[0].toInt() == 0 ? "是" : "否");
-  query.addBindValue(p_mySettings->value(p_mySettings->CALIBRATE_WORK_CURVE(real_curve)).toString());
+  query.addBindValue(p_mySettings->value( MYSETTINGS_CALIBRATE_WORK_CURVE(real_curve) ) );
+
   bool ok1  = query.exec();
   query.finish();
     bool ok2 = db.commit();
