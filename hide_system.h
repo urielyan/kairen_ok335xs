@@ -3,9 +3,6 @@
 
 #include <QWidget>
 //#include <passwd.h>
-#include "proportion.h"
-#include "input_machine_use_time.h"
-#include "query_change_voltage.h"
 
 #include <QSettings>
 
@@ -13,6 +10,10 @@ namespace Ui {
 class hide_system;
 }
 
+class input_machine_use_time;
+class query_change_voltage;
+class proportion;
+class AbstractDataSave;
 class hide_system : public QWidget
 {
     Q_OBJECT
@@ -44,13 +45,17 @@ private slots:
 
 private:
     Ui::hide_system *ui;
-    proportion  *proportion_widget;
     int used_time;
     int most_use_time;
+
     QTimer *timer;
+
     input_machine_use_time *input_time;
-    QSettings mysettings;
     query_change_voltage *query_change_vol;
+    proportion  *proportion_widget;
+
+    //QSettings mysettings;
+    AbstractDataSave *p_mysettings;
 };
 
 #endif // HIDE_SYSTEM_H

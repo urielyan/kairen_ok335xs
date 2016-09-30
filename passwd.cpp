@@ -4,6 +4,8 @@
 #include "com.h"
 #include "countingmeasurement.h"
 #include "datasave.h"
+#include "systemsetup.h"
+#include "hide_system.h"
 
 #include <QList>
 #include <QString>
@@ -15,6 +17,8 @@ passwd::passwd(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::passwd)
 {
+    p_mySettings = MeasurementDataSave::instance();
+
     ui->setupUi(this);
     flag =0;
     ss = new systemsetup();
@@ -202,19 +206,19 @@ void passwd::on_b_ok_clicked()
         }else if(recv_data[1] == (char)0x31 || recv_data[1] == (char)0x32){
             ErrorCountSave::instance()->setValue(QString("change_count_voltage_")+
                                             ErrorCountSave::instance()->value("change_count_voltage_count").toString(),
-                                            QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss")+ ";" + mysettings.value("count_voltage").toString()
+                                            QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss")+ ";" + p_mySettings->value("count_voltage").toString()
                                             + ";" + line_data);
             ErrorCountSave::instance()->setValue("change_count_voltage_count",
                                             ErrorCountSave::instance()->value("change_count_voltage_count").toInt()+1);
             switch (flag) {
               case SETUP_COUNT_VOLTAGE:
-                mysettings.setValue("count_voltage",line_data.toInt());
+                p_mySettings->setValue("count_voltage",line_data.toInt());
                 break;
               case SETUP_LIGHT_VOLTAGE:
-                mysettings.setValue("light_voltage",line_data.toInt());
+                p_mySettings->setValue("light_voltage",line_data.toInt());
                 break;
               case SETUP_LIGHT_ELECTRICITY:
-                mysettings.setValue("light_current",line_data.toInt());
+                p_mySettings->setValue("light_current",line_data.toInt());
                 break;
               default:
                 break;
@@ -249,17 +253,17 @@ void passwd::alterpasswd_show(int index){
 
         ui->label_caution->setText(QString(tr("请输入电压(电压范围在%1-%2V)")).arg(enumMinCountVoltage).arg(enumMaxCountVoltage));
         ui->label_unit->setText("V");
-        ui->lineEdit->setText(mysettings.value("count_voltage").toString());
+        ui->lineEdit->setText(p_mySettings->value("count_voltage").toString());
     }else if(index == SETUP_LIGHT_VOLTAGE){
         ui->label_title->setText(tr("设定光管高压"));
         ui->label_caution->setText(tr("请输入电压"));
         ui->label_unit->setText("V");
-        ui->lineEdit->setText(mysettings.value("light_voltage").toString());
+        ui->lineEdit->setText(p_mySettings->value("light_voltage").toString());
     }else if(index == SETUP_LIGHT_ELECTRICITY){
         ui->label_title->setText(tr("设定光管电流"));
         ui->label_caution->setText(tr("请输入电流"));
         ui->label_unit->setText("μA");
-        ui->lineEdit->setText(mysettings.value("light_current").toString());
+        ui->lineEdit->setText(p_mySettings->value("light_current").toString());
     }else if(index == SETUP_ALTER_PASSWD){
         ui->label_title->setText(tr("修改密码"));
         ui->label_caution->setText(tr("请输入新密码:"));

@@ -2,12 +2,12 @@
 #define MODIFY_KB_VALUE_H
 
 #include <QWidget>
-#include <QSettings>
 
 namespace Ui {
 class modify_kb_value;
 }
 
+class AbstractDataSave;
 class modify_kb_value : public QWidget
 {
     Q_OBJECT
@@ -34,7 +34,9 @@ private slots:
 
 private:
     Ui::modify_kb_value *ui;
-    QSettings mysettings;
+
+    //QSettings mysettings;
+    AbstractDataSave *p_mySettings;
 };
 
 #endif // MODIFY_KB_VALUE_H

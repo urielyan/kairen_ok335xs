@@ -2,10 +2,7 @@
 #ifndef PASSWD_H
 #define PASSWD_H
 
-//#include <QSettings>
 #include <QWidget>
-#include "systemsetup.h"
-#include "hide_system.h"
 
 #define SETUP_ALTER_PASSWD 1
 #define SETUP_COUNT_VOLTAGE     7
@@ -16,6 +13,9 @@ namespace Ui {
 class passwd;
 }
 
+class hide_system;
+class systemsetup;
+class AbstractDataSave;
 class passwd : public QWidget
 {
     Q_OBJECT
@@ -63,10 +63,10 @@ private:
     systemsetup *ss;
     hide_system *hs;
     int flag;
-    QSettings mysettings;
-    int stop_all_measurement();
+    //QSettings mysettings;
+    AbstractDataSave *p_mySettings;
 
-    //void connectSignalAndSlot();
+    int stop_all_measurement();
 };
 
 #endif // PASSWD_H

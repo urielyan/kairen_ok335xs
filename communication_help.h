@@ -2,12 +2,12 @@
 #define COMMUNICATION_HELP_H
 
 #include <QWidget>
-#include <QSettings>
 
 namespace Ui {
   class communication_help;
 }
 
+class AbstractDataSave;
 class communication_help : public QWidget
 {
   Q_OBJECT
@@ -27,7 +27,9 @@ private slots:
 
 private:
   Ui::communication_help *ui;
-    QSettings mysettings;
+
+    //QSettings mysettings;
+    AbstractDataSave *p_mysettings;
 };
 
 #endif // COMMUNICATION_HELP_H

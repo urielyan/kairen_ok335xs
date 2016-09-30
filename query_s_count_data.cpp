@@ -8,8 +8,6 @@
 //#include <math.h>
 //#include <QMessageBox>
 
-////extern QSettings mysettings;
-
 //query_s_count_data::query_s_count_data(QWidget *parent) :
 //    QWidget(parent),
 //    ui(new Ui::query_s_count_data)

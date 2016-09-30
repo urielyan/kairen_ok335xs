@@ -1,29 +1,31 @@
 #include "input_machine_use_time.h"
 #include "ui_input_machine_use_time.h"
 #include "global.h"
-
+#include "datasave.h"
 
 input_machine_use_time::input_machine_use_time(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::input_machine_use_time)
 {
-  ui->setupUi(this);
+    p_mySettings = MeasurementDataSave::instance();
 
-  QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
-  for(int i=0;i<allPButtons.count();i++){
-      QString tmpstr=allPButtons[i]->objectName();
-      //  tmpstr=tmpstr.remove("b_");
-      if(tmpstr.length()==3){
-          QObject::connect(allPButtons[i],SIGNAL(clicked()),this,SLOT(slot_keyNumPressed()));
+    ui->setupUi(this);
+
+    QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
+    for(int i=0;i<allPButtons.count();i++){
+        QString tmpstr=allPButtons[i]->objectName();
+        //  tmpstr=tmpstr.remove("b_");
+        if(tmpstr.length()==3){
+            QObject::connect(allPButtons[i],SIGNAL(clicked()),this,SLOT(slot_keyNumPressed()));
         }
     }
 
-  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  QList<QLabel *> labellist = this->findChildren<QLabel *>();
-  for (int i = 0; i < labellist.count(); ++i) {
-      labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+    this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+    QList<QLabel *> labellist = this->findChildren<QLabel *>();
+    for (int i = 0; i < labellist.count(); ++i) {
+        labellist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     }
-  ui->l_title->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
+    ui->l_title->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
 }
 
 input_machine_use_time::~input_machine_use_time()
@@ -79,15 +81,15 @@ void input_machine_use_time::on_b_ok_clicked()
     }
   if(flag == DECODE){
       if(line_str.toInt() == 1111111){
-          mysettings.setValue("most_use_time",0);
-          mysettings.setValue("machine_used_time",0);
+          p_mySettings->setValue("most_use_time",0);
+          p_mySettings->setValue("machine_used_time",0);
           this->close();
         }
     }else if(flag == PRODUCT_SERIAL){
       QString product = line_str.left(6);
       QString time = line_str.right(1);
-      mysettings.setValue("most_use_time",time.toInt());
-      mysettings.setValue("product_serial",product);
+      p_mySettings->setValue("most_use_time",time.toInt());
+      p_mySettings->setValue("product_serial",product);
     }
 }
 

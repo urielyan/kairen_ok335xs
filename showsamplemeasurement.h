@@ -13,6 +13,7 @@ namespace Ui {
   class showsamplemeasurement;
 }
 
+class AbstractDataSave;
 class showsamplemeasurement : public QWidget
 {
   Q_OBJECT
@@ -38,7 +39,9 @@ private:
   int real_curve;
   QSqlTableModel *model;
   QSqlDatabase db ;
-  QSettings mysettings;
+
+  //QSettings mysettings;
+  AbstractDataSave *p_mySettings;
 
   void printer_result();
 

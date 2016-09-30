@@ -2,12 +2,12 @@
 #define INPUT_MACHINE_USE_TIME_H
 
 #include <QWidget>
-#include <QSettings>
 
 namespace Ui {
   class input_machine_use_time;
 }
 
+class AbstractDataSave;
 class input_machine_use_time : public QWidget
 {
   Q_OBJECT
@@ -26,7 +26,8 @@ private slots:
 
 private:
   Ui::input_machine_use_time *ui;
-  QSettings mysettings;
+  //QSettings mysettings;
+  AbstractDataSave *p_mySettings;
 };
 
 #endif // INPUT_MACHINE_USE_TIME_H

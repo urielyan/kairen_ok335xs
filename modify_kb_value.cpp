@@ -1,59 +1,59 @@
 #include "modify_kb_value.h"
 #include "ui_modify_kb_value.h"
 #include "global.h"
+#include "datasave.h"
 
 #include <QMessageBox>
-
-//extern  QSettings mysettings;
-
 
 modify_kb_value::modify_kb_value(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::modify_kb_value)
 {
-  ui->setupUi(this);
+    p_mySettings = MeasurementDataSave::instance();
 
-  //qDebug() <<;
-  //define the number key slots.
-  ui->label_a2->setText("");
-  ui->lineEdit_a2->hide();
-  ui->lineEdit_ka0->setFocus();
+    ui->setupUi(this);
 
-  QStringList tmplist = mysettings.value(QString("work_curve_1"))\
-      .toString().split(";");
-  if(3 == tmplist.size()){
-      if(tmplist[0].split("=").size() == 2){
-          ui->lineEdit_ba1->setText(tmplist[1].split("=")[1]);
-          ui->lineEdit_ka0->setText(tmplist[0].split("=")[1]);
+    //qDebug() <<;
+    //define the number key slots.
+    ui->label_a2->setText("");
+    ui->lineEdit_a2->hide();
+    ui->lineEdit_ka0->setFocus();
+
+    on_comboBox_currentIndexChanged("1");
+    //TODO: 待删除已用上面这行代替。
+//    QStringList tmplist = p_mySettings->value(QString("work_curve_1"))\
+//            .toString().split(";");
+//    if(3 == tmplist.size()){
+//        if(tmplist[0].split("=").size() == 2){
+//            ui->lineEdit_ba1->setText(tmplist[1].split("=")[1]);
+//            ui->lineEdit_ka0->setText(tmplist[0].split("=")[1]);
+//        }
+//    }
+
+    QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
+    for(int i=0;i<allPButtons.count();i++){
+        QString tmpstr=allPButtons[i]->objectName();
+        allPButtons[i]->setFocusPolicy(Qt::NoFocus);
+        //  tmpstr=tmpstr.remove("b_");
+        if(tmpstr.length()==3){
+            QObject::connect(allPButtons[i],SIGNAL(clicked()),this,SLOT(slot_keynumberPressed()));
         }
     }
-  QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
-  for(int i=0;i<allPButtons.count();i++){
-      QString tmpstr=allPButtons[i]->objectName();
-      allPButtons[i]->setFocusPolicy(Qt::NoFocus);
-      //  tmpstr=tmpstr.remove("b_");
-      if(tmpstr.length()==3){
-          QObject::connect(allPButtons[i],SIGNAL(clicked()),this,SLOT(slot_keynumberPressed()));
-        }
-    }
 
-  INIT_LABEL_SIZE_FONT;
-  ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
-  ui->comboBox->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  ui->label->setObjectName("title");
+    INIT_LABEL_SIZE_FONT;
+    ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2,QFont::Normal));
+    ui->comboBox->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+    ui->label->setObjectName("title");
 
 #ifdef FRIENDLYARM_TINY210
-  ui->comboBox->setFont(QFont(FONT_NAME, FONT_SIZE  + 1,QFont::Normal));
-  ui->comboBox->setFixedHeight(DESKTOP_HEIGHT / 10);
-
-  ui->label_2->setMaximumHeight(DESKTOP_HEIGHT / 10);
+    ui->comboBox->setFont(QFont(FONT_NAME, FONT_SIZE  + 1,QFont::Normal));
 #endif
 #ifdef FORLIN_OK335XS
-  ui->comboBox->setFont(QFont(FONT_NAME, 10,QFont::Normal));
-  ui->comboBox->setFixedHeight(DESKTOP_HEIGHT / 10);
+    ui->comboBox->setFont(QFont(FONT_NAME, 10,QFont::Normal));
 
-  ui->label_2->setMaximumHeight(DESKTOP_HEIGHT / 10);
 #endif
+    ui->comboBox->setFixedHeight(DESKTOP_HEIGHT / 10);
+    ui->label_2->setMaximumHeight(DESKTOP_HEIGHT / 10);
 }
 
 modify_kb_value::~modify_kb_value()
@@ -86,41 +86,38 @@ void modify_kb_value::on_b_abandon_clicked()
 
 void modify_kb_value::on_comboBox_currentIndexChanged(const QString &arg1)
 {
-  ui->lineEdit_a2->setText("");
-  ui->lineEdit_ba1->setText("");
-  ui->lineEdit_ka0->setText("");
+    ui->lineEdit_a2->setText("");
+    ui->lineEdit_ba1->setText("");
+    ui->lineEdit_ka0->setText("");
 
-  if(arg1.toInt() <=5){
-      ui->lineEdit_a2->hide();
-      ui->label_a2->setText("");
-      ui->label_b_a1->setText("b=");
-      ui->label_k_a0->setText("k=");
+    if(arg1.toInt() <=5){
+        ui->lineEdit_a2->hide();
+        ui->label_a2->setText("");
+        ui->label_b_a1->setText("b=");
+        ui->label_k_a0->setText("k=");
 
-      QStringList tmplist = mysettings.value(QString("work_curve_%1").arg(arg1.toInt()))\
-          .toString().split(";");
-      if(3 != tmplist.size())return;
-      if(tmplist[0].split("=").size() == 2){
-
-          ui->lineEdit_ba1->setText(tmplist[1].split("=")[1]);
-          ui->lineEdit_ka0->setText(tmplist[0].split("=")[1]);
-          //ui->lineEdit_a2->setText(tmplist[2].split("=")[1]);
+        QStringList tmplist = p_mySettings->value(MYSETTINGS_CALIBRATE_WORK_CURVE(arg1.toInt())).toString().split(";");
+        if(3 != tmplist.size())return;
+        if(tmplist[0].split("=").size() == 2){
+            ui->lineEdit_ba1->setText(tmplist[1].split("=")[1]);
+            ui->lineEdit_ka0->setText(tmplist[0].split("=")[1]);
+            //ui->lineEdit_a2->setText(tmplist[2].split("=")[1]);
         }
     }else{
-      ui->lineEdit_a2->show();
-      ui->label_k_a0->setText("a0=");
-      ui->label_b_a1->setText("a1=");
-      ui->label_a2->setText("a2=");
+        ui->lineEdit_a2->show();
+        ui->label_k_a0->setText("a0=");
+        ui->label_b_a1->setText("a1=");
+        ui->label_a2->setText("a2=");
 
-      QStringList tmplist = mysettings.value(QString("work_curve_%1")\
-                                             .arg(ui->comboBox->currentText().toInt())).toString().split(";");
-      if(3 != tmplist.size())return;
-      if(tmplist[0].split("=").size() == 2){
-          ui->lineEdit_ba1->setText(tmplist[1].split("=")[1]);
-          ui->lineEdit_ka0->setText(tmplist[0].split("=")[1]);
-          ui->lineEdit_a2->setText(tmplist[2].split("=")[1]);
+        QStringList tmplist = p_mySettings->value(MYSETTINGS_CALIBRATE_WORK_CURVE(ui->comboBox->currentText().toInt())).toString().split(";");
+        if(3 != tmplist.size())return;
+        if(tmplist[0].split("=").size() == 2){
+            ui->lineEdit_ba1->setText(tmplist[1].split("=")[1]);
+            ui->lineEdit_ka0->setText(tmplist[0].split("=")[1]);
+            ui->lineEdit_a2->setText(tmplist[2].split("=")[1]);
         }
     }
-  ui->lineEdit_ka0->setFocus();
+    ui->lineEdit_ka0->setFocus();
 }
 void modify_kb_value::on_b_point_clicked()
 {
@@ -193,8 +190,8 @@ void modify_kb_value::on_b_sure_clicked()
             }
           tmpstr += "r=" + ui->lineEdit_a2->text();
         }
-      mysettings.setValue(QString("work_curve_%1").arg(ui->comboBox->currentText().toInt()),tmpstr);
-      mysettings.setValue(QString("real_compute_kbr_%1").arg(ui->comboBox->currentText().toInt()),tmpstr);
+      p_mySettings->setValue(MYSETTINGS_CALIBRATE_WORK_CURVE(ui->comboBox->currentText().toInt()), tmpstr);
+      p_mySettings->setValue(QString("real_compute_kbr_%1").arg(ui->comboBox->currentText().toInt()), tmpstr);
       WinInforListDialog::instance()->showMsg(tr("您输入的数据已保存！"));
       on_b_abandon_clicked();
       //this->close();

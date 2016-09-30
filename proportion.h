@@ -2,12 +2,12 @@
 #define PROPORTION_H
 
 #include <QWidget>
-#include <QSettings>
 
 namespace Ui {
 class proportion;
 }
 
+class AbstractDataSave;
 class proportion : public QWidget
 {
     Q_OBJECT
@@ -33,7 +33,9 @@ private slots:
 
 private:
     Ui::proportion *ui;
-    QSettings mysettings;
+    //QSettings mysettings;
+    AbstractDataSave *p_mySettings;
+
 };
 
 #endif // PROPORTION_H

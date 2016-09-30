@@ -3,6 +3,7 @@
 #include "input_person_sampleserial.h"
 #include "global.h"
 #include "printer.h"
+#include "datasave.h"
 
 #include <stdio.h>
 #include <countingmeasurement.h>
@@ -34,15 +35,15 @@ showsamplemeasurement::~showsamplemeasurement()
     delete model;
 }
 
-void showsamplemeasurement::add_data(int work_curve_index,QString data,int size){
+void showsamplemeasurement::add_data(int workCurveIndex,QString data,int size){
     if(1 == size) {
         ui->tableWidget->clear();
         ui->tableWidget_hide->clear();
         ui->tableWidget_hide->setRowCount(COUNT_MEASUREMENT_DATA_COUNT);
         for(int i = 0; i < COUNT_MEASUREMENT_DATA_COUNT; i++ ){
             ui->tableWidget_hide->setItem(i,1,\
-              new QTableWidgetItem(countingMeasurement::get_count_5_data().value(i)));
-          }
+                                          new QTableWidgetItem(countingMeasurement::get_count_5_data().value(i)));
+        }
         hide_lable(true);
         sum = 0;
     }
@@ -54,85 +55,82 @@ void showsamplemeasurement::add_data(int work_curve_index,QString data,int size)
     }
 
     //判断是否是自动选择工作曲线,若是，则选择一个合适的工作曲线
-    if(work_curve_index == 0){
+    if(workCurveIndex == 0){
         double r = (data.toDouble())/sample_average;
 #ifdef DEBUG
-    QMessageBox::warning(this,QString(__FILE__),QString(__FUNCTION__) + QString(":%1,%2,%3").arg(data.toDouble()).arg(sample_average).arg(r));
+        QMessageBox::warning(this,QString(__FILE__),QString(__FUNCTION__) + QString(":%1,%2,%3").arg(data.toDouble()).arg(sample_average).arg(r));
 #endif
-        if(mysettings.contains("proportion_1") && mysettings.contains("proportion_2")){
-#ifdef DEBUG
-            QMessageBox::warning(this,QString(__FILE__),QString("contain proportion"));
-#endif
-            if(r < mysettings.value("proportion_1").toDouble()){
-                work_curve_index = 1;
-            }else if(r >= mysettings.value("proportion_1").toDouble() && r < mysettings.value("proportion_2").toDouble()){
-                work_curve_index = 2;
-            }else if(r >= mysettings.value("proportion_2").toDouble()){
-                work_curve_index = 6;
+        if(p_mySettings->contains("proportion_1") && p_mySettings->contains("proportion_2")){
+            if(r < p_mySettings->value("proportion_1").toDouble()){
+                workCurveIndex = 1;
+            }else if(r >= p_mySettings->value("proportion_1").toDouble() && r < p_mySettings->value("proportion_2").toDouble()){
+                workCurveIndex = 2;
+            }else if(r >= p_mySettings->value("proportion_2").toDouble()){
+                workCurveIndex = 6;
             }
         }else {
             if(r < 0.1){
-                work_curve_index = 1;
+                workCurveIndex = 1;
             }else if(r >= 0.1 && r < 1.0){
-                work_curve_index = 2;
+                workCurveIndex = 2;
             }else if(r >= 1.0){
-                work_curve_index = 6;
+                workCurveIndex = 6;
             }
         }
     }
-    real_curve = work_curve_index;
+    real_curve = workCurveIndex;
 
     //得到kb值
-    QString work_curve_value = mysettings.value("real_compute_kbr_" + QString::number(work_curve_index)).toString();
-    QStringList work_curve_list;
+    QString workCurveValue = p_mySettings->value("real_compute_kbr_" + QString::number(workCurveIndex)).toString();
+    QStringList workCurveList;
     double percentage = 0;
-    work_curve_list = work_curve_value.split(";");
-    if(work_curve_index <= 5 && work_curve_index >= 1){
-        if((work_curve_list.size() != 3) || (work_curve_list[0] == NULL)|| (work_curve_list[1] == NULL))return;
-        if(work_curve_list[0].split("=").size() == 2){
-            percentage = work_curve_list[0].split("=")[1].toDouble() * \
-                    ((data.toDouble())/sample_average) + work_curve_list[1].split("=")[1].toDouble();
+    workCurveList = workCurveValue.split(";");
+    if(workCurveIndex <= 5 && workCurveIndex >= 1){
+        if((workCurveList.size() != 3) || (workCurveList[0] == NULL)|| (workCurveList[1] == NULL))return;
+        if(workCurveList[0].split("=").size() == 2){
+            percentage = workCurveList[0].split("=")[1].toDouble() * \
+                    ((data.toDouble())/sample_average) + workCurveList[1].split("=")[1].toDouble();
         }
-    }else if((work_curve_index > 5) && (work_curve_index <= 9)){
-        if((work_curve_list.size() != 3) || (work_curve_list[0] == NULL)|| \
-                (work_curve_list[1] == NULL)|| (work_curve_list[2] == NULL))return;
-        if(work_curve_list[0].split("=").size() == 2){
-            percentage = work_curve_list[0].split("=")[1].toDouble() + \
-                    work_curve_list[1].split("=")[1].toDouble() * ((data.toDouble())/sample_average) + \
-                    work_curve_list[2].split("=")[1].toDouble()* pow(((data.toDouble())/sample_average),2);
+    }else if((workCurveIndex > 5) && (workCurveIndex <= 9)){
+        if((workCurveList.size() != 3) || (workCurveList[0] == NULL)|| \
+                (workCurveList[1] == NULL)|| (workCurveList[2] == NULL))return;
+        if(workCurveList[0].split("=").size() == 2){
+            percentage = workCurveList[0].split("=")[1].toDouble() + \
+                    workCurveList[1].split("=")[1].toDouble() * ((data.toDouble())/sample_average) + \
+                    workCurveList[2].split("=")[1].toDouble()* pow(((data.toDouble())/sample_average),2);
         }
     }else{
         percentage = 0;
-       return;
+        return;
     }
 
     if(percentage < 0.0){
         percentage = 0.0;
-      }
+    }
 
     //let percentage have 4 number after point
     QString percentage_str = QString::number(percentage,'f',4);
     ui->tableWidget->setRowCount(size);
     for(int i = 0;i < size;i++){
         ui->tableWidget->setRowHeight(i,FONT_SIZE*3/2);
-      }
+    }
     ui->tableWidget->setRowHeight(size,FONT_SIZE*3/2);
     if(size <= COUNT_MEASUREMENT_DATA_COUNT){
         ui->tableWidget_hide->setRowCount(COUNT_MEASUREMENT_DATA_COUNT);
-      }else{
+    }else{
         ui->tableWidget_hide->setRowCount(size);
-      }
+    }
     ui->tableWidget_hide->setItem(size -1,0,new QTableWidgetItem(data));
     ui->tableWidget->setItem(size-1,0,new QTableWidgetItem(QString("第 %1 次测量").arg(size)));
     if(percentage == 0.0){
         ui->tableWidget->setItem(size-1,1,new QTableWidgetItem(QString("0.0001")));
-      }else{
+    }else{
         while (percentage_str.size() < 6) {
             percentage_str.append("0");
-          }
+        }
         if(percentage_str.toDouble() > 100)percentage_str = "99.9999";
         ui->tableWidget->setItem(size-1,1,new QTableWidgetItem(percentage_str));
-      }
+    }
     sum += ui->tableWidget->item(size -1,1)->text().toDouble();
 
     resizeTableWidget();
@@ -269,10 +267,10 @@ void showsamplemeasurement::printer_result(){
 void showsamplemeasurement::storeDataToQSettings(QString data)
 {
   //存储数据到文本文件中。
-  int tmp = mysettings.value("sample_count").toInt();
+  int tmp = p_mySettings->value("sample_count").toInt();
   tmp++;
-  mysettings.setValue(QString("sample_data_%1").arg(tmp),data);
-  mysettings.setValue("sample_count",tmp);
+  p_mySettings->setValue(QString("sample_data_%1").arg(tmp),data);
+  p_mySettings->setValue("sample_count",tmp);
 }
 
 void showsamplemeasurement::storeDataToDatabase(QString data)
@@ -294,7 +292,7 @@ void showsamplemeasurement::storeDataToDatabase(QString data)
   query.addBindValue(data_list[4]);
   query.addBindValue(data_list[5]);
   query.addBindValue(data_list[0].toInt() == 0 ? "是" : "否");
-  query.addBindValue(mysettings.value("work_curve_" + QString::number(real_curve)).toString());
+  query.addBindValue(p_mySettings->value(p_mySettings->CALIBRATE_WORK_CURVE(real_curve)).toString());
   bool ok1  = query.exec();
   query.finish();
     bool ok2 = db.commit();

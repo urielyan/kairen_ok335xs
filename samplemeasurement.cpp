@@ -177,28 +177,28 @@ void sampleMeasurement::slotStartClicked()
         return;
     }
 
-    QString work_curve_value;
+    QString workCurve;
     //选择的kb值没有数据则不发送测量信号
      if(ui->comboBo_queue->currentIndex() != 0){
-        work_curve_value = mysettings.value("real_compute_kbr_" + ui->comboBo_queue->currentText()).toString();
-        if((work_curve_value.split(";")[0] == NULL) || (work_curve_value.split(";")[1] == NULL)){
+        workCurve = mysettings.value("real_compute_kbr_" + ui->comboBo_queue->currentText()).toString();
+        if((workCurve.split(";")[0] == NULL) || (workCurve.split(";")[1] == NULL)){
             WinInforListDialog::instance()->showMsg(tr("您选择的工作曲线有误，请重新选择"));
             return;
         }
      }else{
          //当选择自动选择工作曲线时，判断123三条工作曲线是否有值。若没有则不进行含量测量
-        work_curve_value = mysettings.value("real_compute_kbr_1").toString();
-        if((work_curve_value.split(";")[0] == NULL) || (work_curve_value.split(";")[1] == NULL)){
+        workCurve = mysettings.value("real_compute_kbr_1").toString();
+        if((workCurve.split(";")[0] == NULL) || (workCurve.split(";")[1] == NULL)){
             WinInforListDialog::instance()->showMsg(tr("您不能自动选择“自动选择工作曲线”，工作曲线1没有kb值，请重新选择"));
             return;
         }
-        work_curve_value = mysettings.value("real_compute_kbr_2").toString();
-        if((work_curve_value.split(";")[0] == NULL) || (work_curve_value.split(";")[1] == NULL)){
+        workCurve = mysettings.value("real_compute_kbr_2").toString();
+        if((workCurve.split(";")[0] == NULL) || (workCurve.split(";")[1] == NULL)){
             WinInforListDialog::instance()->showMsg(tr("您不能自动选择“自动选择工作曲线”，工作曲线2没有kb值，请重新选择"));
             return;
         }
-        work_curve_value = mysettings.value("real_compute_kbr_6").toString();
-        if((work_curve_value.split(";")[0] == NULL) || (work_curve_value.split(";")[1] == NULL)){
+        workCurve = mysettings.value("real_compute_kbr_6").toString();
+        if((workCurve.split(";")[0] == NULL) || (workCurve.split(";")[1] == NULL)){
             WinInforListDialog::instance()->showMsg(tr("您不能自动选择“自动选择工作曲线”，工作曲线6没有kb值，请重新选择"));
             return;
         }

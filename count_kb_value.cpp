@@ -75,7 +75,7 @@ void count_kb_value::on_pushButton_clicked()
       if(kbr_data == NULL){
           return;
         }
-      p_mysettings->setValue(QString("work_curve_%1").arg(ui->comboBox->currentText().toInt()), kbr_data.replace(" ",";"));
+      p_mysettings->setValue(MYSETTINGS_CALIBRATE_WORK_CURVE(ui->comboBox->currentText().toInt()), kbr_data.replace(" ",";"));
       if(kbr_data == NULL)return;
 
       //最多只能记录20组数据，若已经到21则重新从1开始并覆盖原来的数据
@@ -364,21 +364,21 @@ void count_kb_value::printer_result(){
   printer::instance()->printEnd();
 
   //k=? b=? r=?
-  QStringList work_curve_list = p_mysettings->value(QString("work_curve_%1").arg(ui->comboBox->currentText())).toString().split(";");
-  if(work_curve_list.size() == 3){
-      printer::transmit((void *)work_curve_list[2].split("=")[0].toLocal8Bit().data(), work_curve_list[2].split("=")[0].size());
+  QStringList workCurveList = p_mysettings->value(MYSETTINGS_CALIBRATE_WORK_CURVE(ui->comboBox->currentText())).toString().split(";");
+  if(workCurveList.size() == 3){
+      printer::transmit((void *)workCurveList[2].split("=")[0].toLocal8Bit().data(), workCurveList[2].split("=")[0].size());
       printer::transmit((void *)" =  ",3);
-      printer::transmit((void *)work_curve_list[2].split("=")[1].toLocal8Bit().data(), work_curve_list[2].split("=")[1].size());
+      printer::transmit((void *)workCurveList[2].split("=")[1].toLocal8Bit().data(), workCurveList[2].split("=")[1].size());
       printer ::transmit(enter,1);
 
-      printer::transmit((void *)work_curve_list[1].split("=")[0].toLocal8Bit().data(), work_curve_list[1].split("=")[0].size());
+      printer::transmit((void *)workCurveList[1].split("=")[0].toLocal8Bit().data(), workCurveList[1].split("=")[0].size());
       printer::transmit((void *)" =  ",3);
-      printer::transmit((void *)work_curve_list[1].split("=")[1].toLocal8Bit().data(), work_curve_list[1].split("=")[1].size());
+      printer::transmit((void *)workCurveList[1].split("=")[1].toLocal8Bit().data(), workCurveList[1].split("=")[1].size());
       printer ::transmit(enter,1);
 
-      printer::transmit((void *)work_curve_list[0].split("=")[0].toLocal8Bit().data(), work_curve_list[0].split("=")[0].size());
+      printer::transmit((void *)workCurveList[0].split("=")[0].toLocal8Bit().data(), workCurveList[0].split("=")[0].size());
       printer::transmit((void *)" =  ",3);
-      printer::transmit((void *)work_curve_list[0].split("=")[1].toLocal8Bit().data(), work_curve_list[0].split("=")[1].size());
+      printer::transmit((void *)workCurveList[0].split("=")[1].toLocal8Bit().data(), workCurveList[0].split("=")[1].size());
       printer ::transmit(enter,1);
     }
 

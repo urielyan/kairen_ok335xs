@@ -2,6 +2,7 @@
 #include "proportion.h"
 #include "ui_proportion.h"
 #include "global.h"
+#include "datasave.h"
 
 #include <QMessageBox>
 
@@ -9,6 +10,8 @@ proportion::proportion(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::proportion)
 {
+    p_mySettings = MeasurementDataSave::instance();
+
     ui->setupUi(this);
 
     QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
@@ -21,8 +24,8 @@ proportion::proportion(QWidget *parent) :
         }
     }
 
-    ui->lineEdit->setText(mysettings.value("proportion_1").toString());
-    ui->lineEdit_2->setText(mysettings.value("proportion_2").toString());
+    ui->lineEdit->setText(p_mySettings->value("proportion_1").toString());
+    ui->lineEdit_2->setText(p_mySettings->value("proportion_2").toString());
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
 }
@@ -56,8 +59,8 @@ void proportion::slot_keyNumPressed(){
 
 void proportion::on_pushButton_3_clicked()
 {
-    ui->lineEdit->setText(mysettings.value("proportion_1").toString());
-    ui->lineEdit_2->setText(mysettings.value("proportion_2").toString());
+    ui->lineEdit->setText(p_mySettings->value("proportion_1").toString());
+    ui->lineEdit_2->setText(p_mySettings->value("proportion_2").toString());
     this->close();
 }
 
@@ -66,8 +69,8 @@ void proportion::on_b_sure_clicked()
     if(ui->lineEdit->text().size() < 1 || ui->lineEdit_2->text().size() <1){
         WinInforListDialog::instance()->showMsg(tr("您没有输入值，请重新输入"));
     }
-    mysettings.setValue("proportion_1",ui->lineEdit->text());
-    mysettings.setValue("proportion_2",ui->lineEdit_2->text());
+    p_mySettings->setValue("proportion_1",ui->lineEdit->text());
+    p_mySettings->setValue("proportion_2",ui->lineEdit_2->text());
     WinInforListDialog::instance()->showMsg(tr("自动系数已存储"));
     this->on_pushButton_3_clicked();
 }

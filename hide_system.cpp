@@ -3,6 +3,10 @@
 #include "ui_hide_system.h"
 #include "global.h"
 #include "passwd.h"
+#include "datasave.h"
+#include "proportion.h"
+#include "input_machine_use_time.h"
+#include "query_change_voltage.h"
 
 #include <QMessageBox>
 #include <QSqlQuery>
@@ -12,20 +16,22 @@ hide_system::hide_system(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::hide_system)
 {
-  ui->setupUi(this);
-  proportion_widget = new proportion();
+    p_mysettings = MeasurementDataSave::instance();
 
-  query_change_vol = new query_change_voltage();
+    ui->setupUi(this);
+    proportion_widget = new proportion();
 
-  timer = new QTimer();
-  connect(timer, SIGNAL(timeout()), this, SLOT(time_use_count()));
-  timer->start(1000);
+    query_change_vol = new query_change_voltage();
 
-  input_time = new input_machine_use_time();
+    timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(time_use_count()));
+    timer->start(1000);
 
-  this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
-  ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
-  ui->label->setObjectName("title");
+    input_time = new input_machine_use_time();
+
+    this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+    ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
+    ui->label->setObjectName("title");
 }
 
 hide_system::~hide_system()
@@ -83,14 +89,14 @@ void hide_system::on_pushButton_2_clicked()
 void  hide_system::time_use_count(){
   //一秒进入此函数一次，检查使用日期和最大使用日期。当最大使用日期为0时，仪器可以无限使用。当使用时间大于等于最大使用时间时仪器不能进行除了解码之外的任何操作
 
-  used_time = mysettings.value("machine_used_time").toInt();
-  most_use_time = mysettings.value("most_use_time").toInt();
+  used_time = p_mysettings->value("machine_used_time").toInt();
+  most_use_time = p_mysettings->value("most_use_time").toInt();
 
   if(most_use_time == 0){
       //timer->stop();
       return;
     }
-  if(used_time >= most_use_time  * 30 * 24 * 60){//* 30 * 24 * 60
+  if(used_time >= most_use_time  * 30 * 24 * 60){
     input_time->input_decode_serial();
     }
   static int i = 0;
@@ -100,7 +106,7 @@ void  hide_system::time_use_count(){
       return;
     }
 
-  mysettings.setValue("machine_used_time",used_time + 1);
+  p_mysettings->setValue("machine_used_time",used_time + 1);
   used_time += 1;
 }
 void hide_system::on_b_input_serial_clicked()
