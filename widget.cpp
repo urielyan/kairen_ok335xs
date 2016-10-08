@@ -1,14 +1,21 @@
-﻿#include "datasave.h"
-
-#include "widget.h"
-#include "ui_widget.h"
-#include <QDate>
+﻿#include <QDate>
 #include<QTime>
 #include<QTimer>
 #include<QDebug>
 #include <QMessageBox>
+
+#include "datasave.h"
+#include "widget.h"
+#include "ui_widget.h"
 #include "global.h"
 #include "com.h"
+#include "wininforlistdialog.h"
+#include "countingmeasurement.h"
+#include "spectrummeasurement.h"
+#include "dataquery.h"
+#include "samplemeasurement.h"
+#include "passwd.h"
+#include "inspectoscope.h"
 
 /*区分现在是在做什么:
  * 每次测量之后都要把measurement_flag清零

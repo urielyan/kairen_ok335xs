@@ -2,7 +2,6 @@
 #define BUZZER_H
 
 #include <QObject>
-#include <QTimer>
 
 class buzzer : public QObject
 {
@@ -19,7 +18,6 @@ public slots:
 private:
     int fd,i;
     int already_start_flag;
-   // QTimer *timer;
 };
 
 #endif // BUZZER_H

@@ -2,6 +2,8 @@
 #include "ui_calibration.h"
 #include "input_s_percentage.h"
 #include "global.h"
+#include "calibrationmeasurement.h"
+#include "count_kb_value.h"
 
 #include <QMessageBox>
 

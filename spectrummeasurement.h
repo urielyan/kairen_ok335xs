@@ -3,14 +3,14 @@
 
 #include <QWidget>
 #include <QTimer>
-#include "com.h"
-#include "countingmeasurement.h"
-#include "painter_histogram.h"
+
 
 namespace Ui {
 class spectrummeasurement;
 }
 
+class countingMeasurement;
+class painter_histogram;
 class spectrummeasurement : public QWidget
 {
     Q_OBJECT

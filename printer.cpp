@@ -3,6 +3,16 @@
 #include <QString>
 #include <QDateTime>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/select.h>
+#include <errno.h>
+#include <termios.h>
+#include <unistd.h>
+
 #include "printer.h"
 #include "global.h"
 

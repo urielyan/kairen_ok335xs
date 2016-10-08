@@ -4,15 +4,13 @@
 
 #include <QWidget>
 #include <QTimer>
-#include "showcountingmeasurement.h"
-#include "com.h"
-#include "QDateTime"
 
 namespace Ui {
   class countingMeasurement;
 }
 
 class AbstractDataSave;
+class showcountingmeasurement;
 class countingMeasurement : public QWidget
 {
   Q_OBJECT
@@ -51,14 +49,14 @@ private slots:
   void set_sliding_disabled(bool,bool);
 
 private:
-  Ui::countingMeasurement *ui;
   int turn_second;
   size_t turn_counter,try_inspectoscope_flag;
-  QTimer *timer;
   int flag;
-  showcountingmeasurement *show_count_mea;
 
+  Ui::countingMeasurement *ui;
+  showcountingmeasurement *show_count_mea;
   AbstractDataSave *p_mySettings;
+  QTimer *timer;
 
   void updata_count_5_average(QDateTime,int);
   void start_count_5_data();

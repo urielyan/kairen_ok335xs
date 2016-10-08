@@ -1,7 +1,8 @@
+#include <QMessageBox>
+
 #include "wininforlistdialog.h"
 #include "global.h"
 
-#include <QMessageBox>
 WinInforListDialog *WinInforListDialog::instance()
 {
   static WinInforListDialog Instance;

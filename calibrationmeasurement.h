@@ -3,10 +3,9 @@
 
 #include <QWidget>
 #include <QTimer>
-#include "showcalibratemeasurement.h"
-#include "query_s_count_data.h"
-#include "com.h"
 
+
+class showcalibratemeasurement;
 namespace Ui {
 class calibrationmeasurement;
 }
@@ -34,15 +33,14 @@ private slots:
     void slotReturnClicked();
 
 private:
-    Ui::calibrationmeasurement *ui;
-    QTimer *timer;
     int second,count_flag,button_flag;
 
+    Ui::calibrationmeasurement *ui;
     showcalibratemeasurement *showcalibratemeasure;
+    QTimer *timer;
+    AbstractDataSave *p_mySettings;
 
     void disable_button(bool);
-
-    AbstractDataSave *p_mySettings;
 };
 
 #endif // CALIBRATIONMEASUREMENT_H

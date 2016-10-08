@@ -1,8 +1,9 @@
+#include <QDateTime>
+#include <QString>
+
 #include "showcalibratemeasurement.h"
 #include "ui_showcalibratemeasurement.h"
 #include "global.h"
-
-#include <QDateTime>
 
 showcalibratemeasurement::showcalibratemeasurement(QWidget *parent) :
     QWidget(parent),

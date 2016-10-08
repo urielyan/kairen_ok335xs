@@ -1,6 +1,13 @@
 #include "systemsetup.h"
 #include "ui_systemsetup.h"
 #include "passwd.h"
+#include "setupdatetime.h"
+#include "calibration.h"
+#include "modify_kb_value.h"
+#include "countingmeasurement.h"
+#include "spectrummeasurement.h"
+#include "communication_help.h"
+#include "global.h"
 
 systemsetup::systemsetup(QWidget *parent) :
   QWidget(parent),

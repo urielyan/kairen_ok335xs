@@ -3,6 +3,7 @@
 #include "ui_proportion.h"
 #include "global.h"
 #include "datasave.h"
+#include "wininforlistdialog.h"
 
 #include <QMessageBox>
 

@@ -1,9 +1,14 @@
+
 #include <QTimer>
+
+#include <unistd.h>
 
 #include "ispreheat.h"
 #include "ui_ispreheat.h"
 #include "widget.h"
 #include "issample.h"
+#include "global.h"
+
 
 extern int measurement_flag;
 #define PWM_IOCTL_SET_FREQ	1

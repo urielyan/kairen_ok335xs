@@ -1,13 +1,18 @@
+#include <QMessageBox>
+#include <QDateTime>
+
+#include <stdio.h>
+#include <unistd.h>
+
 #include "countingmeasurement.h"
 #include "ui_countingmeasurement.h"
-//#include "widget.h"
+#include "showcountingmeasurement.h"
 #include "global.h"
 #include "printer.h"
 #include "datasave.h"
+#include "com.h"
+#include "wininforlistdialog.h"
 
-#include <QMessageBox>
-#include <QTimer>
-#include <stdio.h>
 extern int measurement_flag;
 
 countingMeasurement::countingMeasurement(QWidget *parent) :

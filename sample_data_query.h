@@ -5,12 +5,12 @@
 #include <QWidget>
 #include <QSqlTableModel>
 #include <QList>
-#include "input_person_sampleserial.h"
 namespace Ui {
 class sample_data_query;
 }
 
 class QLabel;
+class input_person_sampleSerial;
 class WinSpecifyIndexDialog : public QDialog
 {
   Q_OBJECT

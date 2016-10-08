@@ -1,16 +1,18 @@
+#include <QMessageBox>
+#include <countingmeasurement.h>
+#include <printer.h>
+
+#include <unistd.h>
+
 #include "samplemeasurement.h"
 #include "ui_samplemeasurement.h"
 #include "global.h"
 #include "datasave.h"
-
 #include "com.h"
 #include "showsamplemeasurement.h"
 #include "countingmeasurement.h"
 #include "input_person_sampleserial.h"
-
-#include <QMessageBox>
-#include <countingmeasurement.h>
-#include <printer.h>
+#include "wininforlistdialog.h"
 
 extern int measurement_flag;
 

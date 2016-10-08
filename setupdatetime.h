@@ -4,10 +4,7 @@
 #include <QWidget>
 #include <QButtonGroup>
 #include <QList>
-#include <QList>
-
-#include<QLabel>
-#include <QDateTime>
+#include <QLabel>
 
 class setupdatetime : public QWidget
 {

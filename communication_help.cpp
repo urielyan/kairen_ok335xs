@@ -1,12 +1,13 @@
+#include <QMessageBox>
+#include <QFile>
+#include <QSqlQuery>
+
 #include "communication_help.h"
 #include "ui_communication_help.h"
 #include "global.h"
 #include "datasave.h"
 #include "database.h"
-
-#include <QMessageBox>
-#include <QFile>
-#include <QSqlQuery>
+#include "wininforlistdialog.h"
 
 communication_help::communication_help(QWidget *parent) :
   QWidget(parent),

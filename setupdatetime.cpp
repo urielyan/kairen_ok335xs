@@ -1,10 +1,13 @@
-#include "setupdatetime.h"
-#include "global.h"
-
 #include <QMessageBox>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include<QLabel>
+#include <QDateTime>
+
+#include "setupdatetime.h"
+#include "global.h"
+#include "wininforlistdialog.h"
 
 setupdatetime::setupdatetime(QWidget *parent) :
     QWidget(parent)

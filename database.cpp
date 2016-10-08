@@ -1,5 +1,8 @@
-#include "database.h"
 #include <QMessageBox>
+#include <QSqlError>
+#include <QSqlQuery>
+
+#include "database.h"
 
 Database *Database::instance()
 {

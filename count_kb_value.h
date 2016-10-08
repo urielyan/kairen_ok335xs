@@ -2,14 +2,13 @@
 #define COUNT_KB_VALUE_H
 
 #include <QWidget>
-#include "query_s_count_data.h"
-#include "spectrum_painter.h"
 
 namespace Ui {
 class count_kb_value;
 }
 
 class AbstractDataSave;
+class spectrum_painter;
 class count_kb_value : public QWidget
 {
     Q_OBJECT
@@ -32,7 +31,7 @@ private:
     //query_s_count_data *query_s_count_d;
     AbstractDataSave *p_mySettings;
 
-    spectrum_painter * spec_painter;
+    spectrum_painter *spec_painter;
 
     QString countKbrValue(int judge_which);
     void printer_result();

@@ -1,18 +1,8 @@
 
 #ifndef COM_H
 #define COM_H
-
-#include <QObject>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/select.h>
-#include <errno.h>
 #include <termios.h>
-#include <unistd.h>
-
+#include <QObject>
 
 //本pc机采用的是小端架构的，而arm的机械一般是大端的，所以所有的命令都是倒序的
 #define STOP_ORDER              0xff98feUL

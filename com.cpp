@@ -1,5 +1,17 @@
-#include "com.h"
 #include <QDebug>
+#include <QObject>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/select.h>
+#include <errno.h>
+#include <termios.h>
+#include <unistd.h>
+
+#include "com.h"
 #include "issample.h"
 #include "global.h"
 

@@ -2,6 +2,7 @@
 #include "ui_sample_data_query.h"
 #include "global.h"
 #include "database.h"
+#include "input_person_sampleserial.h"
 
 #include <QSqlQuery>
 #include <QDebug>
@@ -25,7 +26,6 @@ WinSqlDataQuery::WinSqlDataQuery(QWidget *parent) :
   m_model->setTable("sample_data");
   input_serial = input_person_sampleSerial::instance();
 
-  #if 1
   QScrollBar *verticalbar;
   verticalbar = new QScrollBar();
   //verticalbar->setFixedWidth(this->width()/2);
@@ -37,7 +37,6 @@ WinSqlDataQuery::WinSqlDataQuery(QWidget *parent) :
   //horizontalbar->setFixedHeight(this->width()/10);
   horizontalbar->setStyleSheet("height:40px");
   ui->tableView->setHorizontalScrollBar(horizontalbar);
-#endif
 
   on_b_datetime_disorder_clicked();
   //printf("%s\n",__FUNCTION__);

@@ -1,3 +1,5 @@
+#include <QMessageBox>
+#include <math.h>
 
 #include "count_kb_value.h"
 #include "ui_count_kb_value.h"
@@ -6,10 +8,7 @@
 #include "printer.h"
 #include  "wininforlistdialog.h"
 #include "datasave.h"
-
-#include <QMessageBox>
-
-#include <math.h>
+#include "spectrum_painter.h"
 
 count_kb_value::count_kb_value(QWidget *parent):
   QWidget(parent),
@@ -58,7 +57,7 @@ void count_kb_value::on_pushButton_clicked()
   for(int i = 0; i < 12 ; i++){
       QString tmp_str = p_mySettings->value(MYSETTINGS_CALIBRATE_S_INPUT(i)).toString();
       qDebug() << tmp_str << i;
-      if(  (!(tmp_str==NULL)) &&(!tmp_str.toDouble() == 0.0)  )
+      if(  (!(tmp_str==NULL)) &&(!tmp_str.toDouble() == 0)  )
         count_input_s++;
     }
   qDebug() << count_input_s;

@@ -3,10 +3,7 @@
 
 #include <QObject>
 #include <QFrame>
-#include <QSqlTableModel>
-#include <QTableView>
-#include <QSqlError>
-#include <QSqlQuery>
+#include <QSqlDatabase>
 
 class Database : public QFrame
 {

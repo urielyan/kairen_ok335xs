@@ -1,3 +1,9 @@
+#include <QMessageBox>
+#include <QString>
+#include <QTextEdit>
+#include <QHeaderView>
+
+#include <unistd.h>
 
 #include "spectrummeasurement.h"
 #include "ui_spectrummeasurement.h"
@@ -5,11 +11,10 @@
 #include "global.h"
 #include "printer.h"
 #include "datasave.h"
-
-#include <QMessageBox>
-#include <QString>
-#include <QTextEdit>
-#include <QHeaderView>
+#include "wininforlistdialog.h"
+#include "countingmeasurement.h"
+#include "painter_histogram.h"
+#include "com.h"
 
 extern int measurement_flag;
 

@@ -3,16 +3,6 @@
 
 #include <QObject>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/select.h>
-#include <errno.h>
-#include <termios.h>
-#include <unistd.h>
-
 #define SEGMENT_LENGTH        30
 
 class printer : public QObject

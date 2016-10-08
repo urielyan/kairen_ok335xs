@@ -6,6 +6,7 @@
 #include "datasave.h"
 #include "systemsetup.h"
 #include "hide_system.h"
+#include "wininforlistdialog.h"
 
 #include <QList>
 #include <QString>

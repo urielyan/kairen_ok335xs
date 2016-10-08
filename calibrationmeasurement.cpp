@@ -1,8 +1,12 @@
+#include <unistd.h>
 
+#include "showcalibratemeasurement.h"
+#include "com.h"
 #include "calibrationmeasurement.h"
 #include "ui_calibrationmeasurement.h"
 #include "global.h"
 #include "datasave.h"
+#include "wininforlistdialog.h"
 
 extern int measurement_flag;
 int calibrationmeasurement::count;

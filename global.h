@@ -1,14 +1,10 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <stdio.h>
-#include <QDebug>
-#include <QDialog>
-#include <QMessageBox>
 #include <QApplication>
 #include  <QDesktopWidget>
-
-#include "wininforlistdialog.h"
+#define DESKTOP_WIDTH   QApplication::desktop()->width()
+#define DESKTOP_HEIGHT QApplication::desktop()->height()
 
 //#define FRIENDLYARM_TINY210
 #define FORLIN_OK335XS
@@ -77,9 +73,6 @@
 #define ERRNO_SILIDING_POSITION   2
 #define ERRNO_DATA_ILLEGAL             3
 #define ALL_RIGHT 0
-
-#define DESKTOP_WIDTH   QApplication::desktop()->width()
-#define DESKTOP_HEIGHT QApplication::desktop()->height()
 
 //#define DEBUG
 #ifdef DEBUG

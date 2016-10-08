@@ -131,7 +131,3 @@ FORMS    += widget.ui \
     spectrum_painter.ui \
     communication_help.ui \
     query_change_voltage.ui
-
-OTHER_FILES += \
-
-RESOURCES +=

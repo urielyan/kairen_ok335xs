@@ -3,8 +3,6 @@
 
 #include <QWidget>
 
-//#include "buzzer.h"
-
 #define NEED_START_SAMPLING 9999
 namespace Ui {
 class ispreheat;
@@ -24,9 +22,6 @@ private slots:
     void change_label_content();
     void check_ispreheat();
 
-//signals:
-//    void start_buzzer();
-//    void stop_buzzer();
 private:
     Ui::ispreheat *ui;
     QTimer *timer;

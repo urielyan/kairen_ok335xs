@@ -1,16 +1,18 @@
+#include <stdio.h>
+#include <math.h>
+
+#include <QScrollBar>
+#include <QSqlError>
+#include <QSqlDriver>
+
 #include "showsamplemeasurement.h"
+#include "countingmeasurement.h"
 #include "ui_showsamplemeasurement.h"
 #include "input_person_sampleserial.h"
 #include "global.h"
 #include "printer.h"
 #include "datasave.h"
-
-#include <stdio.h>
-#include <countingmeasurement.h>
-#include <math.h>
-#include <QScrollBar>
-#include <QSqlError>
-#include <QSqlDriver>
+#include "wininforlistdialog.h"
 #include "database.h"
 
 showsamplemeasurement::showsamplemeasurement(QWidget *parent) :

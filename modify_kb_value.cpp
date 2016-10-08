@@ -1,9 +1,10 @@
+#include <QMessageBox>
+
 #include "modify_kb_value.h"
 #include "ui_modify_kb_value.h"
 #include "global.h"
 #include "datasave.h"
-
-#include <QMessageBox>
+#include "wininforlistdialog.h"
 
 modify_kb_value::modify_kb_value(QWidget *parent) :
   QWidget(parent),

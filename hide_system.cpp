@@ -1,3 +1,6 @@
+#include <QMessageBox>
+#include <QSqlQuery>
+#include <QTimer>
 
 #include "hide_system.h"
 #include "ui_hide_system.h"
@@ -7,10 +10,7 @@
 #include "proportion.h"
 #include "input_machine_use_time.h"
 #include "query_change_voltage.h"
-
-#include <QMessageBox>
-#include <QSqlQuery>
-#include <QTimer>
+#include "wininforlistdialog.h"
 
 hide_system::hide_system(QWidget *parent) :
   QWidget(parent),

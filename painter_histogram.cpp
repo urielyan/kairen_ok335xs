@@ -1,8 +1,9 @@
+#include <QPainter>
+#include <QDebug>
+
 #include "painter_histogram.h"
 #include "ui_painter_histogram.h"
 #include "global.h"
-
-#include <QPainter>
 
 int painter_histogram::spectrum_data[SPECTRUM_PAINTER_WIDTH] = {0};
 painter_histogram::painter_histogram(QWidget *parent) :

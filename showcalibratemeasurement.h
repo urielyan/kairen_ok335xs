@@ -2,7 +2,6 @@
 #define SHOWCALIBRATEMEASUREMENT_H
 
 #include <QWidget>
-#include <QString>
 
 namespace Ui {
 class showcalibratemeasurement;

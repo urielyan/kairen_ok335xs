@@ -2,15 +2,14 @@
 #define CALIBRATION_H
 
 #include <QWidget>
-#include "calibrationmeasurement.h"
-#include "input_s_percentage.h"
-#include "query_s_count_data.h"
-#include "count_kb_value.h"
 
 namespace Ui {
 class calibration;
 }
 
+class calibrationmeasurement;
+class WinInputSPercentage;
+class count_kb_value;
 class calibration : public QWidget
 {
     Q_OBJECT

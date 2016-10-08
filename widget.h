@@ -3,19 +3,17 @@
 
 #include <QWidget>
 
-#include "countingmeasurement.h"
-#include "spectrummeasurement.h"
-#include "dataquery.h"
-#include "samplemeasurement.h"
-#include "passwd.h"
-#include "inspectoscope.h"
-#include "com.h"
-
 namespace Ui {
 class Widget;
 }
 
 class AbstractDataSave;
+class countingMeasurement;
+class spectrummeasurement;
+class dataquery;
+class sampleMeasurement;
+class passwd;
+class inspectoscope;
 class Widget : public QWidget
 {
     Q_OBJECT
