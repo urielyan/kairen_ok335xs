@@ -1,7 +1,6 @@
 #include "query_change_voltage.h"
 #include "ui_query_change_voltage.h"
 #include "global.h"
-#include <QSettings>
 #include "datasave.h"
 
 query_change_voltage::query_change_voltage(QWidget *parent) :
@@ -26,14 +25,13 @@ query_change_voltage::~query_change_voltage()
 }
 
 void query_change_voltage::show_and_refresh(){
-//  QSettings communication_err_data("shanghaikairen","communication_error");
-  int change_count = ErrorCountSave::instance()->value("change_count_voltage_count").toInt() - 1;
+  int change_count = ErrorCountSave::instance()->value(MYSETTINGS_CHANGE_COUNT_VOLTAGE_COUNT).toInt() - 1;
   ui->tableWidget->setRowCount(change_count);
   ui->tableWidget->setColumnWidth(0,this->width()/3);
   ui->tableWidget->setColumnWidth(1,this->width()/4);
   ui->tableWidget->setColumnWidth(2,this->width()/4);
   for(int i =  0;i < change_count;i++){
-      QStringList record = ErrorCountSave::instance()->value(QString("change_count_voltage_%1").arg(i+1)).toString().split(";");
+      QStringList record = ErrorCountSave::instance()->value(MYSETTINGS_CHANGE_COUNT_VOLTAGE(i+1)).toString().split(";");
       if(record.size() != 3){
           return;
         }

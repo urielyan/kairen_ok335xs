@@ -33,13 +33,8 @@ WinInputSPercentage::~WinInputSPercentage()
   delete ui;
 }
 
-void WinInputSPercentage::clear_all_tablewidget(){
-  /*
-        clear tablewidget and p_mySettings->value("calibrate_input_s_ + i");
-        It's used to clear data in calibrate widget.
-
-        clear calibratemeasurement_count settings;
-    */
+void WinInputSPercentage::clear_all_tablewidget()
+{
   for(int tmpNumber = 0; tmpNumber < 12 ;tmpNumber++){
       p_mySettings->setValue(MYSETTINGS_CALIBRATE_S_INPUT(tmpNumber), "0.0000");
       p_mySettings->setValue(MYSETTINGS_CALIBRATE_S_DATA(tmpNumber), "");

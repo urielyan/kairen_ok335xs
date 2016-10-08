@@ -2,7 +2,6 @@
 #define WIDGET_H
 
 #include <QWidget>
-#include <QSettings>
 
 #include "countingmeasurement.h"
 #include "spectrummeasurement.h"
@@ -16,6 +15,7 @@ namespace Ui {
 class Widget;
 }
 
+class AbstractDataSave;
 class Widget : public QWidget
 {
     Q_OBJECT
@@ -55,7 +55,8 @@ private:
     sampleMeasurement *samplem;
     passwd *pw;
     inspectoscope *inspectoscope_measurement;
-    QSettings mysettings;
+
+    AbstractDataSave *p_mySettings;
 };
 
 #endif // WIDGET_H

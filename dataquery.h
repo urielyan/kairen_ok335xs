@@ -2,16 +2,15 @@
 #define DATAQUERY_H
 
 #include <QWidget>
-#include "countdataquery.h"
-#include "caibrateresultquery.h"
-//#include "samplemeasurementquery.h"
-#include "sample_data_query.h"
 
-class samplemeasurementquery;
 namespace Ui {
 class dataquery;
 }
 
+class samplemeasurementquery;
+class WinSqlDataQuery;
+class caibrateresultquery;
+class countdataquery;
 class dataquery : public QWidget
 {
     Q_OBJECT
@@ -33,8 +32,8 @@ private:
     Ui::dataquery *ui;
     countdataquery *showcountdataquery;
     caibrateresultquery *csquery;
-    samplemeasurementquery *samplemeasurement_query;
-    WinSqlDataQuery *p_sqlDataQuery;
+    samplemeasurementquery *p_sampleQueryByQSettings;
+    WinSqlDataQuery *p_sampleQueryByDatabase;
 };
 
 #endif // DATAQUERY_H

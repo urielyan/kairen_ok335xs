@@ -1,18 +1,18 @@
 #include "samplemeasurementquery.h"
 #include "ui_samplemeasurementquery.h"
 #include "global.h"
-
-//extern QSettings mysettings;
-
+#include "datasave.h"
 
 samplemeasurementquery::samplemeasurementquery(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::samplemeasurementquery)
 {
-  PRINT_DEBUG_INFOR;
+    p_mySettings = MeasurementDataSave::instance();
+
+    PRINT_DEBUG_INFOR;
     ui->setupUi(this);
 
-    current_count = mysettings.value("sample_count").toInt();
+    current_count = p_mySettings->value(MYSETTINGS_SAMPLE_COUNT).toInt();
     refresh_widget(current_count);
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -27,12 +27,12 @@ samplemeasurementquery::~samplemeasurementquery()
 }
 
 void samplemeasurementquery::show_and_refresh(){
-    refresh_widget(mysettings.value("sample_count").toInt());
+    refresh_widget(p_mySettings->value(MYSETTINGS_SAMPLE_COUNT).toInt());
     this->showFullScreen();
 }
 void samplemeasurementquery::on_pushButton_return_clicked()
 {
-    current_count = mysettings.value("sample_count").toInt();
+    current_count = p_mySettings->value(MYSETTINGS_SAMPLE_COUNT).toInt();
     refresh_widget(current_count);
     this->close();
 }
@@ -52,7 +52,7 @@ void samplemeasurementquery::on_pushButton_prev_clicked()
 }
 
 void samplemeasurementquery::refresh_widget(int count){
-    if(count > mysettings.value("sample_count").toInt()){
+    if(count > p_mySettings->value(MYSETTINGS_SAMPLE_COUNT).toInt()){
         current_count--;
         return;
     }
@@ -60,9 +60,9 @@ void samplemeasurementquery::refresh_widget(int count){
         current_count++;
         return;
     }
-    QStringList data_list = mysettings.value(QString("sample_data_%1").arg(count)).toString().split(";");
+    QStringList data_list = p_mySettings->value(MYSETTINGS_SAMPLE_DATA(count)).toString().split(";");
     if(data_list.size() != 6){
-        mysettings.remove(QString("sample_data_%1").arg(count));
+        p_mySettings->remove(QString(MYSETTINGS_SAMPLE_DATA(count)));
         return;
     }
     ui->label_curve->setText(data_list[0]);

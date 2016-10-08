@@ -187,3 +187,55 @@ QString Communciation_Com::receive(int wait_time){
     QString recv_data(buf);
     return recv_data;
 }
+
+bool Communciation_Com::movePlate(Communciation_Com::Move_Plate_Direction direction)
+{
+    if(direction == MoveToMeasuring)
+    {
+
+    }else if(direction == MoveToReference)
+    {
+
+    }
+
+
+//    {
+//      if(measurement_flag != MEASUREMENT_NOTHING){
+//          emit transmit_stop_auto_count();
+//        }
+//      tcflush(Communciation_Com::fd,TCIOFLUSH);
+//      measurement_flag = MEASUREMENT_NOTHING;
+//      if(Communciation_Com::transmit(OUT_SLIDING_PLATE,4) < 0){
+//          WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR));
+//          return -1;
+//        }
+//      QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
+//      //qDebug() <<recv_data.toLocal8Bit().data();
+//      if(recv_data == NULL){
+//          WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + "recv NULL");
+//          ErrorCountSave::instance()->addCount(6);
+//          return -1;
+//        }else if(recv_data[1] == (char)0x31){
+//          ui->widget->change_label_content(REFERENCE_BE_LOCATON);
+//        }else if(recv_data[1] == (char)0x33){
+//          WinInforListDialog::instance()->showMsg(tr(MACHINE_MALFUNCTION_TEXT) + "recv NULL");
+//          set_sliding_disabled(false,false);
+//          emit transmit_move_sliding(false,false);
+//          return -1;
+//        }else {
+//          WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + ":"
+//                                                  + recv_data + "," + QString::number(measurement_flag));
+//          ErrorCountSave::instance()->addCount(6);
+//          return -1;
+//        }
+//      set_sliding_disabled(true,false);
+//      emit transmit_move_sliding(true,false);
+//      if(last_move_sliding_datetime.secsTo(QDateTime::currentDateTime()) < 5){
+//          move_sliding_count++;
+//        }else{
+//          move_sliding_count = 0;
+//        }
+//      last_move_sliding_datetime = QDateTime::currentDateTime();
+//      return ALL_RIGHT;
+//    }
+}

@@ -3,6 +3,9 @@
 #include"global.h"
 #include <stdio.h>
 #include "samplemeasurementquery.h"
+#include "countdataquery.h"
+#include "caibrateresultquery.h"
+#include "sample_data_query.h"
 
 dataquery::dataquery(QWidget *parent):
     QWidget(parent),
@@ -12,8 +15,8 @@ dataquery::dataquery(QWidget *parent):
     ui->setupUi(this);
     showcountdataquery = new countdataquery();
     csquery = new caibrateresultquery();
-    samplemeasurement_query = new samplemeasurementquery();
-    p_sqlDataQuery = new WinSqlDataQuery();
+    p_sampleQueryByQSettings = new samplemeasurementquery();
+    p_sampleQueryByDatabase = new WinSqlDataQuery();
     //printf("%s\n",__FUNCTION__);
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -28,8 +31,8 @@ dataquery::dataquery(QWidget *parent):
 
 dataquery::~dataquery()
 {
-    delete p_sqlDataQuery;
-    delete samplemeasurement_query;
+    delete p_sampleQueryByDatabase;
+    delete p_sampleQueryByQSettings;
     delete csquery;
     delete showcountdataquery;
     delete ui;
@@ -57,6 +60,6 @@ void dataquery::on_pushButton_clicked()
 #ifdef FRIENDLYARM_TINY210_NOSQL
   samplemeasurement_query->show_and_refresh();
 #else
-  p_sqlDataQuery->show_and_refresh();
+  p_sampleQueryByDatabase->show_and_refresh();
 #endif
 }

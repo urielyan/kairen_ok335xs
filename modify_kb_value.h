@@ -35,7 +35,6 @@ private slots:
 private:
     Ui::modify_kb_value *ui;
 
-    //QSettings mysettings;
     AbstractDataSave *p_mySettings;
 };
 

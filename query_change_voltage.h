@@ -23,6 +23,8 @@ private slots:
 
 private:
   Ui::query_change_voltage *ui;
+
+
 };
 
 #endif // QUERY_CHANGE_VOLTAGE_H

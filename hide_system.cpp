@@ -16,7 +16,7 @@ hide_system::hide_system(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::hide_system)
 {
-    p_mysettings = MeasurementDataSave::instance();
+    p_mySettings = MeasurementDataSave::instance();
 
     ui->setupUi(this);
     proportion_widget = new proportion();
@@ -89,8 +89,8 @@ void hide_system::on_pushButton_2_clicked()
 void  hide_system::time_use_count(){
   //一秒进入此函数一次，检查使用日期和最大使用日期。当最大使用日期为0时，仪器可以无限使用。当使用时间大于等于最大使用时间时仪器不能进行除了解码之外的任何操作
 
-  used_time = p_mysettings->value("machine_used_time").toInt();
-  most_use_time = p_mysettings->value("most_use_time").toInt();
+  used_time = p_mySettings->value(MYSETTINGS_USED_TIME).toInt();
+  most_use_time = p_mySettings->value(MYSETTINGS_MAXIMAL_USE_TIME).toInt();
 
   if(most_use_time == 0){
       //timer->stop();
@@ -106,7 +106,7 @@ void  hide_system::time_use_count(){
       return;
     }
 
-  p_mysettings->setValue("machine_used_time",used_time + 1);
+  p_mySettings->setValue(MYSETTINGS_USED_TIME,used_time + 1);
   used_time += 1;
 }
 void hide_system::on_b_input_serial_clicked()

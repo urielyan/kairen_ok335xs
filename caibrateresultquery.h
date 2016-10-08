@@ -7,6 +7,7 @@ namespace Ui {
   class caibrateresultquery;
 }
 
+class AbstractDataSave;
 class caibrateresultquery : public QWidget
 {
   Q_OBJECT
@@ -25,6 +26,8 @@ private:
   Ui::caibrateresultquery *ui;
   QStringList calibrate_results;
   int display_number;
+
+  AbstractDataSave *p_mySettings;
 
   void update_page(int);
 };

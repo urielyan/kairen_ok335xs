@@ -13,15 +13,9 @@ showcalibratemeasurement::showcalibratemeasurement(QWidget *parent) :
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
     ui->label->setFont(QFont(FONT_NAME, FONT_SIZE*2 ,QFont::Normal));
 
-#ifdef  FORLIN_OK335XS
-    ui->pushButton->setFixedHeight(FONT_SIZE * 2);
-    ui->pushButton->setFixedWidth(FONT_SIZE * 4);
-#endif
-
-#ifdef FRIENDLYARM_TINY210
-    ui->pushButton->setFixedHeight(FONT_SIZE * 6);
-    ui->pushButton->setFixedWidth(FONT_SIZE * 10);
-#endif
+    //TODO:
+    ui->pushButton->setFixedHeight(DESKTOP_HEIGHT / 10);
+    ui->pushButton->setFixedWidth(DESKTOP_WIDTH / 10);
 
     ui->label->setObjectName("title");
 }

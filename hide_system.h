@@ -2,9 +2,6 @@
 #define HIDE_SYSTEM_H
 
 #include <QWidget>
-//#include <passwd.h>
-
-#include <QSettings>
 
 namespace Ui {
 class hide_system;
@@ -54,8 +51,7 @@ private:
     query_change_voltage *query_change_vol;
     proportion  *proportion_widget;
 
-    //QSettings mysettings;
-    AbstractDataSave *p_mysettings;
+    AbstractDataSave *p_mySettings;
 };
 
 #endif // HIDE_SYSTEM_H

@@ -2,24 +2,19 @@
 #include "ui_countdataquery.h"
 #include "showcountingmeasurement.h"
 #include "global.h"
+#include "datasave.h"
 
 #include <stdio.h>
-
-//extern QSettings count_data;
 
 countdataquery::countdataquery(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::countdataquery)
 {
-    ui->setupUi(this);
-/*    QCoreApplication::setOrganizationName("shanghaikairen");
-    QCoreApplication::setApplicationName("count_data")*/;
-    QSettings count_data("shanghaikairen","count_data");
-    if(!count_data.contains("count_count")){
-        count_data.setValue("count_count",0);
-    }
+    p_mySettings = MeasurementDataSave::instance();
 
-    display_count = count_data.value("count_count").toInt();
+    ui->setupUi(this);
+
+    display_count = p_mySettings->value(MYSETTINGS_COUNT_COUNT).toInt();
 
 
     ui->tableWidget->setColumnWidth(0,this->width() / 3);
@@ -29,9 +24,6 @@ countdataquery::countdataquery(QWidget *parent) :
         ui->tableWidget->setRowHeight(i_2,this->height()/12);
     }
     ui->tableWidget->setFont(QFont("symbol",11,QFont::Normal));
-
-//    QCoreApplication::setOrganizationName("shanghaikairen");
-//    QCoreApplication::setApplicationName("analysis");
 
     INIT_LABEL_SIZE_FONT;
     ui->tableWidget->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
@@ -46,14 +38,11 @@ countdataquery::~countdataquery()
 
 void countdataquery::on_pushButton_clicked()
 {
-//  QCoreApplication::setOrganizationName("shanghaikairen");
-//  QCoreApplication::setApplicationName("count_data");
-  QSettings count_data("shanghaikairen","count_data");
-    display_count = count_data.value("count_count").toInt();
+    display_count = p_mySettings->value(MYSETTINGS_COUNT_COUNT).toInt();
 
     int i;
     for(i = 0; i < 6 ;i++){
-        QStringList datalist = count_data.value(QString("count_data_%1").arg(display_count)).toString().split(";");
+        QStringList datalist = p_mySettings->value(MYSETTINGS_COUNT_DATA(display_count)).toString().split(";");
         if(datalist.size()  != 3){
             break;
         }
@@ -67,16 +56,11 @@ void countdataquery::on_pushButton_clicked()
     }
     ui->label_current->setText(QString("%1-%2").arg(display_count + i).arg(display_count + 1));
 
-//    QCoreApplication::setOrganizationName("shanghaikairen");
-//    QCoreApplication::setApplicationName("analysis");
     this->close();
 }
 
 void countdataquery::on_pushButton_2_clicked()
 {
-//  QCoreApplication::setOrganizationName("shanghaikairen");
-//  QCoreApplication::setApplicationName("count_data");
-  QSettings count_data("shanghaikairen","count_data");
     for(int i = 0; i < 6 ;i++){
         ui->tableWidget->item(i,0)->setText("");
         ui->tableWidget->item(i,1)->setText("");
@@ -86,9 +70,9 @@ void countdataquery::on_pushButton_2_clicked()
     int i;
     for(i= 0; i < 6 ;i++){
          if(display_count  <= 0) break;
-        QStringList datalist = count_data.value(QString("count_data_%1").arg(display_count)).toString().split(";");
+        QStringList datalist = p_mySettings->value(MYSETTINGS_COUNT_DATA(display_count)).toString().split(";");
         if(datalist.size() != 3){
-            display_count = count_data.value("count_count").toInt();
+            display_count = p_mySettings->value(MYSETTINGS_COUNT_COUNT).toInt();
             return;
         }
         display_count--;
@@ -101,22 +85,14 @@ void countdataquery::on_pushButton_2_clicked()
     }
     if(display_count <= 0){
         ui->label_current->setText(QString("%1-%2").arg(0).arg(display_count + i));
-        display_count = count_data.value("count_count").toInt();
+        display_count = p_mySettings->value(MYSETTINGS_COUNT_COUNT).toInt();
         return;
       }
     ui->label_current->setText(QString("%1-%2").arg(display_count + i).arg(display_count + 1));
-//    QCoreApplication::setOrganizationName("shanghaikairen");
-//    QCoreApplication::setApplicationName("analysis");
-
 }
 
 void countdataquery::show_and_refresh(){
-//  QCoreApplication::setOrganizationName("shanghaikairen");
-//  QCoreApplication::setApplicationName("count_data");
-QSettings count_data("shanghaikairen","count_data");
-  display_count = count_data.value("count_count").toInt();
+  display_count = p_mySettings->value(MYSETTINGS_COUNT_COUNT).toInt();
   on_pushButton_2_clicked();
   this->showFullScreen();
-//  QCoreApplication::setOrganizationName("shanghaikairen");
-//  QCoreApplication::setApplicationName("analysis");
 }

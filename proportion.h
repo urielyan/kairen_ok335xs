@@ -33,9 +33,8 @@ private slots:
 
 private:
     Ui::proportion *ui;
-    //QSettings mysettings;
-    AbstractDataSave *p_mySettings;
 
+    AbstractDataSave *p_mySettings;
 };
 
 #endif // PROPORTION_H

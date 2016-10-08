@@ -45,7 +45,6 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
   countmeas = new countingMeasurement();
   timer = new QTimer();
   connect(timer,SIGNAL(timeout()),this,SLOT(changetable()));
-  spectrum_com = new Communciation_Com();
 
   painter_result = new painter_histogram();
     set_sliding_disabled(true,false);
@@ -73,7 +72,6 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
 spectrummeasurement::~spectrummeasurement()
 {
   delete painter_result;
-  delete spectrum_com;
   delete timer;
   delete countmeas;
   delete ui;

@@ -2,12 +2,12 @@
 #define COUNTDATAQUERY_H
 
 #include <QWidget>
-#include <QSettings>
 
 namespace Ui {
 class countdataquery;
 }
 
+class AbstractDataSave;
 class countdataquery : public QWidget
 {
     Q_OBJECT
@@ -24,8 +24,9 @@ private slots:
 
 private:
     Ui::countdataquery *ui;
+    AbstractDataSave *p_mySettings;
+
     int display_count;
-    //QSettings count_data;
 };
 
 #endif // COUNTDATAQUERY_H

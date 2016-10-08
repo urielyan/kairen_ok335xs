@@ -81,15 +81,15 @@ void input_machine_use_time::on_b_ok_clicked()
     }
   if(flag == DECODE){
       if(line_str.toInt() == 1111111){
-          p_mySettings->setValue("most_use_time",0);
-          p_mySettings->setValue("machine_used_time",0);
+          p_mySettings->setValue(MYSETTINGS_MAXIMAL_USE_TIME,0);
+          p_mySettings->setValue(MYSETTINGS_USED_TIME,0);
           this->close();
         }
     }else if(flag == PRODUCT_SERIAL){
       QString product = line_str.left(6);
       QString time = line_str.right(1);
-      p_mySettings->setValue("most_use_time",time.toInt());
-      p_mySettings->setValue("product_serial",product);
+      p_mySettings->setValue(MYSETTINGS_MAXIMAL_USE_TIME,time.toInt());
+      p_mySettings->setValue(MYSETTINGS_SERIAL,product);
     }
 }
 

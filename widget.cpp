@@ -26,10 +26,9 @@ Widget::Widget(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::Widget)
 {
-  ui->setupUi(this);
+    p_mySettings = MeasurementDataSave::instance();
 
-  Communciation_Com *tmp_com= new Communciation_Com(this);
-  tmp_com->transmit(0,0);
+  ui->setupUi(this);
 
   cm = new countingMeasurement();
   cm_auto = new countingMeasurement();
@@ -289,7 +288,7 @@ void Widget::get_slide_current_position(){
 static int steady_summit_count=0;
 void Widget::judge_spectrument_measurement_result(double summit){
   if(summit > 1.6 || summit < 1.4){
-      int calibrate_summit = (1.5 - summit) * 40 + mysettings.value("count_voltage").toInt();
+      int calibrate_summit = (1.5 - summit) * 40 + p_mySettings->value(MYSETTINGS_COUNT_VOLTAGE).toInt();
       if(calibrate_summit > 700 && summit < 1.4){
           WinInforListDialog::instance()->showMsg(tr("需要更换计数管高压,请联系厂家18855953618"));
           return;
@@ -297,7 +296,7 @@ void Widget::judge_spectrument_measurement_result(double summit){
       steady_summit_count +=1;
       if(steady_summit_count >= 3){
           if(pw->set_count_voltage(calibrate_summit) == ALL_RIGHT){
-              mysettings.setValue("count_voltage",calibrate_summit);
+              p_mySettings->setValue(MYSETTINGS_COUNT_VOLTAGE,calibrate_summit);
               return;
             }
           return;

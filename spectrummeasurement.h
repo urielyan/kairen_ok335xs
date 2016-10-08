@@ -60,7 +60,6 @@ private:
 
         QTimer *timer;
 
-        Communciation_Com *spectrum_com;
         countingMeasurement *countmeas;
         painter_histogram * painter_result;
 

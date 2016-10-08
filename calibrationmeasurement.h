@@ -6,7 +6,6 @@
 #include "showcalibratemeasurement.h"
 #include "query_s_count_data.h"
 #include "com.h"
-#include <QSettings>
 
 namespace Ui {
 class calibrationmeasurement;
@@ -38,11 +37,12 @@ private:
     Ui::calibrationmeasurement *ui;
     QTimer *timer;
     int second,count_flag,button_flag;
+
     showcalibratemeasurement *showcalibratemeasure;
-    Communciation_Com *calibrate_com;
+
     void disable_button(bool);
-    //QSettings *p_mysettings;
-    AbstractDataSave *p_mysettings;
+
+    AbstractDataSave *p_mySettings;
 };
 
 #endif // CALIBRATIONMEASUREMENT_H

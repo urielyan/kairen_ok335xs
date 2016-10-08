@@ -12,6 +12,7 @@
 
 //#define FRIENDLYARM_TINY210
 #define FORLIN_OK335XS
+
 #define INIT_LABEL_SIZE_FONT \
   do{\
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));\

@@ -50,7 +50,6 @@ SOURCES += main.cpp\
     buzzer.cpp \
     communication_help.cpp \
     query_change_voltage.cpp \
-    settings_datasave.cpp \
     global.cpp \
     wininforlistdialog.cpp \
     database.cpp \
@@ -94,7 +93,6 @@ HEADERS  += widget.h \
     buzzer.h \
     communication_help.h \
     query_change_voltage.h \
-    settings_datasave.h \
     wininforlistdialog.h \
     database.h \
     datasave.h

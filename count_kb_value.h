@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include "query_s_count_data.h"
-#include<QSettings>
 #include "spectrum_painter.h"
 
 namespace Ui {
@@ -31,8 +30,8 @@ private:
     static int count_record;
 
     //query_s_count_data *query_s_count_d;
-    //QSettings *p_mysettings;
-    AbstractDataSave *p_mysettings;
+    AbstractDataSave *p_mySettings;
+
     spectrum_painter * spec_painter;
 
     QString countKbrValue(int judge_which);

@@ -19,8 +19,6 @@ WinSqlDataQuery::WinSqlDataQuery(QWidget *parent) :
   //printf("in...%s\n",__FUNCTION__);
   ui->setupUi(this);
 
-
-
   query_flag = 0; //判断当前是什么查询
 
   m_model = new QSqlTableModel(this, Database::instance()->getDb());
@@ -167,7 +165,6 @@ void WinSqlDataQuery::on_tableView_clicked(const QModelIndex &index)
           WinSpecifyIndexDialog dialog(index, m_model);
           dialog.exec();
 }
-
 
 
 #define DISPLAY_COUNT  9

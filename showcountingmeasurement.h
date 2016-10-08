@@ -2,13 +2,12 @@
 #define SHOWCOUNTINGMEASUREMENT_H
 
 #include <QWidget>
-#include <QDateTime>
-#include <QSettings>
 
 namespace Ui {
 class showcountingmeasurement;
 }
 
+class     AbstractDataSave;
 class showcountingmeasurement : public QWidget
 {
     Q_OBJECT
@@ -26,7 +25,7 @@ private slots:
 
 private:
     Ui::showcountingmeasurement *ui;
-     //QSettings count_data;
+    AbstractDataSave *p_mySettings;
 };
 
 #endif // SHOWCOUNTINGMEASUREMENT_H

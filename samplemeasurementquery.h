@@ -2,12 +2,12 @@
 #define SAMPLEMEASUREMENTQUERY_H
 
 #include <QWidget>
-#include <QSettings>
 
 namespace Ui {
 class samplemeasurementquery;
 }
 
+class AbstractDataSave;
 class samplemeasurementquery : public QWidget
 {
     Q_OBJECT
@@ -25,10 +25,12 @@ private slots:
     void on_pushButton_prev_clicked();
 
 private:
-    Ui::samplemeasurementquery *ui;
     int current_count;
+
+    Ui::samplemeasurementquery *ui;
+    AbstractDataSave *p_mySettings;
+
     void refresh_widget(int);
-    QSettings mysettings;
 };
 
 #endif // SAMPLEMEASUREMENTQUERY_H

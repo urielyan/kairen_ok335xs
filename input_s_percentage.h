@@ -2,7 +2,6 @@
 #define INPUT_S_PERCENTAGE_H
 
 #include <QWidget>
-#include <QSettings>
 
 namespace Ui {
 class input_S_percentage;
@@ -36,7 +35,6 @@ private slots:
 
 private:
     Ui::input_S_percentage *ui;
-    //QSettings mysettings;
     AbstractDataSave *p_mySettings;
 
     void initTableWidget();

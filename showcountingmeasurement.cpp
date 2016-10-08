@@ -3,7 +3,9 @@
 #include "global.h"
 #include "issample.h"
 #include "ispreheat.h"
+#include "datasave.h"
 
+#include <QDateTime>
 #include <QByteArray>
 #include <math.h>
 //#include "countingmeasurement.h"
@@ -13,23 +15,15 @@ showcountingmeasurement::showcountingmeasurement(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::showcountingmeasurement)
 {
+    p_mySettings = MeasurementDataSave::instance();
+
   ui->setupUi(this);
 
-#ifdef FRIENDLYARM_TINY210
-  ui->tableWidget->setColumnWidth(0,DESKTOP_WIDTH / 3);
-  for(int i = 0;i < ui->tableWidget->rowCount();i++){
-      ui->tableWidget->setRowHeight(i,this->size().height() / 8);
-    }
-  ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem("计数数据"));
-#endif
-#ifdef FORLIN_OK335XS
   ui->tableWidget->setColumnWidth(0,this->size().width()/3);
   for(int i = 0;i < ui->tableWidget->rowCount();i++){
       ui->tableWidget->setRowHeight(i,this->size().height()/8);
     }
   ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem("计数数据"));
-#endif
-
   INIT_LABEL_SIZE_FONT;
   ui->tableWidget->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
 }
@@ -41,8 +35,6 @@ showcountingmeasurement::~showcountingmeasurement()
 extern int measurement_flag;
 void showcountingmeasurement::adddata(int count,QString data){
 #if 1
-  QSettings count_data("shanghaikairen","count_data");
-  //if(count == 1) clearall();
   data.remove(0,2);
   QTableWidgetItem *tmpitem = new QTableWidgetItem(tr("%1").arg(data));
   tmpitem->setTextAlignment(Qt::AlignHCenter);
@@ -59,7 +51,7 @@ void showcountingmeasurement::adddata(int count,QString data){
           sumsub += pow(sum / 11 - ui->tableWidget->item(i,0)->text().toInt(),2);
         }
       y = pow((sumsub / (double)(sum/11)) * (double)(TURN_SECONDS/10),0.5);
-      int tmp_count = count_data.value("count_count").toInt() + 1;
+      int tmp_count = p_mySettings->value(MYSETTINGS_COUNT_COUNT).toInt() + 1;
       if(tmp_count > COUNT_MEASUREMENT_MOST_STORAGE) tmp_count = 1;
       QString tmp_y = QString::number(y,'f',4);
       ui->label_data->setText(QDateTime::currentDateTime().toString("MM月dd日 hh:mm"));
@@ -68,11 +60,12 @@ void showcountingmeasurement::adddata(int count,QString data){
 
       if(issample::global_is_sample == WAIT_BE_LOCATION || ui->widget_2->global_ispreheat >=  2){
           return;
-        }
-      count_data.setValue(QString("count_data_%1").arg(tmp_count),QString("%1").arg(sum/11) + ";"\
-                          + tmp_y + ";" +QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss"));
-      count_data.setValue("count_count",tmp_count);
-    }
+      }
+      p_mySettings->setValue(MYSETTINGS_COUNT_DATA(tmp_count),
+                             QString("%1").arg(sum/11) + ";" + tmp_y + ";"
+                             + QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss"));
+      p_mySettings->setValue(MYSETTINGS_COUNT_COUNT,tmp_count);
+  }
 #endif
 }
 void showcountingmeasurement::clearall(){

@@ -63,7 +63,7 @@ private:
     systemsetup *ss;
     hide_system *hs;
     int flag;
-    //QSettings mysettings;
+
     AbstractDataSave *p_mySettings;
 
     int stop_all_measurement();

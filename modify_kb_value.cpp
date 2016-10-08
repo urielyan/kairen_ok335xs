@@ -50,7 +50,6 @@ modify_kb_value::modify_kb_value(QWidget *parent) :
 #endif
 #ifdef FORLIN_OK335XS
     ui->comboBox->setFont(QFont(FONT_NAME, 10,QFont::Normal));
-
 #endif
     ui->comboBox->setFixedHeight(DESKTOP_HEIGHT / 10);
     ui->label_2->setMaximumHeight(DESKTOP_HEIGHT / 10);

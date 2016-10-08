@@ -60,12 +60,12 @@ void showsamplemeasurement::add_data(int workCurveIndex,QString data,int size){
 #ifdef DEBUG
         QMessageBox::warning(this,QString(__FILE__),QString(__FUNCTION__) + QString(":%1,%2,%3").arg(data.toDouble()).arg(sample_average).arg(r));
 #endif
-        if(p_mySettings->contains("proportion_1") && p_mySettings->contains("proportion_2")){
-            if(r < p_mySettings->value("proportion_1").toDouble()){
+        if(p_mySettings->contains(MYSETTINGS_PROPORTION(1)) && p_mySettings->contains(MYSETTINGS_PROPORTION(2))){
+            if(r < p_mySettings->value(MYSETTINGS_PROPORTION(1)).toDouble()){
                 workCurveIndex = 1;
-            }else if(r >= p_mySettings->value("proportion_1").toDouble() && r < p_mySettings->value("proportion_2").toDouble()){
+            }else if(r >= p_mySettings->value(MYSETTINGS_PROPORTION(1)).toDouble() && r < p_mySettings->value(MYSETTINGS_PROPORTION(2)).toDouble()){
                 workCurveIndex = 2;
-            }else if(r >= p_mySettings->value("proportion_2").toDouble()){
+            }else if(r >= p_mySettings->value(MYSETTINGS_PROPORTION(2)).toDouble()){
                 workCurveIndex = 6;
             }
         }else {
@@ -81,7 +81,8 @@ void showsamplemeasurement::add_data(int workCurveIndex,QString data,int size){
     real_curve = workCurveIndex;
 
     //得到kb值
-    QString workCurveValue = p_mySettings->value("real_compute_kbr_" + QString::number(workCurveIndex)).toString();
+    QString workCurveValue = p_mySettings->value(MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(workCurveIndex)).toString();
+
     QStringList workCurveList;
     double percentage = 0;
     workCurveList = workCurveValue.split(";");
@@ -267,10 +268,10 @@ void showsamplemeasurement::printer_result(){
 void showsamplemeasurement::storeDataToQSettings(QString data)
 {
   //存储数据到文本文件中。
-  int tmp = p_mySettings->value("sample_count").toInt();
+  int tmp = p_mySettings->value(MYSETTINGS_SAMPLE_COUNT).toInt();
   tmp++;
-  p_mySettings->setValue(QString("sample_data_%1").arg(tmp),data);
-  p_mySettings->setValue("sample_count",tmp);
+  p_mySettings->setValue(MYSETTINGS_SAMPLE_DATA(tmp),data);
+  p_mySettings->setValue(MYSETTINGS_SAMPLE_COUNT,tmp);
 }
 
 void showsamplemeasurement::storeDataToDatabase(QString data)

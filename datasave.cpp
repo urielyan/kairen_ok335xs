@@ -146,6 +146,10 @@ void MeasurementDataSave::init()
   if(!settings->contains("sample_count")){
       settings->setValue("sample_count",0);
   }
+
+  if(!settings->contains("count_count")){
+      settings->setValue("count_count",0);
+  }
 }
 
 
@@ -203,7 +207,7 @@ void ErrorCountSave::setValue(QString key, qint64 value)
 {
   if(settings == NULL)
     return;
-  settings->setValue("key", "value");
+  settings->setValue(key, value);
 }
 
 void ErrorCountSave::setValue(QString key, QString value)
@@ -228,4 +232,14 @@ bool AbstractDataSave::contains(QString key)
     }
 
     return settings->contains(key);
+}
+
+void AbstractDataSave::remove(QString key)
+{
+    if(settings == NULL)
+    {
+        return;
+    }
+
+    return settings->remove(key);
 }

@@ -26,7 +26,7 @@ private slots:
 
 private:
   Ui::input_machine_use_time *ui;
-  //QSettings mysettings;
+
   AbstractDataSave *p_mySettings;
 };
 

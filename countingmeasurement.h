@@ -6,11 +6,13 @@
 #include <QTimer>
 #include "showcountingmeasurement.h"
 #include "com.h"
+#include "QDateTime"
 
 namespace Ui {
   class countingMeasurement;
 }
 
+class AbstractDataSave;
 class countingMeasurement : public QWidget
 {
   Q_OBJECT
@@ -55,6 +57,9 @@ private:
   QTimer *timer;
   int flag;
   showcountingmeasurement *show_count_mea;
+
+  AbstractDataSave *p_mySettings;
+
   void updata_count_5_average(QDateTime,int);
   void start_count_5_data();
   void disable_button(bool);

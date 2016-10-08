@@ -1,9 +1,7 @@
+#include <QTimer>
 
 #include "ispreheat.h"
 #include "ui_ispreheat.h"
-#include <QTimer>
-#include <QSettings>
-
 #include "widget.h"
 #include "issample.h"
 

@@ -12,7 +12,7 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::calibrationmeasurement)
 {
-  p_mysettings = MeasurementDataSave::instance();
+  p_mySettings = MeasurementDataSave::instance();
 
   ui->setupUi(this);
 
@@ -30,13 +30,11 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
   ui->label_issamlpe->hide();
   ui->label_2->setText(QString("测量时间2×%1秒").arg(CALIBRATE_TIME));
 
-  count = p_mysettings->value(MYSETTINGS_CALIBRATE_COUNT).toInt();
+  count = p_mySettings->value(MYSETTINGS_CALIBRATE_COUNT).toInt();
 
   showcalibratemeasure = new showcalibratemeasurement();
   timer =  new QTimer(this);
   connect(timer,SIGNAL(timeout()),this,SLOT(doing_measurement()));
-
-  calibrate_com =  Communciation_Com::instance();
 
   ui->pushButton_2->setObjectName("stop");
   ui->pushButton->setObjectName("start");
@@ -57,7 +55,6 @@ calibrationmeasurement::calibrationmeasurement(QWidget *parent) :
 
 calibrationmeasurement::~calibrationmeasurement()
 {
-  delete calibrate_com;
   delete showcalibratemeasure;
   delete timer;
   delete ui;
@@ -143,8 +140,8 @@ void calibrationmeasurement::doing_measurement(){
           showcalibratemeasure->add_calibratemeasurement_data(count + 1,NULL,recv_data);
           showcalibratemeasure->showFullScreen();
 //          query_s_count_data_in_this->add_s_count_data(count,query_data);
-          p_mysettings->setValue(MYSETTINGS_CALIBRATE_S_DATA(count), query_data);
-          p_mysettings->setValue(MYSETTINGS_CALIBRATE_COUNT,  ++count);
+          p_mySettings->setValue(MYSETTINGS_CALIBRATE_S_DATA(count), query_data);
+          p_mySettings->setValue(MYSETTINGS_CALIBRATE_COUNT,  ++count);
           return;
         }else{
           ErrorCountSave::instance()->addCount(4);
@@ -173,7 +170,7 @@ void calibrationmeasurement::slotStartClicked()
       disable_button(false);
       return;
     }
-  count = p_mysettings->value(MYSETTINGS_CALIBRATE_COUNT).toInt();
+  count = p_mySettings->value(MYSETTINGS_CALIBRATE_COUNT).toInt();
   if(count >= 12){
       WinInforListDialog::instance()->showMsg(tr("标定样已超过12个"));
       disable_button(false);

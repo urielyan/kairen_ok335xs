@@ -3,6 +3,11 @@
 #include "global.h"
 #include "datasave.h"
 
+#include "com.h"
+#include "showsamplemeasurement.h"
+#include "countingmeasurement.h"
+#include "input_person_sampleserial.h"
+
 #include <QMessageBox>
 #include <countingmeasurement.h>
 #include <printer.h>
@@ -13,6 +18,8 @@ sampleMeasurement::sampleMeasurement(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::sampleMeasurement)
 {
+  p_mySettings = MeasurementDataSave::instance();
+
   ui->setupUi(this);
 
   count = 3;
@@ -180,24 +187,26 @@ void sampleMeasurement::slotStartClicked()
     QString workCurve;
     //选择的kb值没有数据则不发送测量信号
      if(ui->comboBo_queue->currentIndex() != 0){
-        workCurve = mysettings.value("real_compute_kbr_" + ui->comboBo_queue->currentText()).toString();
+        workCurve = p_mySettings->value(MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(
+                                            ui->comboBo_queue->currentText().toInt())).toString();
         if((workCurve.split(";")[0] == NULL) || (workCurve.split(";")[1] == NULL)){
             WinInforListDialog::instance()->showMsg(tr("您选择的工作曲线有误，请重新选择"));
             return;
         }
      }else{
          //当选择自动选择工作曲线时，判断123三条工作曲线是否有值。若没有则不进行含量测量
-        workCurve = mysettings.value("real_compute_kbr_1").toString();
+        workCurve = p_mySettings->value(MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(1)).toString();
         if((workCurve.split(";")[0] == NULL) || (workCurve.split(";")[1] == NULL)){
             WinInforListDialog::instance()->showMsg(tr("您不能自动选择“自动选择工作曲线”，工作曲线1没有kb值，请重新选择"));
             return;
         }
-        workCurve = mysettings.value("real_compute_kbr_2").toString();
+        workCurve = p_mySettings->value(MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(2)).toString();
+
         if((workCurve.split(";")[0] == NULL) || (workCurve.split(";")[1] == NULL)){
             WinInforListDialog::instance()->showMsg(tr("您不能自动选择“自动选择工作曲线”，工作曲线2没有kb值，请重新选择"));
             return;
         }
-        workCurve = mysettings.value("real_compute_kbr_6").toString();
+        workCurve = p_mySettings->value(MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(6)).toString();
         if((workCurve.split(";")[0] == NULL) || (workCurve.split(";")[1] == NULL)){
             WinInforListDialog::instance()->showMsg(tr("您不能自动选择“自动选择工作曲线”，工作曲线6没有kb值，请重新选择"));
             return;

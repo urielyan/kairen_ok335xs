@@ -28,8 +28,13 @@ class Communciation_Com : public QObject
 {
   Q_OBJECT
 public:
-  explicit Communciation_Com(QObject *parent = 0);
-  static Communciation_Com* instance();
+    enum Move_Plate_Direction
+    {
+        MoveToReference = 0,
+        MoveToMeasuring
+    };
+
+      static Communciation_Com* instance();
 
   static int fd;
   static struct termios options;
@@ -42,8 +47,12 @@ public:
   static QString receive();
   static QString receive(int);
 
+  bool movePlate(Communciation_Com::Move_Plate_Direction direction);
+
 public slots:
 
+private:
+  explicit Communciation_Com(QObject *parent = 0);
 };
 
 #endif // COM_H

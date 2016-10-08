@@ -6,16 +6,14 @@
 #include <QDateTime>
 #include <QTimer>
 
-#include "showsamplemeasurement.h"
-#include "com.h"
-#include "countingmeasurement.h"
-#include "input_person_sampleserial.h"
-#include <QSettings>
-
 namespace Ui {
 class sampleMeasurement;
 }
 
+class showsamplemeasurement;
+class countingMeasurement;
+class AbstractDataSave;
+class input_person_sampleSerial;
 class sampleMeasurement : public QWidget
 {
     Q_OBJECT
@@ -47,7 +45,7 @@ private:
     showsamplemeasurement *showsm;
     countingMeasurement *counting_measurement;
     input_person_sampleSerial *input_serial;
-    QSettings mysettings;
+    AbstractDataSave *p_mySettings;
 
     void all_combox_disabled(bool);
     void printer_result();

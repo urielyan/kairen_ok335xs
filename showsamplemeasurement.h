@@ -7,7 +7,6 @@
 #include <QSqlQuery>
 #include <QSqlRelationalTableModel>
 #include <QSqlRecord>
-#include <QSettings>
 
 namespace Ui {
   class showsamplemeasurement;
@@ -40,7 +39,6 @@ private:
   QSqlTableModel *model;
   QSqlDatabase db ;
 
-  //QSettings mysettings;
   AbstractDataSave *p_mySettings;
 
   void printer_result();

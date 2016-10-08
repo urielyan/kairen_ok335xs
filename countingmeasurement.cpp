@@ -14,6 +14,8 @@ countingMeasurement::countingMeasurement(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::countingMeasurement)
 {
+    p_mySettings = MeasurementDataSave::instance();
+
   ui->setupUi(this);
   show_count_mea = new showcountingmeasurement();
   turn_counter = 1;//
@@ -66,64 +68,39 @@ countingMeasurement::~countingMeasurement()
     第三个函数：开始计数测量，开始之前不发送停止信号。
     第四个函数：是一个静态公有槽函数，检查5个数据是否有效,若无效，则进行计数测量并返回-1，否则返回0，这个槽函数要每分钟进行一次。若正在进行计数测量，则不做任何事。
 */
-static QMap<QDateTime,int> count_data_5;
-void countingMeasurement::updata_count_5_average(QDateTime count_datetime,int data){
-  //printf("in\n");
-  QSettings count_data("shanghaikairen","count_data");
-
-  if(count_data_5.size() < COUNT_MEASUREMENT_DATA_COUNT){
-      count_data_5.insert(count_datetime,data);
+static QMap<QDateTime,int> countData5;
+void countingMeasurement::updata_count_5_average(QDateTime count_datetime,int data)
+{
+  if(countData5.size() < COUNT_MEASUREMENT_DATA_COUNT){
+      countData5.insert(count_datetime,data);
       return;
     }else {
-      count_data_5.remove(count_data_5.begin().key());
-      count_data_5.insert(count_datetime,data);
+      countData5.remove(countData5.begin().key());
+      countData5.insert(count_datetime,data);
     }
 
   if(measurement_flag == MEASUREMENT_10_AUTO && turn_counter == COUNT_MEASUREMENT_DATA_COUNT){
       //printf("ready\n");
       static int in_this_cunction_time = 0;
       in_this_cunction_time ++;
-      int tmp_count = count_data.value("count_count").toInt() + 1;
+      int tmp_count = p_mySettings->value(MYSETTINGS_COUNT_COUNT).toInt() + 1;
       if(tmp_count > COUNT_MEASUREMENT_MOST_STORAGE) tmp_count = 1;
-#if 0
-      QString last_count_meaurement_datetime;
-      if(tmp_count == 1){
-          //printf("in1111\n");
-          if(count_data.contains(QString("count_data_%1").arg(COUNT_MEASUREMENT_MOST_STORAGE))){
-              last_count_meaurement_datetime = count_data.value(QString("count_data_%1").arg(COUNT_MEASUREMENT_MOST_STORAGE)).toString();
-            }else {
-              count_data.setValue(QString("count_data_%1").arg(tmp_count),QString("%1").arg((int)get_count_5_average()) \
-                                  + ";" + "   " + ";" + QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss"));
-              count_data.setValue("count_count",tmp_count);
-              return;
-            }
-        }else{
-          //printf("in222\n");
-          last_count_meaurement_datetime = count_data.value(QString("count_data_%1").arg(tmp_count -1)).toString();
-        }
-      if(last_count_meaurement_datetime.split(";").size() != 3)return;
-      if(-QDateTime::currentDateTime().secsTo(QDateTime::fromString(last_count_meaurement_datetime.split(";")[2],"yyyy.MM.dd hh:mm:ss")) > 10 * 60){
-          //printf("3333333\n");
-          return;
-        }
-      if(tmp_count >= COUNT_MEASUREMENT_MOST_STORAGE) tmp_count = 1;
-      //QString tmp_y = QString("无");
-      //printf("444444in\n");
-#endif
+
       if(in_this_cunction_time  < 2){
           //printf("no\n");
           return;
         }
       in_this_cunction_time = 0;
-      count_data.setValue(QString("count_data_%1").arg(tmp_count),QString("%1").arg((int)get_count_5_average()) \
+      p_mySettings->setValue(MYSETTINGS_COUNT_DATA(tmp_count),
+                             QString("%1").arg((int)get_count_5_average())
                           + ";" + "  " + ";" + QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss"));
-      count_data.setValue("count_count",tmp_count);
+      p_mySettings->setValue(MYSETTINGS_COUNT_COUNT,tmp_count);
     }
 }
 double countingMeasurement::get_count_5_average(){
   double average = 0;
   QMap<QDateTime,int>::iterator i;
-  for(i = count_data_5.begin();i != count_data_5.end();i++){
+  for(i = countData5.begin();i != countData5.end();i++){
       average += i.value();
     }
   average /= (double)COUNT_MEASUREMENT_DATA_COUNT;
@@ -135,21 +112,21 @@ void countingMeasurement::start_count_5_data(){
 }
 int countingMeasurement::examine_count_5_data_availability(){
   if(ui->widget_2->global_ispreheat > 0)return 1;
-  if(count_data_5.size() < COUNT_MEASUREMENT_DATA_COUNT){
+  if(countData5.size() < COUNT_MEASUREMENT_DATA_COUNT){
       if(issample::global_is_sample == WAIT_BE_LOCATION){
           //如果待测样在参考样位置，则使ispreheat的lable2变成“需要采样”
           ispreheat::is_sampling_num = NEED_START_SAMPLING;
           return -1;
         }
       start_count_5_data();
-      ispreheat::is_sampling_num = COUNT_MEASUREMENT_DATA_COUNT - count_data_5.size();
+      ispreheat::is_sampling_num = COUNT_MEASUREMENT_DATA_COUNT - countData5.size();
       //qDebug() << ispreheat::is_sampling_num << count_data_5.size();
       return -1;
     }else{
       int count_5_data_stale_count = 0;
       QMap<QDateTime,int>::iterator i;
       //检查5个数据中有几个数据无效
-      for(i = count_data_5.begin();i != count_data_5.end();i++){
+      for(i = countData5.begin();i != countData5.end();i++){
           //数据有效时间为30分钟
           if(i.key().secsTo(QDateTime::currentDateTime()) > 60 *30)
             count_5_data_stale_count++;
@@ -174,14 +151,14 @@ int countingMeasurement::examine_count_5_data_availability(){
     }
 }
 int countingMeasurement::clear_count_5_data(){
-  count_data_5.clear();
+  countData5.clear();
   //examine_count_5_data_availability();
   return 0;
 }
 QStringList countingMeasurement::get_count_5_data(){
   QMap<QDateTime,int>::iterator i;
   QStringList list;
-  for(i = count_data_5.begin();i != count_data_5.end();i++){
+  for(i = countData5.begin();i != countData5.end();i++){
       list << QString::number(i.value());
     }
   return list;

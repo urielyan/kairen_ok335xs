@@ -28,7 +28,6 @@ private slots:
 private:
   Ui::communication_help *ui;
 
-    //QSettings mysettings;
     AbstractDataSave *p_mysettings;
 };
 
