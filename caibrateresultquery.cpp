@@ -15,6 +15,16 @@ caibrateresultquery::caibrateresultquery(QWidget *parent) :
   display_number = p_mySettings->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt() - 1;
   update_page(display_number);
 
+  for(int i = 0; i < ui->tableWidget->columnCount();i++){
+        ui->tableWidget->setColumnWidth(i, DESKTOP_WIDTH / 9);
+      }
+
+    for(int i = 0; i < 3; i++)
+      {
+        ui->tableWidget->setRowHeight(i, DESKTOP_HEIGHT / 10);
+      }
+    INIT_LABEL_SIZE_FONT;
+
   QList<QPushButton *> buttonlist = this->findChildren<QPushButton *>();
   for (int i = 0; i < buttonlist.count(); ++i) {
       buttonlist[i]->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
