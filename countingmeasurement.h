@@ -4,6 +4,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QDateTime>
 
 namespace Ui {
   class countingMeasurement;

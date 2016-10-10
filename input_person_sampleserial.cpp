@@ -17,9 +17,6 @@ input_person_sampleSerial::input_person_sampleSerial(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->lineEdit_people->setMinimumWidth(DESKTOP_WIDTH / 2);
-    ui->lineEdit_serial->setMinimumWidth(DESKTOP_WIDTH / 2);
-
     QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
     for(int i=0;i<allPButtons.count();i++){
         allPButtons[i]->setFocusPolicy(Qt::NoFocus);//设置所有按钮没有焦点
@@ -30,6 +27,9 @@ input_person_sampleSerial::input_person_sampleSerial(QWidget *parent) :
     }
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+
+    this->setWindowFlags(Qt::FramelessWindowHint);
+    this->setGeometry(0, 0, DESKTOP_WIDTH, DESKTOP_HEIGHT);
 
     connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(slotBackspaceClicked()));
 }

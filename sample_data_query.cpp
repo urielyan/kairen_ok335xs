@@ -258,4 +258,3 @@ void WinSpecifyIndexDialog::initData(QStringList valueList)
         m_labelList.at(i)->setText(valueList.at(i) + " " + unitList.at(i));
     }
 }
-
