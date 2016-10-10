@@ -2,12 +2,9 @@
 #define ISPREHEAT_H
 
 #include <QWidget>
+#include <QLabel>
 
 #define NEED_START_SAMPLING 9999
-namespace Ui {
-class ispreheat;
-}
-
 class ispreheat : public QWidget
 {
     Q_OBJECT
@@ -23,11 +20,13 @@ private slots:
     void check_ispreheat();
 
 private:
-    Ui::ispreheat *ui;
+    bool blink_flag;
+
     QTimer *timer;
     QTimer *timer2;
-    bool blink_flag;
-    static int fd;
+
+    QLabel m_labelIsPreheat;
+    QLabel m_labelIsSampling;
 };
 
 #endif // ISPREHEAT_H
