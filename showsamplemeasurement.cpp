@@ -301,6 +301,8 @@ void showsamplemeasurement::storeDataToDatabase(QString data)
     if(ok1 == false  || ok2 == false){
         WinInforListDialog::instance()->showMsg(tr("数据未存入数据库中！") + "\n" + db.lastError().text());
     }
+
+    input_person_sampleSerial::instance()->clearLineEdit();
 #endif
 }
 

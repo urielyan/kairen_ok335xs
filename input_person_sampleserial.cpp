@@ -17,6 +17,9 @@ input_person_sampleSerial::input_person_sampleSerial(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->lineEdit_people->setMinimumWidth(DESKTOP_WIDTH / 2);
+    ui->lineEdit_serial->setMinimumWidth(DESKTOP_WIDTH / 2);
+
     QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();
     for(int i=0;i<allPButtons.count();i++){
         allPButtons[i]->setFocusPolicy(Qt::NoFocus);//设置所有按钮没有焦点
@@ -67,6 +70,7 @@ void input_person_sampleSerial:: slotNumKeyPressed()
 void input_person_sampleSerial::showPeopleSample()
 {
     initWidget();
+    this->exec();
 }
 
 void input_person_sampleSerial::showPeople()
@@ -79,9 +83,16 @@ void input_person_sampleSerial::showPeople()
 
 void input_person_sampleSerial::showSample()
 {
+    initWidget();
 
     ui->lineEdit_people->hide();
     ui->label->hide();
+}
+
+void input_person_sampleSerial::clearLineEdit()
+{
+    ui->lineEdit_people->setText("");
+    ui->lineEdit_serial->setText("");
 }
 
 void input_person_sampleSerial::on_b_return_clicked()
@@ -92,11 +103,6 @@ void input_person_sampleSerial::on_b_return_clicked()
 
 void input_person_sampleSerial::on_b_ok_clicked()
 {
-    if(ui->lineEdit_people->hasFocus()){
-        emit transmit_data(ui->lineEdit_people->text());
-    }else if (ui->lineEdit_serial->hasFocus()){
-        emit transmit_data(ui->lineEdit_serial->text());
-    }
     this->accept();
 }
 

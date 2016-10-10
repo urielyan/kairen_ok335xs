@@ -23,9 +23,7 @@ public:
     void showPeople();
     void showSample();
 
-signals:
-    void transmit_data(QString);
-
+    void clearLineEdit();
 private slots:
     void on_b_return_clicked();
 
