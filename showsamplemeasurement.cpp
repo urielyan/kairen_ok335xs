@@ -176,8 +176,6 @@ void showsamplemeasurement::show_calculate_storage(QString data){
 
     storeDataToQSettings(data);
     storeDataToDatabase(data);
-    input_person_sampleSerial::instance()->initData();
-
     printer_result();
     this->showFullScreen();
 }
@@ -286,8 +284,8 @@ void showsamplemeasurement::storeDataToDatabase(QString data)
   QSqlQuery query;
   query.prepare("INSERT INTO sample_data (people_id ,sample_serial, date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient) "
                 "VALUES (?,?,?,?,?,?,?,?,?,?)");
-  query.addBindValue(input_person_sampleSerial::instance()->line_people);
-  query.addBindValue(input_person_sampleSerial::instance()->line_serial);
+  query.addBindValue(input_person_sampleSerial::instance()->getPeople());
+  query.addBindValue(input_person_sampleSerial::instance()->getSample());
   query.addBindValue(data_list[1]);
   query.addBindValue(real_curve);
   query.addBindValue(data_list[2]);
@@ -304,7 +302,6 @@ void showsamplemeasurement::storeDataToDatabase(QString data)
         WinInforListDialog::instance()->showMsg(tr("数据未存入数据库中！") + "\n" + db.lastError().text());
     }
 #endif
-    input_person_sampleSerial::instance()->initData();
 }
 
 void showsamplemeasurement::resizeTableWidget()

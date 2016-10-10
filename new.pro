@@ -53,7 +53,8 @@ SOURCES += main.cpp\
     global.cpp \
     wininforlistdialog.cpp \
     database.cpp \
-    datasave.cpp
+    datasave.cpp \
+    winabstractframe.cpp
 
 HEADERS  += widget.h \
     date_widget.h \
@@ -95,14 +96,14 @@ HEADERS  += widget.h \
     query_change_voltage.h \
     wininforlistdialog.h \
     database.h \
-    datasave.h
+    datasave.h \
+    winabstractframe.h
 
 FORMS    += widget.ui \
     date_widget.ui \
     samplemeasurement.ui \
     countingmeasurement.ui \
     issample.ui \
-    ispreheat.ui \
     spectrummeasurement.ui \
     showcountingmeasurement.ui \
     dataquery.ui \

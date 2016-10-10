@@ -13,7 +13,6 @@ class sampleMeasurement;
 class showsamplemeasurement;
 class countingMeasurement;
 class AbstractDataSave;
-class input_person_sampleSerial;
 class sampleMeasurement : public QWidget
 {
     Q_OBJECT
@@ -44,7 +43,6 @@ private:
     int count,change_count,second,change_second,work_queue,flag;
     showsamplemeasurement *showsm;
     countingMeasurement *counting_measurement;
-    input_person_sampleSerial *input_serial;
     AbstractDataSave *p_mySettings;
 
     void all_combox_disabled(bool);

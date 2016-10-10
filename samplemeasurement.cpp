@@ -42,8 +42,6 @@ sampleMeasurement::sampleMeasurement(QWidget *parent) :
   connect(timer_measurement,SIGNAL(timeout()),this,SLOT(doing_measurement()));
 
   counting_measurement = new countingMeasurement();
-  input_serial = input_person_sampleSerial::instance();
-
 
   ui->pushButton_2->setObjectName("stop");
   ui->pushButton->setObjectName("start");
@@ -80,7 +78,6 @@ sampleMeasurement::~sampleMeasurement()
 {
     delete counting_measurement;
     delete timer_measurement;
-    delete input_serial;
 
     delete showsm;
     delete ui;
@@ -317,7 +314,7 @@ void sampleMeasurement::on_pushButton_4_clicked()
 
 void sampleMeasurement::on_b_input_serial_clicked()
 {
-    input_serial->showFullScreen();
+    input_person_sampleSerial::instance()->showPeopleSample();
 }
 
 void sampleMeasurement::printer_result(){

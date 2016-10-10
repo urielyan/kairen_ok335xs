@@ -10,7 +10,6 @@ class sample_data_query;
 }
 
 class QLabel;
-class input_person_sampleSerial;
 class WinSpecifyIndexDialog : public QDialog
 {
   Q_OBJECT
@@ -26,7 +25,7 @@ private:
   void initData(QStringList valueList);
 
   QModelIndex m_index;
-  QSqlTableModel *m_model;
+  QSqlTableModel *p_model;
 
   QList <QLabel *> m_labelList;
 };
@@ -49,17 +48,14 @@ private slots:
 
     void on_b_datetime_disorder_clicked();
 
-    void wait_input_result(QString);
-
     void on_b_sample_clicked();
 
     void on_tableView_clicked(const QModelIndex &index);
 
 private:
-    int query_flag;
     Ui::sample_data_query *ui;
-    QSqlTableModel *m_model;
-    input_person_sampleSerial *input_serial;
+    QSqlTableModel *p_model;
+
     void initTableview();
 };
 

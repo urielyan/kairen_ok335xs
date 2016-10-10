@@ -2,32 +2,34 @@
 #define INPUT_PERSON_SAMPLESERIAL_H
 
 #include <QWidget>
+#include <QDialog>
 
 namespace Ui {
 class input_person_sampleSerial;
 }
 
-class input_person_sampleSerial : public QWidget
+class input_person_sampleSerial : public QDialog
 {
     Q_OBJECT
-
-signals:
-    void transmit_data(QString);
-
 public:
     static input_person_sampleSerial* instance();
     explicit input_person_sampleSerial(QWidget *parent = 0);
     ~input_person_sampleSerial();
 
-    static QString line_people,line_serial;
+    QString getSample();
+    QString getPeople();
 
-    void just_show_people();
-    void just_show_sample();
-    void initData();
+    void showPeopleSample();
+    void showPeople();
+    void showSample();
+
+signals:
+    void transmit_data(QString);
+
 private slots:
     void on_b_return_clicked();
 
-    void slot_keyNumPressed();
+    void slotNumKeyPressed();
 
     void on_b_ok_clicked();
 
@@ -36,6 +38,7 @@ private slots:
 private:
     Ui::input_person_sampleSerial *ui;
 
+    void initWidget();
 };
 
 #endif // INPUT_PERSON_SAMPLESERIAL_H
