@@ -33,7 +33,7 @@ private slots:
 
     void on_b_ok_clicked();
 
-    void on_pushButton_clicked();
+    void slotBackspaceClicked();
 
 private:
     Ui::input_person_sampleSerial *ui;

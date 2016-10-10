@@ -27,6 +27,8 @@ input_person_sampleSerial::input_person_sampleSerial(QWidget *parent) :
     }
 
     this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
+
+    connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(slotBackspaceClicked()));
 }
 
 input_person_sampleSerial::~input_person_sampleSerial()
@@ -108,7 +110,7 @@ void input_person_sampleSerial::initWidget()
     ui->lineEdit_serial->setText("");
 }
 
-void input_person_sampleSerial::on_pushButton_clicked()
+void input_person_sampleSerial::slotBackspaceClicked()
 {
     QString current_text;
     if(ui->lineEdit_people->hasFocus()){
