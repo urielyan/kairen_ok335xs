@@ -14,6 +14,7 @@
 #include "com.h"
 #include "issample.h"
 #include "global.h"
+#include "wininforlistdialog.h"
 
 Communciation_Com::Communciation_Com(QObject *parent) :
     QObject(parent)
@@ -28,6 +29,11 @@ Communciation_Com::Communciation_Com(QObject *parent) :
         fd = open( "/dev/ttySAC3", O_RDWR|O_NOCTTY|O_NDELAY);
 #endif
     if (-1 == fd){
+        fd = open( "/dev/ttyO1", O_RDWR|O_NOCTTY|O_NDELAY);//mid com
+        if(fd == -1)
+        {
+            WinInforListDialog::instance()->showMsg(tr("open err"));
+        }
         return;
     }
     if  ( tcgetattr( fd,&options)  !=  0){
@@ -53,6 +59,7 @@ Communciation_Com::Communciation_Com(QObject *parent) :
         printf("com set err,tcsetattr!\n");
         return;
     }
+    printf("open com success!\n");
 }
 
 
@@ -111,7 +118,7 @@ int Communciation_Com::transmit(int data, int size){
     if (0 == data || size <= 0){
         return 0;
     }
-    int ret  = write(fd,(void *)&data,size);
+    int ret  = write(fd,(void *)&data, size);
 
     if(ret <= 0){
         printf("write err\n");

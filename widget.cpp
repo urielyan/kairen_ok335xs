@@ -35,6 +35,10 @@ Widget::Widget(QWidget *parent) :
 {
     p_mySettings = MeasurementDataSave::instance();
 
+
+    Communciation_Com *tmp_com= new Communciation_Com(this);
+    tmp_com->transmit(0,0);
+
   ui->setupUi(this);
 
   cm = new countingMeasurement();
@@ -162,7 +166,7 @@ void Widget::on_b4_clicked()
   tcflush(Communciation_Com::fd,TCIOFLUSH);
   measurement_flag = MEASUREMENT_NOTHING;
   if(Communciation_Com::transmit(IN_SLIDING_PLATE,4) < 0){
-      WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR));
+      WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR) + Communciation_Com::fd);
       if(last_move_sliding_datetime.secsTo(QDateTime::currentDateTime()) > 5){
           move_sliding_count = 0;
         }
@@ -191,7 +195,6 @@ void Widget::on_b4_clicked()
       move_sliding_count = 0;
     }
   last_move_sliding_datetime = QDateTime::currentDateTime();
-
 }
 
 int Widget::on_b6_clicked()

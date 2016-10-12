@@ -41,7 +41,7 @@ public:
 
 public slots:
 
-private:
+public:
   explicit Communciation_Com(QObject *parent = 0);
 };
 

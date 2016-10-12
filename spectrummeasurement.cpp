@@ -32,6 +32,8 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
   ui(new Ui::spectrummeasurement),
   summit_value(1)
 {
+    Communciation_Com *spectrum_com = new Communciation_Com();
+
   ui->setupUi(this);
   row = 0;
   column = 0;
