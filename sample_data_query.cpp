@@ -108,7 +108,7 @@ void WinSqlDataQuery::on_pushButton_clicked()
     input_person_sampleSerial::instance()->showPeople();
     if( input_person_sampleSerial::instance()->exec() == QDialog::Accepted)
     {
-        QString queryString = QString("people_id=").append(input_person_sampleSerial::instance()->getPeople());
+        QString queryString = QString("people_id=\"").append(input_person_sampleSerial::instance()->getPeople()).append("\"");
         if(input_person_sampleSerial::instance()->getPeople().size() == 0)
         {
             queryString = "1";
@@ -124,7 +124,7 @@ void WinSqlDataQuery::on_b_sample_clicked()
 
     if( input_person_sampleSerial::instance()->exec() == QDialog::Accepted)
     {
-        QString queryString = QString("sample_serial=").append(input_person_sampleSerial::instance()->getSample());
+        QString queryString = QString("sample_serial=\"").append(input_person_sampleSerial::instance()->getSample()).append("\"");
         if(input_person_sampleSerial::instance()->getSample().size() == 0)
         {
             queryString = "1";
@@ -251,7 +251,7 @@ void WinSpecifyIndexDialog::initData(QStringList valueList)
     Q_ASSERT(valueList.size() == DISPLAY_COUNT);
 
     QStringList unitList;
-    unitList << "" << "" << "" << "" << tr("秒") << tr("次") << "%(m/m)" << "%(m/m" <<  "";
+    unitList << "" << "" << "" << "" << tr("秒") << tr("次") << "%(m/m)" << "%(m/m)" <<  "";
 
     for (int i = 0; i < DISPLAY_COUNT; i ++)
     {
