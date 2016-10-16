@@ -111,7 +111,8 @@ void count_kb_value::on_pushButton_clicked()
 
       //保存刚刚标定完成的是第几组数据再加一，以便下次计算kb值
       p_mySettings->setValue(MYSETTINGS_CALIBRATE_RESULT_COUNT,++count_record);
-      WinInforListDialog::instance()->showMsg(QString("标定结果已经存入工作曲线%1").arg(ui->comboBox->currentText().toInt()));
+      WinInforListDialog::instance()->showMsg(QString("标定结果已经存入工作曲线%1\n").arg(ui->comboBox->currentText().toInt())
+                                              + kbr_data);
 
       spec_painter->show_special_curve(ui->comboBox->currentIndex()+1,painter_data,kbr_data);
       printer_result();
@@ -143,6 +144,7 @@ QString count_kb_value::countKbrValue(int judge_which)
     //判断用户的正确输入输入了s含量，没有则提醒用户输入
     if(calibrate_data.size() < 3){
         WinInforListDialog::instance()->showMsg(tr("你需要输入硫的含量"));
+        return NULL;
     }
     double r_sum = 0;//参考样/reference的和
     double w_sum = 0;//S value的和
@@ -351,7 +353,6 @@ QString count_kb_value::countKbrValue(int judge_which)
 }
 
 void count_kb_value::printer_result(){
-
   int enter = 0x0A;
 
   long long calibrate_result = 0xFBB9E1BDA8B6EAB1;

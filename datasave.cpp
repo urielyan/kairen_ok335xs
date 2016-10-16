@@ -60,6 +60,14 @@ MeasurementDataSave::MeasurementDataSave()
       settings = new QSettings("./QSettings/measurementData.settings", QSettings::NativeFormat);
     }
   init();
+
+  QString workCurve = settings->value(MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(2), ";;").toString();
+
+  if((workCurve.split(";")[0] == NULL) || (workCurve.split(";")[1] == NULL)){
+     qDebug() << "err";
+      return;
+  }
+
   Q_ASSERT(test() == true);
 }
 

@@ -25,7 +25,7 @@ void spectrum_painter::on_pushButton_clicked()
 }
 
 #ifdef FRIENDLYARM_TINY210
-#define DISPLAY_FONT_SIZE 3
+#define DISPLAY_FONT_SIZE 2
 #define POINT_SIZE 3
 #endif
 #ifdef FORLIN_OK335XS
@@ -53,14 +53,25 @@ void spectrum_painter::paintEvent(QPaintEvent *)
   //  v1= 1.5773;
   //  v2 = - 0.2151;
 
+    //得到最大值和最小值
   max_data_y = max_data_x = 0;
   QMap<int,QString>::iterator i;
   if(curve <= 5){
-      for(i = painter_data.begin();i != painter_data.end();i++){
+      for(i = painter_data.begin();i != painter_data.end();i++)
+      {
           QStringList painter_data_list = i.value().split("/");
-          if(painter_data_list.size() != 3)return;
-          if(painter_data_list[0].toDouble() > max_data_y)max_data_y = painter_data_list[0].toDouble();
-          if(painter_data_list[1].toDouble()/painter_data_list[2].toDouble()> max_data_x)max_data_x = painter_data_list[1].toDouble()/painter_data_list[2].toDouble();
+          if(painter_data_list.size() != 3)
+          {
+              return;
+          }
+          if(painter_data_list[0].toDouble() > max_data_y)
+          {
+              max_data_y = painter_data_list[0].toDouble();
+          }
+          if(painter_data_list[1].toDouble()/painter_data_list[2].toDouble()> max_data_x)
+          {
+              max_data_x = painter_data_list[1].toDouble()/painter_data_list[2].toDouble();
+          }
         }
       max_data_y *= 1.1;//所要花的直线的最大的y的值在多0.1，TO保证穿过最后一个点
       max_data_x *= 1.2;
@@ -80,15 +91,36 @@ void spectrum_painter::paintEvent(QPaintEvent *)
       painter.drawLine(0,0,(max_data_y - v2)/v1 * multiple_size +v2/v1 * multiple_size,-max_data_y * multiple_size);
 
       //i先乘以 100 再除以100是为了使y轴上的数只有两个小数点,
-      for(int i = 0; i <= max_data_y * 100; i+= max_data_y * 10){
+      for(int i = 0; i <= max_data_y * 100; i+= max_data_y * 20){
           // y axes;
-          painter.drawText(-8* DISPLAY_FONT_SIZE,- (double)i/100 * multiple_size,QString::number((double)i/100));
+#ifdef FORLIN_OK335XS
+          painter.drawText(-8* DISPLAY_FONT_SIZE, - (double)i/100 * multiple_size,QString::number((double)i/100));
+#endif
+#ifdef FRIENDLYARM_TINY210
+          painter.drawText(-40, - (double)i/100 * multiple_size,QString::number((double)i/100));
+#endif
           painter.drawLine(0,- (double)i/100 * multiple_size,-5,- (double)i/100 * multiple_size);
         }
-      for(double i = -v2/v1;i < max_data_x; i += (max_data_x/5)){
-          painter.drawText(i * multiple_size+v2/v1 * multiple_size  - DISPLAY_FONT_SIZE * 2 ,15,QString::number(i,'f',1));
-          painter.drawLine(i * multiple_size+v2/v1 * multiple_size ,0,i * multiple_size+v2/v1 * multiple_size ,5);
-        }
+
+      {
+          //画ｘ坐标上的标尺和单位．
+          painter.drawText(0 ,15,QString::number(-v2/v1, 'f', 1));
+
+          int x = max_data_x  * multiple_size * 2;
+          painter.drawText(x, 15,QString::number(max_data_x * 2, 'f', 1));
+          painter.drawLine(x, 0, x, -5);
+      }
+//      for(double i = -v2/v1;i < max_data_x; i += (max_data_x/5)){
+//          // x axes;
+//#ifdef FORLIN_OK335XS
+//          painter.drawText(i * multiple_size+v2/v1 * multiple_size  - DISPLAY_FONT_SIZE * 2 ,15,QString::number(i,'f',1));
+//          painter.drawLine(i * multiple_size+v2/v1 * multiple_size ,0,i * multiple_size+v2/v1 * multiple_size ,5);
+//#endif
+//#ifdef FRIENDLYARM_TINY210
+//          painter.drawText(i * multiple_size+v2/v1 * multiple_size  - 5 * 2 ,15,QString::number(i,'f',1));
+//          painter.drawLine(i * multiple_size+v2/v1 * multiple_size ,0,i * multiple_size+v2/v1 * multiple_size ,5);
+//#endif
+//        }
     }else{
       multiple_size = 50;
       for(i = painter_data.begin();i != painter_data.end();i++){
@@ -102,6 +134,7 @@ void spectrum_painter::paintEvent(QPaintEvent *)
 //              QString("(%1,%2)").arg(painter_data_list[1].toDouble()/painter_data_list[2].toDouble()).arg(painter_data_list[0].toDouble()));
           //qDebug()  << painter_data_list[1].toDouble()/painter_data_list[2].toDouble() * multiple_size+v2/v1 * multiple_size ;
         }
+    qDebug() << __LINE__;
 
       painter.setBrush(Qt::black);
       for(double i = 0;i < 3.0; i += 0.01){
@@ -111,34 +144,44 @@ void spectrum_painter::paintEvent(QPaintEvent *)
 
       max_data_y = 5.5;
       max_data_x = 3.5;
-      for(int i = 0; i <= max_data_y * 100; i+= max_data_y * 10){
+      for(int i = 0; i <= max_data_y * 100; i+= max_data_y * 10)
+      {
           // y axes;
-          painter.drawText(-8* DISPLAY_FONT_SIZE,- (double)i/100 * multiple_size,QString::number((double)i/100));
+#ifdef FORLIN_OK335XS
+          painter.drawText(-8* DISPLAY_FONT_SIZE, - (double)i/100 * multiple_size,QString::number((double)i/100));
+#endif
+#ifdef FRIENDLYARM_TINY210
+          painter.drawText(-40, - (double)i/100 * multiple_size,QString::number((double)i/100));
+#endif
           painter.drawLine(0,- (double)i/100 * multiple_size,-5,- (double)i/100 * multiple_size);
-        }
-      for(double i = 0;i < max_data_x; i += (max_data_x/5)){
-          painter.drawText(i * multiple_size - DISPLAY_FONT_SIZE * 2 ,15,QString::number(i,'f',1));
-          painter.drawLine(i * multiple_size,0,i * multiple_size,5);
-        }
-    }
+      }
 
-  for(int i = 0; i <= max_data_y * 100; i+= max_data_y * 10){
-      // y axes;
-      painter.drawText(-8* DISPLAY_FONT_SIZE,- (double)i/100 * multiple_size,QString::number((double)i/100));
-      painter.drawLine(0,- (double)i/100 * multiple_size,-5,- (double)i/100 * multiple_size);
+//      painter.drawText(0 ,15,QString::number(-v2/v1, 'f', 1));
+//      painter.drawText(max_data_x * multiple_size, 15,QString::number(max_data_x, 'f', 1));
+//      painter.drawLine(max_data_x * multiple_size, 0, max_data_x * multiple_size, -5);
+
     }
 }
 
 void spectrum_painter::show_special_curve(int current_curve,QMap<int,QString>data,QString kbr_value){
-  if(kbr_value.split(";").size() != 3)return;
+  if(kbr_value.split(";").size() != 3)
+  {
+      return;
+  }
   v1 = kbr_value.split(";")[0].split("=")[1].toDouble();
   v2 = kbr_value.split(";")[1].split("=")[1].toDouble();
   v3 = kbr_value.split(";")[2].split("=")[1].toDouble();
 
-  if(data.size() < 3 || data.size() > 11)return;
+  if(data.size() < 3 || data.size() > 11)
+  {
+      return;
+  }
   painter_data = data;
 
-  if(current_curve < 1 || current_curve > 9)return;
+  if(current_curve < 1 || current_curve > 9)
+  {
+      return;
+  }
   curve = current_curve;
   this->update();
   this->showFullScreen();

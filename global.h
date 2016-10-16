@@ -6,8 +6,8 @@
 #define DESKTOP_WIDTH   QApplication::desktop()->width()
 #define DESKTOP_HEIGHT QApplication::desktop()->height()
 
-//#define FRIENDLYARM_TINY210
-#define FORLIN_OK335XS
+#define FRIENDLYARM_TINY210
+//#define FORLIN_OK335XS
 
 #define INIT_LABEL_SIZE_FONT \
   do{\
@@ -57,7 +57,7 @@
 
 #define COUNT_MEASUREMENT_MOST_STORAGE 10000
 
-#define COUNT_MEASUREMENT_DATA_COUNT 7
+#define COUNT_MEASUREMENT_DATA_COUNT 7    //采样数据个数
 
 #ifdef FRIENDLYARM_TINY210
 #define FONT_SIZE 7

@@ -5,7 +5,7 @@
 #include <QSettings>
 
 //标定相关：
-//记录标定了几组数据。0-12
+//记录标定了几组数据。0-12 //TODO 标定样计数值需要加一
 #define MYSETTINGS_CALIBRATE_COUNT "calibratemeasurement_count"
 #define MYSETTINGS_CALIBRATE_S_DATA(x) QString("s_count_data_").append(QString::number((x)))
 #define MYSETTINGS_CALIBRATE_S_INPUT(x) QString("calibrate_input_s_").append(QString::number((x)))

@@ -188,6 +188,7 @@ void countingMeasurement::count_second(){
   if(turn_second < 0){
       recv_data = Communciation_Com::receive(5);
       if(recv_data == NULL){
+          on_pushButton_2_clicked();
           ErrorCountSave::instance()->addCount(2);
           WinInforListDialog::instance()->showMsg(tr("没有接收到计数数据，已停止测量"));
           QTimer::singleShot(MESSAGEBOX_AUTO_CLOSE_SECOND * 1000,WinInforListDialog::instance(),SLOT(close()));

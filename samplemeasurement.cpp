@@ -141,6 +141,7 @@ void sampleMeasurement::doing_measurement(){
             all_combox_disabled(false);
             return;
         }
+        qDebug() << __LINE__;
         recv_data = Communciation_Com::receive();
     }
     change_second--;
@@ -212,7 +213,10 @@ void sampleMeasurement::slotStartClicked()
         }
      }
     //开始之前停止任何测量,并刷新输入输出缓冲区
-     if(slotStopClicked() != ALL_RIGHT)return;
+     if(slotStopClicked() != ALL_RIGHT)
+     {
+         return;
+     }
 
     //发送测量信号
     measurement_flag = MEASUREMENT_SAMPLE;

@@ -44,7 +44,6 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
 #include "global.h"
 #include "buzzer.h"
 #include "datasave.h"
-
 #include <QApplication>
 #include <QDesktopWidget>
 
@@ -59,6 +58,11 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
 
 #include <QSqlDatabase>
 #include<QSqlDriver>
+
+#ifdef __arm__
+#include <QWSServer>
+#endif
+
 void initSettings()
 {
 
@@ -330,6 +334,11 @@ int main(int argc, char *argv[])
   initLanguage(a);
   initDatabase();
 
+
+#ifdef __arm__
+  QWSServer::setCursorVisible(false);//这句就能让我们实现触摸屏能用而光标又不显示的功能了。
+  qDebug() << "set no cursor";
+#endif
   buzzer buz;
   buz.stop_music();
 

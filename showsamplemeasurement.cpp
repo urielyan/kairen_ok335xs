@@ -20,6 +20,7 @@ showsamplemeasurement::showsamplemeasurement(QWidget *parent) :
     ui(new Ui::showsamplemeasurement)
 {
   db = Database::instance()->getDb();
+  p_mySettings = MeasurementDataSave::instance();
     ui->setupUi(this);
     sum = 0;
     real_curve = 0;
@@ -49,6 +50,7 @@ void showsamplemeasurement::add_data(int workCurveIndex,QString data,int size){
         hide_lable(true);
         sum = 0;
     }
+
     //得到5个样品的平均数
     double sample_average = countingMeasurement::get_count_5_average();
     //ui->label->setText(QString("sample_average:%1").arg(sample_average));
@@ -137,7 +139,6 @@ void showsamplemeasurement::add_data(int workCurveIndex,QString data,int size){
     sum += ui->tableWidget->item(size -1,1)->text().toDouble();
 
     resizeTableWidget();
-
 }
 
 void showsamplemeasurement::show_calculate_storage(QString data){
