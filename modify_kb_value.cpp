@@ -191,7 +191,7 @@ void modify_kb_value::on_b_sure_clicked()
           tmpstr += "r=" + ui->lineEdit_a2->text();
         }
       p_mySettings->setValue(MYSETTINGS_CALIBRATE_WORK_CURVE(ui->comboBox->currentText().toInt()), tmpstr);
-      p_mySettings->setValue(QString("real_compute_kbr_%1").arg(ui->comboBox->currentText().toInt()), tmpstr);
+      p_mySettings->setValue(MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(ui->comboBox->currentText().toInt()), tmpstr);
       WinInforListDialog::instance()->showMsg(tr("您输入的数据已保存！"));
       on_b_abandon_clicked();
       //this->close();
