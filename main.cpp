@@ -60,7 +60,9 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
 #include<QSqlDriver>
 
 #ifdef __arm__
+#ifdef FORLIN_OK335XS
 #include <QWSServer>
+#endif
 #endif
 
 void initSettings()
@@ -334,10 +336,11 @@ int main(int argc, char *argv[])
   initLanguage(a);
   initDatabase();
 
-
 #ifdef __arm__
+#ifdef FORLIN_OK335XS
   QWSServer::setCursorVisible(false);//这句就能让我们实现触摸屏能用而光标又不显示的功能了。
   qDebug() << "set no cursor";
+#endif
 #endif
   buzzer buz;
   buz.stop_music();

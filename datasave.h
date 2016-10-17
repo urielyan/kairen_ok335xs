@@ -11,11 +11,11 @@
 #define MYSETTINGS_CALIBRATE_S_INPUT(x) QString("calibrate_input_s_").append(QString::number((x)))
 //relavnt calibrate results
 //标定数据下次保存的序号.1-20
-#define MYSETTINGS_CALIBRATE_WORK_CURVE(x) QString("work_curve_%1").arg(x)
+#define MYSETTINGS_CALIBRATE_WORK_CURVE(x) QString("work_curve_").append(QString::number((x)))
 #define MYSETTINGS_CALIBRATE_RESULT_COUNT "calibration_results_count"
 #define MYSETTINGS_CALIBRATE_RESULT_RESULT(x) QString("calibration_results_in_result_").append(QString::number((x)))
 #define MYSETTINGS_CALIBRATE_RESULT_DATA(x) QString("calibration_results_in_data_").append(QString::number((x)))
-#define MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(x) QString("real_compute_kbr_1").append(QString::number((x)))
+#define MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(x) QString("real_compute_kbr_").append(QString::number((x)))
 
 //计数相关
 #define MYSETTINGS_COUNT_COUNT QString("count_count")
