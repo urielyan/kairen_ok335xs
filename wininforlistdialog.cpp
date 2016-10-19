@@ -9,11 +9,12 @@ WinInforListDialog *WinInforListDialog::instance()
   return &Instance;
 }
 
-void WinInforListDialog::showMsg(QString text)
+void WinInforListDialog::showMsg(QString text, QString informativeText)
 {
   QMessageBox msgbox;
   msgbox.setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
   msgbox.setText(text);
+  msgbox.setInformativeText(informativeText);
   msgbox.exec();
 }
 

@@ -32,7 +32,8 @@ Communciation_Com::Communciation_Com(QObject *parent) :
         fd = open( "/dev/ttyO1", O_RDWR|O_NOCTTY|O_NDELAY);//mid com
         if(fd == -1)
         {
-            WinInforListDialog::instance()->showMsg(tr("open err"));
+            //WinInforListDialog::instance()->showMsg(tr("open err"));
+            return;
         }
         return;
     }

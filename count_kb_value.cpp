@@ -111,8 +111,15 @@ void count_kb_value::on_pushButton_clicked()
 
       //保存刚刚标定完成的是第几组数据再加一，以便下次计算kb值
       p_mySettings->setValue(MYSETTINGS_CALIBRATE_RESULT_COUNT,++count_record);
+
+      QString displayKBRString = kbr_data.replace(";", "\n");
+      qDebug() << displayKBRString;
+      if(displayKBRString.size() == 0)
+      {
+          displayKBRString = kbr_data;
+      }
       WinInforListDialog::instance()->showMsg(QString("标定结果已经存入工作曲线%1\n").arg(ui->comboBox->currentText().toInt())
-                                              +  kbr_data.replace(";", "\n"));
+                                              ,  displayKBRString);
 
       //spec_painter->show_special_curve(ui->comboBox->currentIndex()+1,painter_data,kbr_data);
       printer_result();
