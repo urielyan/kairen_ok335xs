@@ -2,11 +2,23 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>Sliding</name>
+    <message>
+        <location filename="common/sliding.cpp" line="69"/>
+        <source>未接收到数据</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="common/sliding.cpp" line="91"/>
+        <source>recv 0x33</source>
+        <translation type="unfinished">yange</translation>
+    </message>
+</context>
+<context>
     <name>Widget</name>
     <message>
-        <location filename="widget.ui" line="14"/>
         <source>Widget</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
     <message>
         <location filename="widget.ui" line="34"/>
@@ -44,23 +56,19 @@
         <translation>yange</translation>
     </message>
     <message>
-        <location filename="widget.cpp" line="178"/>
         <source>recv Null</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
     <message>
-        <location filename="widget.cpp" line="182"/>
-        <location filename="widget.cpp" line="228"/>
         <source>recv 0x33</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
     <message>
-        <location filename="widget.cpp" line="223"/>
         <source>recv NULL</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
     <message>
-        <location filename="widget.cpp" line="303"/>
+        <location filename="widget.cpp" line="240"/>
         <source>需要更换计数管高压,请联系厂家18855953618</source>
         <translation>yange</translation>
     </message>
@@ -222,9 +230,8 @@
 <context>
     <name>caibrateresultquery</name>
     <message>
-        <location filename="caibrateresultquery.ui" line="14"/>
         <source>Form</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
     <message>
         <location filename="caibrateresultquery.ui" line="45"/>
@@ -812,14 +819,12 @@
         <translation>yange</translation>
     </message>
     <message>
-        <location filename="date_widget.ui" line="39"/>
         <source>date</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
     <message>
-        <location filename="date_widget.ui" line="54"/>
         <source>time</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
 </context>
 <context>
@@ -1429,20 +1434,16 @@ p, li { white-space: pre-wrap; }
         <translation>yange</translation>
     </message>
     <message>
-        <location filename="passwd.ui" line="31"/>
         <source>password</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
     <message>
-        <location filename="passwd.ui" line="56"/>
         <source>passwd</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
     <message>
-        <location filename="passwd.ui" line="96"/>
-        <location filename="passwd.ui" line="226"/>
         <source>PushButton</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
     <message>
         <location filename="passwd.ui" line="109"/>
@@ -1525,9 +1526,13 @@ p, li { white-space: pre-wrap; }
         <translation>yange</translation>
     </message>
     <message>
-        <location filename="passwd.cpp" line="200"/>
         <source>transmit err!</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
+    </message>
+    <message>
+        <location filename="passwd.cpp" line="200"/>
+        <source>命令发送失败。</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="passwd.cpp" line="205"/>
@@ -2126,9 +2131,8 @@ p, li { white-space: pre-wrap; }
         <translation>yange</translation>
     </message>
     <message>
-        <location filename="samplemeasurementquery.ui" line="74"/>
         <source>TextLabel</source>
-        <translation>yange</translation>
+        <translation type="vanished">yange</translation>
     </message>
     <message>
         <location filename="samplemeasurementquery.ui" line="85"/>
@@ -2477,7 +2481,7 @@ p, li { white-space: pre-wrap; }
         <translation>yange</translation>
     </message>
     <message>
-        <location filename="showsamplemeasurement.cpp" line="303"/>
+        <location filename="showsamplemeasurement.cpp" line="304"/>
         <source>数据未存入数据库中！</source>
         <translation>yange</translation>
     </message>
