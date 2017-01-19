@@ -4,6 +4,7 @@
 #include <QScrollBar>
 #include <QSqlError>
 #include <QSqlDriver>
+#include <QMessageBox>
 
 #include "showsamplemeasurement.h"
 #include "countingmeasurement.h"

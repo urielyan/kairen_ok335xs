@@ -151,98 +151,35 @@ void Widget::on_b1_clicked()
   samplem->showFullScreen();
 }
 
-static int move_sliding_count = 0;
-static QDateTime last_move_sliding_datetime = QDateTime::currentDateTime();
+#include "common/sliding.h"
+
 void Widget::on_b4_clicked()
 {
   //移进滑板到待测样
-  if(move_sliding_count >= 2){
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NOT_ALLOW));
-      return;
-    }
-  if(measurement_flag != MEASUREMENT_NOTHING){
-      emit transmit_stop_auto_count();
-    }
-  tcflush(Communciation_Com::fd,TCIOFLUSH);
-  measurement_flag = MEASUREMENT_NOTHING;
-  if(Communciation_Com::transmit(IN_SLIDING_PLATE,4) < 0){
-      WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR) + Communciation_Com::fd);
-      if(last_move_sliding_datetime.secsTo(QDateTime::currentDateTime()) > 5){
-          move_sliding_count = 0;
-        }
-      return;
-    }
-  QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
-  if(recv_data == NULL){
-      ErrorCountSave::instance()->addCount(6);
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv Null"));
-    }else if(recv_data[1] == (char)0x32){//recv_data[0] == (char)0x98 &&
-      issample::global_is_sample = WAIT_BE_LOCATION;
-    }else if( recv_data[1] == (char)0x33){//recv_data[0] == (char)0x98 &&
-      WinInforListDialog::instance()->showMsg(tr(MACHINE_MALFUNCTION_TEXT) + tr("recv 0x33"));
-      set_sliding_disabled(false,false);
-      emit change_sliding_disabled(false,false);
-    }else {
-      ErrorCountSave::instance()->addCount(6);
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT)+ ":" + recv_data + "," + QString::number(measurement_flag));
-    }
 
-  set_sliding_disabled(false,true);
-  emit change_sliding_disabled(false,true);
-  if(last_move_sliding_datetime.secsTo(QDateTime::currentDateTime()) < 5){
-      move_sliding_count++;
-    }else{
-      move_sliding_count = 0;
+    if(measurement_flag != MEASUREMENT_NOTHING)
+    {
+        emit transmit_stop_auto_count();
+        measurement_flag = MEASUREMENT_NOTHING;
     }
-  last_move_sliding_datetime = QDateTime::currentDateTime();
+    Sliding::moveSlider(Sliding::In);
 }
 
 int Widget::on_b6_clicked()
 {
-  //移出滑板到参考样,
-  if(move_sliding_count >= 2){
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NOT_ALLOW));
-      if(last_move_sliding_datetime.secsTo(QDateTime::currentDateTime()) > 5){
-          move_sliding_count = 0;
-        }
-      return -2;
+    //移出滑板到参考样,
+
+    if(measurement_flag != MEASUREMENT_NOTHING)
+    {
+        emit transmit_stop_auto_count();
+        measurement_flag = MEASUREMENT_NOTHING;
     }
-  if(measurement_flag != MEASUREMENT_NOTHING){
-      emit transmit_stop_auto_count();
+    if(Sliding::moveSlider(Sliding::Out) != Sliding::SlidingSuccess)
+    {
+        return false;
     }
-  tcflush(Communciation_Com::fd,TCIOFLUSH);
-  measurement_flag = MEASUREMENT_NOTHING;
-  if(Communciation_Com::transmit(OUT_SLIDING_PLATE,4) < 0){
-      WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR));
-      return ERRNO_COMMUNICATION_1;
-    }
-  QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
-  //qDebug() <<recv_data.toLocal8Bit().data();
-  if(recv_data == NULL){
-      ErrorCountSave::instance()->addCount(6);
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv NULL"));
-      return ERRNO_COMMUNICATION_1;
-    }else if(recv_data[1] == (char)0x31){
-      issample::global_is_sample = REFERENCE_BE_LOCATON;
-    }else if(recv_data[1] == (char)0x33){
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv 0x33"));
-      set_sliding_disabled(false,false);
-      emit change_sliding_disabled(false,false);
-      return ERRNO_SILIDING_POSITION;
-    }else {
-      ErrorCountSave::instance()->addCount(6);
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT)  + ":" + recv_data + "," + QString::number(measurement_flag));
-      return ERRNO_COMMUNICATION_1;
-    }
-  set_sliding_disabled(true,false);
-  emit change_sliding_disabled(true,false);
-  if(last_move_sliding_datetime.secsTo(QDateTime::currentDateTime()) < 5){
-      move_sliding_count++;
-    }else{
-      move_sliding_count = 0;
-    }
-  last_move_sliding_datetime = QDateTime::currentDateTime();
-  return ALL_RIGHT;
+
+    return true;
 }
 
 void Widget::set_sliding_disabled(bool out, bool in){
@@ -263,7 +200,7 @@ void Widget::on_b5_clicked()
 
 #endif
   if(ret == QMessageBox::Ok){
-      if (on_b6_clicked() != 0){
+      if (on_b6_clicked() == false){
           return;
         }
       //if(measurement_flag == 4)return;

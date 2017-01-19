@@ -233,6 +233,11 @@ int main(int argc, char *argv[])
       GlobalData::instance()->strUdiskPath = QString(argv[2]);
     }
   QApplication a(argc, argv);
+
+  QTranslator tsor;           //创建翻译器
+  tsor.load("/home/yange/en.qm");    //加载语言包
+  QApplication::installTranslator(&tsor); //安装翻译器
+
 #ifdef FRIENDLYARM_TINY210
   a.setStyleSheet(""
                   "QPushButton#stop{"
