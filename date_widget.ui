@@ -36,7 +36,7 @@
         <string notr="true"/>
        </property>
        <property name="text">
-        <string>date</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -51,7 +51,7 @@
         <string notr="true"/>
        </property>
        <property name="text">
-        <string>time</string>
+        <string/>
        </property>
       </widget>
      </item>

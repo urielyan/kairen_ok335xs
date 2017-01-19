@@ -28,7 +28,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>password</string>
+        <string/>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -53,7 +53,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>passwd</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -93,7 +93,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>PushButton</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -223,7 +223,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>PushButton</string>
+          <string/>
          </property>
         </widget>
        </item>
