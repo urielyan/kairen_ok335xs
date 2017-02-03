@@ -32,7 +32,7 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
   ui(new Ui::spectrummeasurement),
   summit_value(1)
 {
-    Communciation_Com *spectrum_com = new Communciation_Com();
+    //Communciation_Com *spectrum_com = new Communciation_Com();
 
   ui->setupUi(this);
   row = 0;
@@ -598,6 +598,7 @@ void spectrummeasurement::printPicture()
 
   printer::transmit(ll);
 
+#if 0
   static int array_data[SPECTRUM_PAINTER_WIDTH] = {
     0,100,200,300,592,
     592,641,656,720,720,
@@ -607,6 +608,7 @@ void spectrummeasurement::printPicture()
     257,272,400,577,944,
     1498,2000,2576,2721,2192,
     1616,939,400,161,80,33,16,33,48,48,48,48};
+#endif
   //  for(int column = 0;i <= 6;i += 2){
   //      for(int row = 0;i <10; i++){
   //          array_data[tmp_array_length++] = ui->tableWidget->item(row,column)->text().toInt();

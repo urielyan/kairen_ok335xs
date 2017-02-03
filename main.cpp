@@ -206,7 +206,7 @@ void initDatabase()
 {
 #if 0
   QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-  db.setDatabaseName("/samplemeasurement.db");
+  db.setDatabaseName("./samplemeasurement.db");
   bool ok = db.open();
   if(ok == false){
       WinInforListDialog::instance()->showMsg(tr("不能打开含量测量的数据"));
@@ -234,9 +234,11 @@ int main(int argc, char *argv[])
     }
   QApplication a(argc, argv);
 
+#if 0
   QTranslator tsor;           //创建翻译器
   tsor.load("/home/yange/en.qm");    //加载语言包
   QApplication::installTranslator(&tsor); //安装翻译器
+#endif
 
 #ifdef FRIENDLYARM_TINY210
   a.setStyleSheet(""
