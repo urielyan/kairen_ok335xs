@@ -11,6 +11,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = new
 TEMPLATE = app
 
+unix {
+    INCLUDEPATH += ./common ./dataSave
+}
+
 
 SOURCES += main.cpp\
         widget.cpp \
@@ -52,8 +56,9 @@ SOURCES += main.cpp\
     query_change_voltage.cpp \
     global.cpp \
     wininforlistdialog.cpp \
-    database.cpp \
-    datasave.cpp
+    common/sliding.cpp \
+    dataSave/datasave.cpp \
+    dataSave/database.cpp
 
 HEADERS  += widget.h \
     date_widget.h \
@@ -94,8 +99,9 @@ HEADERS  += widget.h \
     communication_help.h \
     query_change_voltage.h \
     wininforlistdialog.h \
-    database.h \
-    datasave.h
+    common/sliding.h \
+    dataSave/datasave.h \
+    dataSave/database.h
 
 FORMS    += widget.ui \
     date_widget.ui \

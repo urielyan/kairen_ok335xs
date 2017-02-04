@@ -197,7 +197,7 @@ void passwd::on_b_ok_clicked()
 
         tcflush(Communciation_Com::fd,TCIOFLUSH);
         if(Communciation_Com::transmit(transmit_data,7) <= 0){
-            WinInforListDialog::instance()->showMsg(tr("transmit err!"));
+            WinInforListDialog::instance()->showMsg(tr("命令发送失败。"));
             return;
           }
         QString recv_data = Communciation_Com::receive(SETUP_WAIT_TIME);
