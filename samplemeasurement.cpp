@@ -314,6 +314,9 @@ void sampleMeasurement::on_pushButton_4_clicked()
 {
     //query button
     showsm->showFullScreen();
+#ifdef DEBUG
+    showsm->show_calculate_storage(tr_data);
+#endif
 }
 
 void sampleMeasurement::on_b_input_serial_clicked()

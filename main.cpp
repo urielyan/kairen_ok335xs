@@ -328,15 +328,19 @@ int main(int argc, char *argv[])
                           "}"
                           "QHeaderView{font:20px}"
 
-                          "QScrollBar{width:10px;}"
+                          "QScrollBar:vertical {"
+                              "border: 0px solid grey;"
+                              "width: 20px;"
+                         " }"
                           ).arg(FONT_SIZE * 1.5));
 #endif
 
   //initSettings();
   initLanguage(a);
   initDatabase();
-
+//QApplication::setOverrideCursor(Qt::BlankCursor);
 #ifdef __arm__
+
 #ifdef FORLIN_OK335XS
   QWSServer::setCursorVisible(false);//这句就能让我们实现触摸屏能用而光标又不显示的功能了。
   qDebug() << "set no cursor";
