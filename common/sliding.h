@@ -36,7 +36,7 @@ public:
 
     static int moveSlider(SlidingDirection direction);
 
-    static void setSliderButtonPair(QPushButton* in, QPushButton* Out);
+    static void insertSliderButtonPairs(QPushButton* in, QPushButton* Out);
     static void setButtonsState(SliderPosition position);
 
     static QList<QPushButton*> s_moveInSliderButtons;

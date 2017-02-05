@@ -23,7 +23,8 @@ Communciation_Com::Communciation_Com(QObject *parent) :
     fd = open( "/dev/ttyUSB0", O_RDWR|O_NOCTTY|O_NDELAY);
 #endif
 #ifdef FORLIN_OK335XS
-    fd = open( "/dev/ttyO1", O_RDWR|O_NOCTTY|O_NDELAY);//mid com
+    fd = open( "/dev/ttyUSB0", O_RDWR|O_NOCTTY|O_NDELAY);
+    //fd = open( "/dev/ttyO1", O_RDWR|O_NOCTTY|O_NDELAY);//mid com
 #endif
 #ifdef FRIENDLYARM_TINY210
         fd = open( "/dev/ttySAC3", O_RDWR|O_NOCTTY|O_NDELAY);
@@ -37,7 +38,8 @@ Communciation_Com::Communciation_Com(QObject *parent) :
         }
         return;
     }
-    if  ( tcgetattr( fd,&options)  !=  0){
+    if  ( tcgetattr( fd,&options)  !=  0)
+    {
         printf("SetupSerial tcgetattr\n");
         return;
     }

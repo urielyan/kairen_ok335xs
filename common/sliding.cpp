@@ -40,7 +40,9 @@ int Sliding::moveSlider(SlidingDirection direction)
     if(direction == In)
     {
         slidingOrder = IN_SLIDING_PLATE;
-    }else{
+    }
+    else
+    {
         slidingOrder = OUT_SLIDING_PLATE;
     }
     if(Communciation_Com::transmit(slidingOrder,4) < 0)
@@ -111,7 +113,7 @@ int Sliding::moveSlider(SlidingDirection direction)
     return m_sliderState;
 }
 
-void Sliding::setSliderButtonPair(QPushButton *in, QPushButton *out)
+void Sliding::insertSliderButtonPairs(QPushButton *in, QPushButton *out)
 {
     Q_ASSERT(in != NULL);
     Q_ASSERT(out != NULL);
@@ -135,13 +137,13 @@ void Sliding::setButtonsState(Sliding::SliderPosition position)
     //根据滑板位置设置移动滑板按钮状态。
     if(position == Reference)
     {
-        inState = false;
-        outState = true;
+        inState = true;
+        outState = false;
         issample::global_is_sample = Reference;
     }else if(position == SampleToBeTested)
     {
-        inState = true;
-        outState = false;
+        inState = false;
+        outState = true;
         issample::global_is_sample = SampleToBeTested;
     }else if(position == Malfunction)
     {

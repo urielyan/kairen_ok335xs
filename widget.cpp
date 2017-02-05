@@ -1,4 +1,6 @@
-﻿#include <QDate>
+﻿#include "common/sliding.h"
+
+#include <QDate>
 #include<QTime>
 #include<QTimer>
 #include<QDebug>
@@ -29,9 +31,9 @@
 */
 int measurement_flag = 0;
 
-Widget::Widget(QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::Widget)
+Widget::Widget(QWidget *parent)
+  : QWidget(parent)
+  , ui(new Ui::Widget)
 {
     p_mySettings = MeasurementDataSave::instance();
 
@@ -89,6 +91,8 @@ Widget::Widget(QWidget *parent) :
   INIT_LABEL_SIZE_FONT;
   ui->label->setFont(QFont("symbol.ttf", FONT_SIZE*2,QFont::Normal));
   ui->label->setObjectName("title");
+
+  Sliding::insertSliderButtonPairs(ui->b4, ui->b6);
 }
 
 Widget::~Widget()
@@ -150,8 +154,6 @@ void Widget::on_b1_clicked()
   //sample measurement.
   samplem->showFullScreen();
 }
-
-#include "common/sliding.h"
 
 void Widget::on_b4_clicked()
 {

@@ -6,8 +6,8 @@
 #define DESKTOP_WIDTH   QApplication::desktop()->width()
 #define DESKTOP_HEIGHT QApplication::desktop()->height()
 
-#define FRIENDLYARM_TINY210
-//#define FORLIN_OK335XS
+//#define FRIENDLYARM_TINY210
+#define FORLIN_OK335XS
 
 #define INIT_LABEL_SIZE_FONT \
   do{\
