@@ -44,6 +44,7 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
 #include "global.h"
 #include "buzzer.h"
 #include "datasave.h"
+#include "com.h"
 #include <QApplication>
 #include <QDesktopWidget>
 
@@ -68,307 +69,312 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
 void initSettings()
 {
 
-  QCoreApplication::setOrganizationName("shanghaikairen");
-  QCoreApplication::setApplicationName("analysis");
+    QCoreApplication::setOrganizationName("shanghaikairen");
+    QCoreApplication::setApplicationName("analysis");
 
-  QSettings mysettings("shanghaikairen","analysis");
-//  mysettings.setPath(QSettings::NativeFormat, QSettings::UserScope, "/shanghaikairen");
-  qDebug() << mysettings.fileName();
-  mysettings.clear();
+    QSettings mysettings("shanghaikairen","analysis");
+    //  mysettings.setPath(QSettings::NativeFormat, QSettings::UserScope, "/shanghaikairen");
+    qDebug() << mysettings.fileName();
+    mysettings.clear();
 
-  if(!mysettings.contains("calibration_results_count")){
-      mysettings.setValue("calibration_results_count",1);
+    if(!mysettings.contains("calibration_results_count")){
+        mysettings.setValue("calibration_results_count",1);
     }
-  if((!mysettings.contains("calibration_results_in_result_1"))\
-     && (!mysettings.contains("calibration_results_in_data_10"))){
-      for(int tmp = 1;tmp <= 10;tmp++){
-          //qDebug() << "calibrate_results";
-          mysettings.setValue(QString("calibration_results_in_result_%1").arg(tmp)," ; ; ; ");
-          mysettings.setValue(QString("calibration_results_in_data_%1").arg(tmp),"");
+    if((!mysettings.contains("calibration_results_in_result_1"))\
+            && (!mysettings.contains("calibration_results_in_data_10"))){
+        for(int tmp = 1;tmp <= 10;tmp++){
+            //qDebug() << "calibrate_results";
+            mysettings.setValue(QString("calibration_results_in_result_%1").arg(tmp)," ; ; ; ");
+            mysettings.setValue(QString("calibration_results_in_data_%1").arg(tmp),"");
         }
     }
 
-  QString tmpstr = "calibrate_input_s_";
-  if(!mysettings.contains("calibrate_input_s_1")){
-      for(int tmpnumber = 0; tmpnumber < 12 ;tmpnumber++){
-          tmpstr.append(QString("%1").arg(tmpnumber));
-          mysettings.setValue(tmpstr,"0.0000");
-          tmpstr = "calibrate_input_s_";
-        }
-    }
-
-
-  tmpstr = "s_count_data_";
-  if(!mysettings.contains("s_count_data_1")){
-      for(int tmpnumber = 0; tmpnumber < 12 ;tmpnumber++){
-          tmpstr.append(QString("%1").arg(tmpnumber));
-          qDebug() << tmpstr;
-          mysettings.setValue(tmpstr,"");
-          tmpstr = "s_count_data_";
-      }
-  }
-
-  if(!mysettings.contains("work_curve_1") || !mysettings.contains("work_curve_9")){
-      for(int i = 1;i <= 5 ; i++){
-          mysettings.setValue(QString("work_curve_%1").arg(i),";;");
-        }
-      for(int i = 6 ; i <= 9 ; i++){
-          mysettings.setValue(QString("work_curve_%1").arg(i),";;");
+    QString tmpstr = "calibrate_input_s_";
+    if(!mysettings.contains("calibrate_input_s_1")){
+        for(int tmpnumber = 0; tmpnumber < 12 ;tmpnumber++){
+            tmpstr.append(QString("%1").arg(tmpnumber));
+            mysettings.setValue(tmpstr,"0.0000");
+            tmpstr = "calibrate_input_s_";
         }
     }
 
 
-  //judge calibratemeasurement_count  whether is exit;if not exit create it.finally assign count variable.
-  if(!mysettings.contains("calibratemeasurement_count")){
-      mysettings.setValue("calibratemeasurement_count",0);
+    tmpstr = "s_count_data_";
+    if(!mysettings.contains("s_count_data_1")){
+        for(int tmpnumber = 0; tmpnumber < 12 ;tmpnumber++){
+            tmpstr.append(QString("%1").arg(tmpnumber));
+            qDebug() << tmpstr;
+            mysettings.setValue(tmpstr,"");
+            tmpstr = "s_count_data_";
+        }
     }
 
-  if(!mysettings.contains("count_voltage")){
-      mysettings.setValue("count_voltage",578);
-    }
-
-  if(!mysettings.contains("light_voltage")){
-      mysettings.setValue("light_voltage"," ");
-    }
-
-  if(!mysettings.contains("light_current")){
-      mysettings.setValue("light_current"," ");
+    if(!mysettings.contains("work_curve_1") || !mysettings.contains("work_curve_9")){
+        for(int i = 1;i <= 5 ; i++){
+            mysettings.setValue(QString("work_curve_%1").arg(i),";;");
+        }
+        for(int i = 6 ; i <= 9 ; i++){
+            mysettings.setValue(QString("work_curve_%1").arg(i),";;");
+        }
     }
 
 
-  if(!mysettings.contains("machine_used_time")){
-      mysettings.setValue("machine_used_time",0);
+    //judge calibratemeasurement_count  whether is exit;if not exit create it.finally assign count variable.
+    if(!mysettings.contains("calibratemeasurement_count")){
+        mysettings.setValue("calibratemeasurement_count",0);
     }
-  if(!mysettings.contains("most_use_time")){
-      mysettings.setValue("most_use_time",0);
+
+    if(!mysettings.contains("count_voltage")){
+        mysettings.setValue("count_voltage",578);
     }
-  if (!mysettings.contains("passwd")){
-      mysettings.setValue("passwd",111111);
-  }
 
-  // not set default value
-//    if(!mysettings.contains("proportion_1"))
-//      {
-//        mysettings.setValue("proportion_1", 0.1);
-//        mysettings.setValue("proportion_2", 1);
-//      }
+    if(!mysettings.contains("light_voltage")){
+        mysettings.setValue("light_voltage"," ");
+    }
+
+    if(!mysettings.contains("light_current")){
+        mysettings.setValue("light_current"," ");
+    }
 
 
-  if(!mysettings.contains("sample_count")){
-      mysettings.setValue("sample_count",0);
-  }
+    if(!mysettings.contains("machine_used_time")){
+        mysettings.setValue("machine_used_time",0);
+    }
+    if(!mysettings.contains("most_use_time")){
+        mysettings.setValue("most_use_time",0);
+    }
+    if (!mysettings.contains("passwd")){
+        mysettings.setValue("passwd",111111);
+    }
+
+    // not set default value
+    //    if(!mysettings.contains("proportion_1"))
+    //      {
+    //        mysettings.setValue("proportion_1", 0.1);
+    //        mysettings.setValue("proportion_2", 1);
+    //      }
+
+
+    if(!mysettings.contains("sample_count")){
+        mysettings.setValue("sample_count",0);
+    }
 }
 
 void initLanguage(QApplication &a)
 {
 #if 1
-  QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-  qDebug() << "test";
-  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-  QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/test/");
+    qDebug() << "test";
+    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, "/test/");
 #endif
 
 #endif
 
 
-  int nIndex = QFontDatabase::addApplicationFont("/wenquanyi.ttf");//opt/Qtopia4.4.3/lib/fonts
-  if (nIndex != -1){
-      QStringList strList(QFontDatabase::applicationFontFamilies(nIndex));
-      if (strList.count() > 0){
-          QFont fontThis(strList.at(0));
-          qDebug()<< strList.size() <<strList.at(0);
-          fontThis.setPointSize(9);
-          a.setFont(fontThis);
+    int nIndex = QFontDatabase::addApplicationFont("/wenquanyi.ttf");//opt/Qtopia4.4.3/lib/fonts
+    if (nIndex != -1){
+        QStringList strList(QFontDatabase::applicationFontFamilies(nIndex));
+        if (strList.count() > 0){
+            QFont fontThis(strList.at(0));
+            qDebug()<< strList.size() <<strList.at(0);
+            fontThis.setPointSize(9);
+            a.setFont(fontThis);
         }
     }
-  nIndex = QFontDatabase::addApplicationFont("/symbol.ttf");//opt/Qtopia4.4.3/lib/fonts
-  if (nIndex != -1){
-      QStringList strList(QFontDatabase::applicationFontFamilies(nIndex));
-      if (strList.count() > 0){
-          QFont fontThis(strList.at(0));
-          qDebug()<< strList.size() <<strList.at(0);
-          fontThis.setPointSize(9);
-          a.setFont(fontThis);
+    nIndex = QFontDatabase::addApplicationFont("/symbol.ttf");//opt/Qtopia4.4.3/lib/fonts
+    if (nIndex != -1){
+        QStringList strList(QFontDatabase::applicationFontFamilies(nIndex));
+        if (strList.count() > 0){
+            QFont fontThis(strList.at(0));
+            qDebug()<< strList.size() <<strList.at(0);
+            fontThis.setPointSize(9);
+            a.setFont(fontThis);
         }
     }
 
-  //把QMessageBox的按钮变成中文的
-  QTranslator trans;
-  trans.load("/qt_zh_CN");
-  a.installTranslator(&trans);
+    //把QMessageBox的按钮变成中文的
+    QTranslator trans;
+    trans.load("/qt_zh_CN");
+    a.installTranslator(&trans);
 
 }
 
 void initDatabase()
 {
 #if 0
-  QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-  db.setDatabaseName("./samplemeasurement.db");
-  bool ok = db.open();
-  if(ok == false){
-      WinInforListDialog::instance()->showMsg(tr("不能打开含量测量的数据"));
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("./samplemeasurement.db");
+    bool ok = db.open();
+    if(ok == false){
+        WinInforListDialog::instance()->showMsg(tr("不能打开含量测量的数据"));
     }
-  //printf(",,,%s\n",__FUNCTION__);
-  QSqlQuery query(db);
-  ok = query.exec("SELECT * FROM sample_data;");
-  if(ok == false){
-      ok = query.exec("create table sample_data(people_id,sample_serial,date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient);");
-      if(ok == false){
-          WinInforListDialog::instance()->showMsg(tr("不能打开含量测量的数据"));
-          return;
+    //printf(",,,%s\n",__FUNCTION__);
+    QSqlQuery query(db);
+    ok = query.exec("SELECT * FROM sample_data;");
+    if(ok == false){
+        ok = query.exec("create table sample_data(people_id,sample_serial,date_time,work_curve,measurement_time,repeat_time,average,deviation,is_auto,current_coefficient);");
+        if(ok == false){
+            WinInforListDialog::instance()->showMsg(tr("不能打开含量测量的数据"));
+            return;
         }
-      WinInforListDialog::instance()->showMsg(tr("创建了含量测量的数据库"));
+        WinInforListDialog::instance()->showMsg(tr("创建了含量测量的数据库"));
     }
 #endif
 }
 
 int main(int argc, char *argv[])
 {
-  if(argc > 2)
+    if(argc > 2)
     {
-      GlobalData::instance()->strComName = QString(argv[1]);
-      GlobalData::instance()->strUdiskPath = QString(argv[2]);
+        GlobalData::instance()->strComName = QString(argv[1]);
+        GlobalData::instance()->strUdiskPath = QString(argv[2]);
     }
-  QApplication a(argc, argv);
+    QApplication a(argc, argv);
 
 #if 0
-  QTranslator tsor;           //创建翻译器
-  tsor.load("/home/yange/en.qm");    //加载语言包
-  QApplication::installTranslator(&tsor); //安装翻译器
+    QTranslator tsor;           //创建翻译器
+    tsor.load("/home/yange/en.qm");    //加载语言包
+    QApplication::installTranslator(&tsor); //安装翻译器
 #endif
 
 #ifdef FRIENDLYARM_TINY210
-  a.setStyleSheet(""
-                  "QPushButton#stop{"
-                  "background-color:(255, 0, 0); color: rgb(255, 255, 255); font-weight:bold;"
-                  "}"
-                  "QPushButton#start{background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;}"  );
+    a.setStyleSheet(""
+                    "QPushButton#stop{"
+                    "background-color:(255, 0, 0); color: rgb(255, 255, 255); font-weight:bold;"
+                    "}"
+                    "QPushButton#start{background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;}"  );
 
-  //                          "min-width:80; font: 28px; min-height:60;"
-  //                          "}"
-  //                          "QPushButton#buttonTitle{"
-  //                          "font: 48px;"
-  //                          "min-height:50px;"
-  //                          "}"
+    //                          "min-width:80; font: 28px; min-height:60;"
+    //                          "}"
+    //                          "QPushButton#buttonTitle{"
+    //                          "font: 48px;"
+    //                          "min-height:50px;"
+    //                          "}"
 
-  //                          "QLabel{"
-  //                          "font: 10px;"
-  //                          "min-height:15px;"
-  //                          "}"
-  //                          "QLabel#countDown{"
-  //                          "font: 15px;"
-  //                          "min-height:20px;"
-  //                          "}"
-  //                          "QLabel#title{"
-  //                          "font: 15px;"
-  //                          "min-height:20px;"
-  //                          "}"
+    //                          "QLabel{"
+    //                          "font: 10px;"
+    //                          "min-height:15px;"
+    //                          "}"
+    //                          "QLabel#countDown{"
+    //                          "font: 15px;"
+    //                          "min-height:20px;"
+    //                          "}"
+    //                          "QLabel#title{"
+    //                          "font: 15px;"
+    //                          "min-height:20px;"
+    //                          "}"
 
-  //                          "QComboBox {"
-  //                          "min-height: 40px;"
-  //                          "font: 30px;"
-  //                          "}"
+    //                          "QComboBox {"
+    //                          "min-height: 40px;"
+    //                          "font: 30px;"
+    //                          "}"
 
-  //                          "QLineEdit{"
-  //                          "font: 24px;"
-  //                          "}"
+    //                          "QLineEdit{"
+    //                          "font: 24px;"
+    //                          "}"
 
-  //                          "QTableView{"
-  //                          "font:15px;"
-  //                          "}"
-  //                          "QTableView::item{"
-  //                          "min-height: 16px;"
-  //                          "}"
-  //                          "QHeaderView{font:7px}"
+    //                          "QTableView{"
+    //                          "font:15px;"
+    //                          "}"
+    //                          "QTableView::item{"
+    //                          "min-height: 16px;"
+    //                          "}"
+    //                          "QHeaderView{font:7px}"
 
-  //                          "QScrollBar{width:10px;}"
+    //                          "QScrollBar{width:10px;}"
 
-  //                          "QMessageBox{min-height: 50px; min-width: 80px;}"
+    //                          "QMessageBox{min-height: 50px; min-width: 80px;}"
 
 #endif
 
 #ifdef FORLIN_OK335XS
-  a.setStyleSheet(QString("QPushButton{"
-                          "min-width:80; font: 28px; min-height:60;"
-                          "}"
-                          "QPushButton#stop{"
-                          "background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;"
-                          "}"
-                          "QPushButton#start{"
-                          "background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;"
-                          "}"
-                          "QPushButton#buttonTitle{"
-                          "font: 48px;"
-                          "min-height:50px;"
-                          "}"
+    a.setStyleSheet(QString("QPushButton{"
+                            "min-width:80; font: 28px; min-height:60;"
+                            "}"
+                            "QPushButton#stop{"
+                            "background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;"
+                            "}"
+                            "QPushButton#start{"
+                            "background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;"
+                            "}"
+                            "QPushButton#buttonTitle{"
+                            "font: 48px;"
+                            "min-height:50px;"
+                            "}"
 
-                          "QLabel{"
-                          "font: 24px;"
-                          "min-height:%1;"
-                          "}"
-                          "QLabel#countDown{"
-                          "font: 48px;"
-                          "min-height:50px;"
-                          "}"
-                          "QLabel#title{"
-                          "font: 48px;"
-                          "min-height:50px;"
-                          "}"
+                            "QLabel{"
+                            "font: 24px;"
+                            "min-height:%1;"
+                            "}"
+                            "QLabel#countDown{"
+                            "font: 48px;"
+                            "min-height:50px;"
+                            "}"
+                            "QLabel#title{"
+                            "font: 48px;"
+                            "min-height:50px;"
+                            "}"
 
-                          "QComboBox {"
-                          "min-height: 50px;"
-                          "font: 25px;"
-                          "}"
+                            "QComboBox {"
+                            "min-height: 50px;"
+                            "font: 25px;"
+                            "}"
 
-                          "QLineEdit{"
-                          "font: 24px;"
-                          "}"
+                            "QLineEdit{"
+                            "font: 24px;"
+                            "}"
 
-                          "QTableView{"
-                          "font:20px;"
-                          "}"
-                          "QTableView::item{"
-                          "min-height: 18px;"
-                          "}"
-                          "QHeaderView{font:20px}"
+                            "QTableView{"
+                            "font:20px;"
+                            "}"
+                            "QTableView::item{"
+                            "min-height: 18px;"
+                            "}"
+                            "QHeaderView{font:20px}"
 
-                          "QScrollBar:vertical {"
-                              "border: 0px solid grey;"
-                              "width: 20px;"
-                         " }"
-                          ).arg(FONT_SIZE * 1.5));
+                            "QScrollBar:vertical {"
+                            "border: 0px solid grey;"
+                            "width: 20px;"
+                            " }"
+                            ).arg(FONT_SIZE * 1.5));
 #endif
 
-  //initSettings();
-  initLanguage(a);
-  initDatabase();
-//QApplication::setOverrideCursor(Qt::BlankCursor);
+    //initSettings();
+    initLanguage(a);
+    initDatabase();
+    //QApplication::setOverrideCursor(Qt::BlankCursor);
 #ifdef __arm__
 
 #ifdef FORLIN_OK335XS
-  QWSServer::setCursorVisible(false);//这句就能让我们实现触摸屏能用而光标又不显示的功能了。
-  qDebug() << "set no cursor";
+    QWSServer::setCursorVisible(false);//这句就能让我们实现触摸屏能用而光标又不显示的功能了。
+    qDebug() << "set no cursor";
 #endif
 #endif
-  buzzer buz;
-  buz.stop_music();
+    //  buzzer buz;
+    //  buz.stop_music();
 
-  printer pri;
+    printer pri;
+
 #if 0
-  printer::transmit(0x0A,1);
-  printer::transmit((void *)"shanghaikairen",14);
-  printer::transmit(0x0A,1);
+    printer::transmit(0x0A,1);
+    printer::transmit((void *)"shanghaikairen",14);
+    printer::transmit(0x0A,1);
 #endif
 
-  Widget w;
-  //  logo l;
-  //  l.showFullScreen();
-  //  QTimer::singleShot(5000,&l,SLOT(close()));
-  //  w.setFont(QFont("wenquanyi",FONT_SIZE,QFont::Normal));
-  //  QTimer::singleShot(4800,&w,SLOT(showFullScreen()));
-  w.showFullScreen();
-  return a.exec();
+    //SendSampleDataToPC __init;
+
+    Widget w;
+    logo l;
+    l.showFullScreen();
+    QTimer::singleShot(5000,&l,SLOT(close()));
+    //w.setFont(QFont("wenquanyi",FONT_SIZE,QFont::Normal));
+    QTimer::singleShot(4500,&w,SLOT(showFullScreen()));
+    //w.showFullScreen();
+
+    qDebug() << printer::revertDataToOtherProtectet(printer::getSampleData());
+    return a.exec();
 }

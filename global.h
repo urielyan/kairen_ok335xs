@@ -74,7 +74,7 @@
 #define ERRNO_DATA_ILLEGAL             3
 #define ALL_RIGHT 0
 
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
 #include <QDebug>
 #define PRINT_DEBUG_INFOR qDebug() << __FILE__ << __LINE__;

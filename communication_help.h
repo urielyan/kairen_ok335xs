@@ -28,6 +28,7 @@ private slots:
 private:
     bool saveCalibrateData(QString path);
     bool saveSampleData(QString path);
+    bool sendSampleDataToPC();
     bool copySampleDatabase(QString dir);
 
 private:

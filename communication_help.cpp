@@ -30,6 +30,9 @@ communication_help::communication_help(QWidget *parent) :
     ui->lableVersion->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     p_mysettings = ErrorCountSave::instance();
+
+    //阳光那边给部队的可以发送数据到上位机的版本(最初未经测试版)
+    ui->lableVersion->setText("当前版本：Ｖ2.0(2017.07.09)");
 }
 
 communication_help::~communication_help()
@@ -40,6 +43,9 @@ communication_help::~communication_help()
 void communication_help::on_pushButton_clicked()
 {
     //copy file
+
+    //sendSampleDataToPC();
+
     if(!QDir(m_uDiskDir).exists())
     {
         WinInforListDialog::instance()->showMsg(tr("请确定已插入u盘"));
@@ -282,6 +288,38 @@ bool communication_help::saveSampleData(QString path)
     }
     file2.close();
 
+    return true;
+}
+
+#include "com.h"
+
+bool communication_help::sendSampleDataToPC()
+{
+    QString out2;
+    QSqlQuery query(Database::instance()->getDb());
+    bool ok = query.exec("SELECT * FROM sample_data");
+    if(ok == true )
+    {
+        while(query.next())
+        {
+            QString msgstr;
+            for(int i = 0;i < 10;i++)
+            {
+                if(query.value(i).toString() == NULL)
+                {
+                    msgstr += "NULL";
+                    msgstr += "|";
+                    continue;
+                }
+                msgstr += query.value(i).toString();
+                msgstr += "|";
+            }
+            msgstr.chop(1);
+            out2.append(msgstr).append("\n\n");
+        }
+    }
+
+    SendSampleDataToPC::sendData(out2);
     return true;
 }
 

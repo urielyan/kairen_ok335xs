@@ -74,6 +74,8 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
          btnList[i]->setFixedHeight(DESKTOP_HEIGHT / 7);
        }
 #endif
+
+     ui->pushButton_6->hide();//隐藏能谱查看按钮
 }
 
 spectrummeasurement::~spectrummeasurement()
@@ -223,7 +225,7 @@ void spectrummeasurement::changetable(){
 #endif
         }
       printer_result();
-      on_pushButton_6_clicked();
+      //on_pushButton_6_clicked();
       return;
     }
   if(row == 9){

@@ -95,10 +95,12 @@ void countingMeasurement::updata_count_5_average(QDateTime count_datetime,int da
           return;
         }
       in_this_cunction_time = 0;
-      p_mySettings->setValue(MYSETTINGS_COUNT_DATA(tmp_count),
-                             QString("%1").arg((int)get_count_5_average())
-                          + ";" + "  " + ";" + QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss"));
-      p_mySettings->setValue(MYSETTINGS_COUNT_COUNT,tmp_count);
+
+      //去除稳峰测量的保存数据．自动稳峰功能保留
+//      p_mySettings->setValue(MYSETTINGS_COUNT_DATA(tmp_count),
+//                             QString("%1").arg((int)get_count_5_average())
+//                          + ";" + "  " + ";" + QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss"));
+//      p_mySettings->setValue(MYSETTINGS_COUNT_COUNT,tmp_count);
     }
 }
 double countingMeasurement::get_count_5_average(){

@@ -102,7 +102,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="lableVersion">
          <property name="text">
-          <string>当前版本：Ｖ1.0</string>
+          <string>当前版本：Ｖ1.1(2017.06.05)</string>
          </property>
         </widget>
        </item>

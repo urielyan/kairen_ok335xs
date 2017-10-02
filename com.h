@@ -3,7 +3,7 @@
 #define COM_H
 #include <termios.h>
 #include <QObject>
-
+#include <QTimer>
 //本pc机采用的是小端架构的，而arm的机械一般是大端的，所以所有的命令都是倒序的
 #define STOP_ORDER              0xff98feUL
 #define CURRENT_POSITION        0XFF98FEUL
@@ -13,6 +13,23 @@
 #define ACTIVATING_CALIBRATE    0XFF04FEUL
 #define IN_SLIDING_PLATE        0XFF3106FEUL
 #define OUT_SLIDING_PLATE       0XFF3206FEUL
+
+class SendSampleDataToPC : public QObject
+{
+      Q_OBJECT
+public:
+  explicit SendSampleDataToPC(QObject *parent = 0);
+
+public slots:
+    static void sendData(QString data);
+    static void recvData();
+    static QString receive(int fd);
+
+    static int openCom();
+    static QByteArray getSampleData();
+
+private:
+};
 
 class Communciation_Com : public QObject
 {

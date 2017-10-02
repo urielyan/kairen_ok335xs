@@ -159,7 +159,6 @@ void showsamplemeasurement::show_calculate_storage(QString data){
     data += str_average;
     data += ";";
 
-
     double standard_deviation = 0.0;
     double n_avg_sub_2_sum = 0.0;
 

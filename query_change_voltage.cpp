@@ -25,13 +25,13 @@ query_change_voltage::~query_change_voltage()
 }
 
 void query_change_voltage::show_and_refresh(){
-  int change_count = ErrorCountSave::instance()->value(MYSETTINGS_CHANGE_COUNT_VOLTAGE_COUNT).toInt() - 1;
+  int change_count = MeasurementDataSave::instance()->value(MYSETTINGS_CHANGE_COUNT_VOLTAGE_COUNT).toInt() - 1;
   ui->tableWidget->setRowCount(change_count);
   ui->tableWidget->setColumnWidth(0,this->width()/3);
   ui->tableWidget->setColumnWidth(1,this->width()/4);
   ui->tableWidget->setColumnWidth(2,this->width()/4);
   for(int i =  0;i < change_count;i++){
-      QStringList record = ErrorCountSave::instance()->value(MYSETTINGS_CHANGE_COUNT_VOLTAGE(i+1)).toString().split(";");
+      QStringList record = MeasurementDataSave::instance()->value(MYSETTINGS_CHANGE_COUNT_VOLTAGE(i+1)).toString().split(";");
       if(record.size() != 3){
           return;
         }

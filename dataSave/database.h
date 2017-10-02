@@ -8,10 +8,26 @@
 class Database : public QFrame
 {
   Q_OBJECT
+
 public:
-  static Database* instance();
+    enum ColumnName
+    {
+        PeopelName = 0,
+        SampleSerial,
+        DateTime,
+        WorkCurve,
+        MeasurementTime,
+        RepeatTime,
+        Average,
+        Deviation,
+        IsAuto,
+        CurrentCoefficient
+    };
+
+    static Database* instance();
 
   QSqlDatabase getDb() const;
+  static QString getDefaultData(uint column, QString rawData);
 
 signals:
 

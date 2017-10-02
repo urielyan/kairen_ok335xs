@@ -5,6 +5,7 @@
 
 #define SEGMENT_LENGTH        30
 
+#define TRANST_DATA_TO_PC
 class printer : public QObject
 {
   Q_OBJECT
@@ -26,9 +27,12 @@ public:
   static int transmit(unsigned long ,int);
   static int transmit(int ,int);
 
-private:
+public slots:
 
   //void initData();
+  static QByteArray getSampleData();
+  static QByteArray revertDataToOtherProtectet(QByteArray rawData);
+  static void recvData();
 };
 
 #endif // PRINTER_H

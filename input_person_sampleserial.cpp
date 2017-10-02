@@ -46,7 +46,8 @@ QString input_person_sampleSerial::getSample()
 
 QString input_person_sampleSerial::getPeople()
 {
-    return ui->lineEdit_people->text();
+    QString peopleId = ui->lineEdit_people->text();
+    return peopleId;
 }
 
 void input_person_sampleSerial:: slotNumKeyPressed()
@@ -57,12 +58,12 @@ void input_person_sampleSerial:: slotNumKeyPressed()
     if(ui->lineEdit_people->hasFocus()){
         current_text = ui->lineEdit_people->text();
         current_text += tmpstr;
-        if(current_text.size() > 6) return;
+        if(current_text.size() > 5) return;
         ui->lineEdit_people->setText(current_text);
     }else if (ui->lineEdit_serial->hasFocus()){
         current_text = ui->lineEdit_serial->text();
         current_text += tmpstr;
-        if(current_text.size() > 13) return;
+        if(current_text.size() > 5) return;
        ui->lineEdit_serial->setText(current_text);
     }
 }

@@ -1,3 +1,4 @@
+#include <QDateTime>
 #include <QMessageBox>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -33,5 +34,88 @@ Database::Database(QFrame *parent) :
 }
 QSqlDatabase Database::getDb() const
 {
-  return db;
+    return db;
+}
+
+QString Database::getDefaultData(uint column, QString rawData)
+{
+    QString sendData = rawData;
+    switch (column)
+    {
+    case PeopelName:
+    case SampleSerial:
+        if(rawData.size() >= 5)
+        {
+            sendData = rawData.right(5);
+        }else
+        {
+            sendData = QString("99999");
+        }
+        break;
+
+    case DateTime:
+    {
+        sendData = rawData.remove("-").remove(" ");
+        if(sendData.size() != 13)
+        {
+            sendData = "1999090909:09";
+        }
+        break;
+    }
+    case WorkCurve:
+        if (rawData.size() == 0)
+        {
+            sendData = "00";
+        } else if (rawData.size() == 1)
+        {
+            sendData = "0" + rawData;
+        } else
+        {
+            sendData = "99";
+        }
+        break;
+
+    case MeasurementTime:
+        if (rawData.size() == 2)
+        {
+            sendData = "0" + rawData;
+        }
+        else if (rawData.size() != 3)
+        {
+            sendData = "999";
+        }
+        break;
+    case RepeatTime:
+        if (rawData.size() == 1)
+        {
+            sendData = "0" + rawData;
+        }
+        else if(rawData.size() != 2)
+        {
+            sendData = "99";
+        }
+        break;
+    case Average:
+        if(rawData.size() != 6)
+        {
+            sendData = "9.9999";
+        }else
+        {
+            sendData = rawData;
+        }
+        break;
+    case Deviation:
+        if(rawData.size() != 6)
+        {
+            sendData = "9.9999";
+        }else
+        {
+            sendData = rawData;
+        }
+        break;
+    default:
+        break;
+    }
+
+    return sendData;
 }
