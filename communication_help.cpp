@@ -31,8 +31,13 @@ communication_help::communication_help(QWidget *parent) :
 
     p_mysettings = ErrorCountSave::instance();
 
-    //阳光那边给部队的可以发送数据到上位机的版本(最初未经测试版)
-    ui->lableVersion->setText("当前版本：Ｖ2.0(2017.07.09)");
+    //阳光那边给部队的可以发送数据到上位机的版本(最初未经测试版) :"当前版本：Ｖ2.0(2017.07.09)"
+
+    //v2.1 :修改预热时间为一个小时，添加读取下位机版本的功能；去掉稳峰记录的计数数据保存．
+    QString versionText;
+    versionText = QString("当前版本：Ｖ2.1(2017.10.02)\n%1")
+            .arg(getSubMachineVersion());
+    ui->lableVersion->setText(versionText);
 }
 
 communication_help::~communication_help()
@@ -336,9 +341,24 @@ bool communication_help::copySampleDatabase(QString dir)
         WinInforListDialog::instance()->showMsg(
                     tr("拷贝数据库文件失败。")
                     );
-
         return false;
     }
 
     return true;
+}
+
+QString communication_help::getSubMachineVersion()
+{
+    if (Communciation_Com::transmit(GET_VERSION, 3) < 0)
+    {
+        return QString("0.0");
+      }
+    QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
+    recv_data.remove(0, 1);
+    recv_data.chop(1);
+    if(recv_data == NULL){
+        return QString("0.00");
+    }
+
+    return recv_data;
 }

@@ -20,10 +20,10 @@ ispreheat::ispreheat(QWidget *parent) :
     p_mainLayout->addWidget(&m_labelIsPreheat);
     p_mainLayout->addWidget(&m_labelIsSampling);
 
-  m_labelIsPreheat.setText(tr("预热还需30分钟"));
+  m_labelIsPreheat.setText(tr("预热还需60分钟"));
   m_labelIsSampling.hide();
 
-  global_ispreheat = 30;
+  global_ispreheat = 60;
   blink_flag = 1;
   timer = new QTimer(this);
   timer2 = new QTimer(this);

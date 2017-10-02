@@ -30,6 +30,7 @@ private:
     bool saveSampleData(QString path);
     bool sendSampleDataToPC();
     bool copySampleDatabase(QString dir);
+    QString getSubMachineVersion();
 
 private:
     Ui::communication_help *ui;
