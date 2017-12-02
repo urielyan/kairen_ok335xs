@@ -39,18 +39,18 @@ printer::printer(QObject *parent) :
   //fd = open( "/dev/ttySAC0", O_RDWR|O_NOCTTY|O_NDELAY);
   //fd = open( "/dev/ttyUSB0", O_RDWR|O_NOCTTY|O_NDELAY);
   if (-1 == fd){
-      printf("open /dev/ttyO2 err");
+      printf("open /dev/ttyO2 err\n");
       return;
     }
   if  ( tcgetattr( fd,&options)  !=  0){
       printf("SetupSerial tcgetattr\n");
       return;
     }
-//  cfsetispeed(&options,B9600);
-//  cfsetospeed(&options,B9600);
+  cfsetispeed(&options,B9600);
+  cfsetospeed(&options,B9600);
 
-  cfsetispeed(&options,B115200);
-  cfsetospeed(&options,B115200);
+//  cfsetispeed(&options,B115200);
+//  cfsetospeed(&options,B115200);
   options.c_cflag |= CLOCAL | CREAD;//修改控制模式，保证程序不会占用串口和能够从串口中读取输入数据
   options.c_cflag &= ~CRTSCTS;//设置数据流控制
   options.c_cflag &= ~CSIZE;//屏蔽其他标志位
@@ -298,6 +298,7 @@ QByteArray printer::revertDataToOtherProtectet(QByteArray rawData)
 void printer::recvData()
 {
     printf("com0\n");
+    write(fd, "test\n", 5);
 
     char buf[1] = {0};
     if(read(fd, buf, 1) != 1)
@@ -315,11 +316,23 @@ void printer::recvData()
     QByteArray out2 = getSampleData();
     out2 = revertDataToOtherProtectet(out2);
 
-    printf("write data %s!\n", buf);
+    printf("write data size %d!\n", out2.size());
 
-    int sendSize = write(fd, out2.data(), out2.size());
-    if(sendSize == out2.size())
+    int sendSizeSum = 0;
+    while (out2.size() > 0)
     {
+        QByteArray tmpByteArray = out2.left(1024);
+        sendSizeSum += write(fd, tmpByteArray.data(), tmpByteArray.size());
+        out2.remove(0, tmpByteArray.size());
+        printf("write data size %d!\n", out2.size());
+        //QMessageBox::warning(NULL, "test", QString::number(sendSizeSum));
+
+    }
+    //QMessageBox::warning(NULL, "testend", QString::number(sendSizeSum));
+
+    if(sendSizeSum == out2.size())
+    {
+
         printf("数据已发送至ＰＣ!\n");
     }else
     {
