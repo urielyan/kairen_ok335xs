@@ -157,6 +157,7 @@ void passwd::on_b_return_clicked()
 
 
 //确认按钮
+//弹出那个更换计数管高压的原因是，我会在没有任何测量的情况下 后台进行稳压测量， 稳压测量会判断峰值是否在1.4-1.6之间，若不在会将当前合适的 计数管高压值发给下位机，若连续三次计数峰值不在1.4-1.6 可能计数管坏了
 void passwd::on_b_ok_clicked()
 {
     if(flag == SETUP_COUNT_VOLTAGE || \
