@@ -56,6 +56,7 @@ yange@yange-Vostro-260:~/ok335XS/cross/kairen_ok335xs$ cp new /media/yange/E832-
 #include <QTranslator>
 #include <QDebug>
 #include <QSettings>
+#include <QFile>
 
 #include <QSqlDatabase>
 #include<QSqlDriver>
@@ -291,9 +292,9 @@ int main(int argc, char *argv[])
 
 #endif
 
-#ifdef FORLIN_OK335XS
+#ifdef FORLIN_OK335XSd
     a.setStyleSheet(QString("QPushButton{"
-                            "min-width:80; font: 28px; min-height:60;"
+                            "min-width:80; font: 28px; min-height:60;border: 1px solid gray;border-radius: 10px;"
                             "}"
                             "QPushButton#stop{"
                             "background-color:rgb(0, 255, 0); color: rgb(255, 255, 255); font-weight:bold;"
@@ -342,6 +343,12 @@ int main(int argc, char *argv[])
                             " }"
                             ).arg(FONT_SIZE * 1.5));
 #endif
+
+    QFile file(":qss/resource/qss/ok335xs.qss");
+       if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+           return -1;
+
+
 
     //initSettings();
     initLanguage(a);

@@ -136,3 +136,9 @@ FORMS    += widget.ui \
     spectrum_painter.ui \
     communication_help.ui \
     query_change_voltage.ui
+
+RESOURCES += \
+    resource.qrc
+
+OTHER_FILES += \
+    resource/qss/ok335xs.qss
