@@ -344,7 +344,7 @@ int main(int argc, char *argv[])
                             ).arg(FONT_SIZE * 1.5));
 #endif
 
-    QFile file(":qss/resource/qss/ok335xs.qss");
+    QFile file(":/qss/qss");
        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
            return -1;
 
