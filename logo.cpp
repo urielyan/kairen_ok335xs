@@ -22,9 +22,14 @@ logo::logo(QWidget *parent) :
 //    ui->labelCompute->setText(tr("上海昌吉地址仪器有限公司"));
 
     //2017.07.08 :为肖总的部队产品
-    ui->labelID->setText(tr("JY-9020-J"));
-    ui->labelName->setText(tr("硫含量测定仪"));
-    ui->labelCompute->setText(tr("上海景颐自动化设备有限公司"));
+//    ui->labelID->setText(tr("JY-9020-J"));
+//    ui->labelName->setText(tr("硫含量测定仪"));
+//    ui->labelCompute->setText(tr("上海景颐自动化设备有限公司"));
+
+    //xuezong
+    ui->labelID->setText(tr("YZ--6180A"));
+    ui->labelName->setText(tr("X荧光测硫仪"));
+    ui->labelCompute->setText(tr("上海荧展电子仪器有限公司"));
 }
 
 logo::~logo()

@@ -34,7 +34,7 @@ void showcalibratemeasurement::on_pushButton_clicked()
 void showcalibratemeasurement::add_calibratemeasurement_data(int count,QString calibrate_count , QString reference_count){
     ui->label_datatime->setText(QDateTime::currentDateTime().toString("MM-dd  hh:mm"));
     if(count <=12 && count >= 0)
-        ui->label_number->setText(QString("第 %1# 标定样").arg(count));
+        ui->label_number->setText(QString("第 %1 个标定样").arg(count));
     if(calibrate_count.size() == 5)
         ui->label_calibrate->setText(calibrate_count);
     if(reference_count.size() == 5)

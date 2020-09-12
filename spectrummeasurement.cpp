@@ -75,7 +75,7 @@ spectrummeasurement::spectrummeasurement(QWidget *parent) :
        }
 #endif
 
-     ui->pushButton_6->hide();//隐藏能谱查看按钮
+     //ui->pushButton_6->hide();//隐藏能谱查看按钮
 }
 
 spectrummeasurement::~spectrummeasurement()
@@ -225,7 +225,7 @@ void spectrummeasurement::changetable(){
 #endif
         }
       printer_result();
-      //on_pushButton_6_clicked();
+      on_pushButton_6_clicked();
       return;
     }
   if(row == 9){
@@ -245,6 +245,7 @@ void spectrummeasurement::on_pushButton_3_clicked()
     }
   ui->tableWidget->clearContents();
   row = column = 0;
+  emit closed();
   this->close();
 }
 
@@ -275,7 +276,7 @@ void spectrummeasurement::on_pushButton_clicked()
   tcflush(Communciation_Com::fd,TCIOFLUSH);
   //开始能谱测量
   if(Communciation_Com::transmit(ACTIVATING_SPECTRUM,3) <= 0){
-      WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR) + tr("transmit err"));
+      //WinInforListDialog::instance()->showMsg(tr(TRANSMIT_DATA_ERROR) + tr("transmit err"));
       on_pushButton_2_clicked();
       return;
     }
@@ -308,7 +309,7 @@ int spectrummeasurement::on_pushButton_2_clicked()
     }
   QString recv_data = Communciation_Com::receive(1);
   if(recv_data == NULL){
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("\n recv NULL"));
+      //WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("\n recv NULL"));
       return ERRNO_COMMUNICATION_1;
     }
   if(recv_data[1] == (char)0x31){//recv_data[0] == (char)0x98 &&
@@ -360,7 +361,7 @@ void spectrummeasurement::on_pushButton_5_clicked()
     }
   QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   if(recv_data == NULL){
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT));
+      //WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT));
       ErrorCountSave::instance()->addCount(1);
     }else if(recv_data[1] == (char)0x32){//recv_data[0] == (char)0x98 &&
       ui->widget->change_label_content(WAIT_BE_LOCATION);
@@ -369,7 +370,7 @@ void spectrummeasurement::on_pushButton_5_clicked()
       set_sliding_disabled(false,false);
       emit transmit_move_sliding(false,false);
     }else {
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT));
+      //WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT));
       ErrorCountSave::instance()->addCount(6);
     }
 
@@ -405,7 +406,7 @@ int spectrummeasurement::on_pushButton_4_clicked()
   QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   //qDebug() <<recv_data.toLocal8Bit().data();
   if(recv_data == NULL){
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + "recv NULL");
+      //WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + "recv NULL");
       ErrorCountSave::instance()->addCount(6);
       return -1;
     }else if(recv_data[1] == (char)0x31){
@@ -416,8 +417,7 @@ int spectrummeasurement::on_pushButton_4_clicked()
       emit transmit_move_sliding(false,false);
       return -1;
     }else {
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + ":"
-                                              + recv_data + "," + QString::number(measurement_flag));
+      //WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + ":" + recv_data + "," + QString::number(measurement_flag));
       ErrorCountSave::instance()->addCount(6);
       return -1;
     }

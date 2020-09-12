@@ -5,16 +5,40 @@
 #include <QWidget>
 #include <QSqlTableModel>
 #include <QList>
+
 namespace Ui {
 class sample_data_query;
 }
+
+
+class SampleDataModel : public QSqlQueryModel{
+    Q_OBJECT
+
+public:
+    SampleDataModel(QObject *parent)
+        : QSqlQueryModel(parent)
+    {
+    }
+public slots:
+    QVariant data(const QModelIndex & item, int role) const
+    {
+    QVariant value = QSqlQueryModel::data(item, role);
+    if (role == Qt::TextAlignmentRole)
+    {
+    value = (Qt::AlignCenter);
+    return value;
+    }
+    return value;
+    }
+};
+
 
 class QLabel;
 class WinSpecifyIndexDialog : public QDialog
 {
   Q_OBJECT
 public:
-  explicit WinSpecifyIndexDialog(const QModelIndex &index, QSqlTableModel *model,  QWidget *parent = 0);
+  explicit WinSpecifyIndexDialog(const QModelIndex &index, QSqlQueryModel *model,  QWidget *parent = 0);
 
 private slots:
   void slotNextButtonClicked();
@@ -25,7 +49,8 @@ private:
   void initData(QStringList valueList);
 
   QModelIndex m_index;
-  QSqlTableModel *p_model;
+  //QSqlTableModel *p_model;
+  QSqlQueryModel *p_model;
 
   QList <QLabel *> m_labelList;
 };
@@ -52,9 +77,13 @@ private slots:
 
     void on_tableView_clicked(const QModelIndex &index);
 
+    void on_moreData_clicked();
+
 private:
     Ui::sample_data_query *ui;
-    QSqlTableModel *p_model;
+    //QSqlTableModel *p_model;
+    QSqlQueryModel *p_model;
+    int m_currentIndex;
 
     void initTableview();
 };

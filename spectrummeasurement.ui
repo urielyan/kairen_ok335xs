@@ -104,42 +104,42 @@
        </row>
        <column>
         <property name="text">
-         <string>阈值</string>
+         <string>阈值(V)</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>计数</string>
+         <string>计数(N)</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>阈值</string>
+         <string>阈值(V)</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>计数</string>
+         <string>计数(N)</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>阈值</string>
+         <string>阈值(V)</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>计数</string>
+         <string>计数(N)</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>阈值</string>
+         <string>阈值(V)</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>计数</string>
+         <string>计数(N)</string>
         </property>
        </column>
        <item row="0" column="0">

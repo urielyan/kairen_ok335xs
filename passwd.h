@@ -16,6 +16,7 @@ class passwd;
 class hide_system;
 class systemsetup;
 class AbstractDataSave;
+class input_machine_use_time;
 class passwd : public QWidget
 {
     Q_OBJECT
@@ -63,6 +64,7 @@ private:
     systemsetup *ss;
     hide_system *hs;
     int flag;
+    input_machine_use_time *input;
 
     AbstractDataSave *p_mySettings;
 

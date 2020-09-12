@@ -3,22 +3,30 @@
 #include "global.h"
 #include "database.h"
 #include "input_person_sampleserial.h"
+#include "wininforlistdialog.h"
 
 #include <QSqlQuery>
 #include <QDebug>
 #include <QMessageBox>
 #include <QScrollBar>
 #include <QButtonGroup>
+#include <QSqlError>
+
+#define SAMPLE_TABLE_NAME "sample_data"
+static const int s_onePageData= 10;
+
 
 WinSqlDataQuery::WinSqlDataQuery(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::sample_data_query)
+  , m_currentIndex(0)
 {
     //printf("in...%s\n",__FUNCTION__);
     ui->setupUi(this);
 
-    p_model = new QSqlTableModel(this, Database::instance()->getDb());
-    p_model->setTable("sample_data");
+    //p_model = new QSqlTableModel(this, Database::instance()->getDb());
+    //p_model->setTable("sample_data");
+    p_model = new SampleDataModel(this);
 
     QScrollBar *verticalbar;
     verticalbar = new QScrollBar();
@@ -38,6 +46,10 @@ WinSqlDataQuery::WinSqlDataQuery(QWidget *parent) :
     INIT_LABEL_SIZE_FONT;
 
     ui->tableView->setFont(QFont(FONT_NAME, FONT_SIZE/3 * 2 ,QFont::Normal));
+    ui->b_sample->hide();
+    ui->pushButton->hide();
+    ui->b_datetime->hide();
+    ui->b_datetime_disorder->hide();
 }
 
 WinSqlDataQuery::~WinSqlDataQuery()
@@ -50,27 +62,39 @@ void WinSqlDataQuery::initTableview(){
     ui->tableView->setModel(p_model);
 
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    p_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    //p_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
     p_model->setHeaderData(0, Qt::Horizontal, tr("人员编号"));
     p_model->setHeaderData(1, Qt::Horizontal, tr("样品编号"));
     p_model->setHeaderData(2, Qt::Horizontal, tr("测量日期"));
     p_model->setHeaderData(3, Qt::Horizontal, tr("工作曲线"));
     p_model->setHeaderData(4, Qt::Horizontal, tr("测量时间"));
     p_model->setHeaderData(5, Qt::Horizontal, tr("重复次数"));
-    p_model->setHeaderData(6, Qt::Horizontal, tr("平均值"));
+    p_model->setHeaderData(6, Qt::Horizontal, tr("S%"));
     p_model->setHeaderData(7, Qt::Horizontal, tr("标准偏差"));
     p_model->setHeaderData(8, Qt::Horizontal, tr("是否自动"));
     p_model->setHeaderData(9, Qt::Horizontal, tr("测量系数"));
 
+    for (int i =0; i < p_model->columnCount(); ++i)
+    {
+        ui->tableView->setColumnHidden(i, true);
+    }
+    ui->tableView->setColumnHidden(2, false);
+    ui->tableView->setColumnHidden(3, false);
+
+    ui->tableView->setColumnHidden(6, false);
+    ui->tableView->setColumnHidden(7, false);
+
+
+
 #define SUIT_DIVIDE 6
-    ui->tableView->setColumnWidth(0,this->width() /SUIT_DIVIDE);
-    ui->tableView->setColumnWidth(1,this->width() /SUIT_DIVIDE);
+    ui->tableView->setColumnWidth(0,this->width() /SUIT_DIVIDE - 1);
+    ui->tableView->setColumnWidth(1,this->width() /SUIT_DIVIDE - 1);
     ui->tableView->setColumnWidth(2,this->width() /3);
-    ui->tableView->setColumnWidth(3,this->width() /SUIT_DIVIDE);
-    ui->tableView->setColumnWidth(4,this->width() /SUIT_DIVIDE);
-    ui->tableView->setColumnWidth(5,this->width() /SUIT_DIVIDE);
-    //ui->tableView->setColumnWidth(6,this->width() /SUIT_DIVIDE);
-    //ui->tableView->setColumnWidth(7,this->width() /SUIT_DIVIDE);
+    ui->tableView->setColumnWidth(3,this->width() /SUIT_DIVIDE - 1);
+    ui->tableView->setColumnWidth(4,this->width() /SUIT_DIVIDE - 1);
+    ui->tableView->setColumnWidth(5,this->width() /SUIT_DIVIDE - 1);
+    //ui->tableView->setColumnWidth(6,this->width() /SUIT_DIVIDE - 1);
+    //ui->tableView->setColumnWidth(7,this->width() /SUIT_DIVIDE - 1);
 
 #ifdef FRIENDLYARM_TINY210
     ui->tableView->setFont(QFont(FONT_NAME, FONT_SIZE*5/6,QFont::Normal));
@@ -80,8 +104,14 @@ void WinSqlDataQuery::initTableview(){
     ui->tableView->setFont(QFont(FONT_NAME, FONT_SIZE*3/4, QFont::Normal));
 #endif
 
-    p_model->setFilter("1");
-    p_model->select();
+   //p_model->setFilter("1");
+    //p_model->setQuery(QString(select * from %1).arg(SAMPLE_TABLE_NAME));
+    //p_model->select();
+    m_currentIndex = 0;
+    on_moreData_clicked();
+
+    ui->tableView->resizeColumnsToContents();
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
 }
 
 void WinSqlDataQuery::show_and_refresh(){
@@ -92,14 +122,14 @@ void WinSqlDataQuery::show_and_refresh(){
 
 void WinSqlDataQuery::on_b_datetime_clicked()
 {
-    p_model->setSort(2,Qt::AscendingOrder);
-    p_model->select();
+    //p_model->setSort(2,Qt::AscendingOrder);
+    //p_model->select();
 }
 
 void WinSqlDataQuery::on_b_datetime_disorder_clicked()
 {
-    p_model->setSort(2,Qt::DescendingOrder);
-    p_model->select();
+    //p_model->setSort(2,Qt::DescendingOrder);
+    //p_model->select();
 }
 
 void WinSqlDataQuery::on_pushButton_clicked()
@@ -113,8 +143,8 @@ void WinSqlDataQuery::on_pushButton_clicked()
         {
             queryString = "1";
         }
-        p_model->setFilter(queryString);
-        p_model->select();
+        //p_model->setFilter(queryString);
+        //p_model->select();
     }
 }
 
@@ -129,14 +159,15 @@ void WinSqlDataQuery::on_b_sample_clicked()
         {
             queryString = "1";
         }
-        p_model->setFilter(queryString);
-        p_model->select();
+        //p_model->setFilter(queryString);
+        //
+        //p_model->select();
     }
 }
 
 void WinSqlDataQuery::on_pushButton_3_clicked()
 {
-    p_model->setFilter("1");
+    //p_model->setFilter("1");
     this->close();
 }
 
@@ -148,7 +179,7 @@ void WinSqlDataQuery::on_tableView_clicked(const QModelIndex &index)
 
 
 #define DISPLAY_COUNT  9
-WinSpecifyIndexDialog::WinSpecifyIndexDialog(const QModelIndex &index, QSqlTableModel *model, QWidget *parent)
+WinSpecifyIndexDialog::WinSpecifyIndexDialog(const QModelIndex &index, QSqlQueryModel *model, QWidget *parent)
     : QDialog(parent)
 {
     m_index = index;
@@ -196,6 +227,7 @@ WinSpecifyIndexDialog::WinSpecifyIndexDialog(const QModelIndex &index, QSqlTable
     setMaximumHeight(DESKTOP_HEIGHT -10);
     setMaximumWidth(DESKTOP_WIDTH - 10);
     this->setWindowFlags(Qt::FramelessWindowHint);
+
 
 }
 
@@ -257,4 +289,74 @@ void WinSpecifyIndexDialog::initData(QStringList valueList)
     {
         m_labelList.at(i)->setText(valueList.at(i) + " " + unitList.at(i));
     }
+}
+
+void WinSqlDataQuery::on_moreData_clicked()
+{
+    QString queryString  = QString("select * from %1 limit %2, %3 order by  date_time desc;")
+            .arg(SAMPLE_TABLE_NAME).arg(m_currentIndex).arg(s_onePageData);
+    p_model->setQuery(queryString);
+    if (p_model->lastError().isValid())
+        qDebug() << p_model->lastError().text();
+
+
+    m_currentIndex += s_onePageData;
+
+    if (p_model->rowCount() < s_onePageData)
+    {
+        WinInforListDialog::instance()->showMsg("数据查询完毕", "将显示第一页数据");
+        m_currentIndex = 0;
+    }
+
+
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    //p_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    p_model->setHeaderData(0, Qt::Horizontal, tr("人员编号"));
+    p_model->setHeaderData(1, Qt::Horizontal, tr("样品编号"));
+    p_model->setHeaderData(2, Qt::Horizontal, tr("     测量日期     "));
+    p_model->setHeaderData(3, Qt::Horizontal, tr("工作曲线"));
+    p_model->setHeaderData(4, Qt::Horizontal, tr("测量时间"));
+    p_model->setHeaderData(5, Qt::Horizontal, tr("重复次数"));
+    p_model->setHeaderData(6, Qt::Horizontal, tr("    S%    "));
+    p_model->setHeaderData(7, Qt::Horizontal, tr("标准偏差"));
+    p_model->setHeaderData(8, Qt::Horizontal, tr("是否自动"));
+    p_model->setHeaderData(9, Qt::Horizontal, tr("测量系数"));
+
+    for (int i =0; i < p_model->columnCount(); ++i)
+    {
+        ui->tableView->setColumnHidden(i, true);
+    }
+    ui->tableView->setColumnHidden(2, false);
+    ui->tableView->setColumnHidden(3, false);
+
+    ui->tableView->setColumnHidden(5, false);
+    ui->tableView->setColumnHidden(6, false);
+    ui->tableView->setColumnHidden(7, false);
+
+
+
+#define SUIT_DIVIDE 4
+    ui->tableView->setColumnWidth(0,this->width() /SUIT_DIVIDE - 1);
+    ui->tableView->setColumnWidth(1,this->width() /SUIT_DIVIDE - 1);
+    ui->tableView->setColumnWidth(2,this->width() /SUIT_DIVIDE - 1);
+    ui->tableView->setColumnWidth(3,this->width() /SUIT_DIVIDE - 1);
+    ui->tableView->setColumnWidth(4,this->width() /SUIT_DIVIDE - 1);
+    ui->tableView->setColumnWidth(5,this->width() /SUIT_DIVIDE - 1);
+    ui->tableView->setColumnWidth(6,this->width() /SUIT_DIVIDE - 1);
+    //ui->tableView->setColumnWidth(7,this->width() /SUIT_DIVIDE - 1);
+
+#ifdef FRIENDLYARM_TINY210
+    ui->tableView->setFont(QFont(FONT_NAME, FONT_SIZE*5/6,QFont::Normal));
+#endif
+
+#ifdef FORLIN_OK335XS
+    ui->tableView->setFont(QFont(FONT_NAME, FONT_SIZE*3/4, QFont::Normal));
+#endif
+
+    ui->tableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    ui->tableView->resizeColumnsToContents();
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
+
+//    p_model->select();
 }

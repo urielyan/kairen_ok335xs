@@ -76,10 +76,37 @@ Widget::Widget(QWidget *parent)
     connect(cm_auto, SIGNAL(start_steady_summit_measurement()), sm, SLOT(start_steady_summit()));
     connect(sm, SIGNAL(transmit_steady_summit_result(double)),
             this, SLOT(judge_spectrument_measurement_result(double)));
+
     INIT_LABEL_SIZE_FONT;
     ui->label->setFont(QFont("symbol.ttf", FONT_SIZE * 2, QFont::Normal));
     ui->label->setObjectName("title");
     Sliding::insertSliderButtonPairs(ui->b4, ui->b6);
+
+    {
+    QString line_data = QString::number(p_mySettings->value(MYSETTINGS_COUNT_VOLTAGE).toInt());
+
+    long long transmit_data = 0xff;
+    for(int i = line_data.size() - 1;i >= 0 ;i--){
+        //把需要给下位机的数据或到transmit上
+        transmit_data = (transmit_data << 8);
+        transmit_data = transmit_data | (long long)line_data[i].toLatin1();
+        qDebug()<<line_data.size() << line_data[i];
+    }
+    for(int i = 0;i < 4 - line_data.size();i++){
+        //补齐
+        transmit_data = (transmit_data << 8) | 0x30;
+    }
+    transmit_data = (transmit_data << 8) | SETUP_COUNT_VOLTAGE;
+    transmit_data = (transmit_data << 8) | 0xfe;
+
+
+
+    tcflush(Communciation_Com::fd,TCIOFLUSH);
+    if(Communciation_Com::transmit(transmit_data,7) <= 0){
+        WinInforListDialog::instance()->showMsg(tr("初始化计数管高压,命令发送失败。"));
+        return;
+      }
+    }
 }
 
 Widget::~Widget()
@@ -221,7 +248,8 @@ void Widget::judge_spectrument_measurement_result(double summit)
     if(summit > 1.6 || summit < 1.4) {
         int calibrate_summit = (1.5 - summit) * 40 + p_mySettings->value(MYSETTINGS_COUNT_VOLTAGE).toInt();
         if(calibrate_summit > 700 && summit < 1.4) {
-            WinInforListDialog::instance()->showMsg(tr("需要更换计数管高压,请联系厂家18855953618"));
+            qDebug() << "需要更换计数管高压, summit = "<< summit;
+            //WinInforListDialog::instance()->showMsg(tr("需要更换计数管高压,请联系厂家18855953618"));
             return;
         }
         steady_summit_count += 1;
@@ -236,4 +264,33 @@ void Widget::judge_spectrument_measurement_result(double summit)
     } else {
         steady_summit_count = 0;
     }
+}
+
+#include "countingmeasurement.h"
+#include "spectrummeasurement.h"
+void Widget::on_countMeasurementButton_clicked()
+{
+    QEventLoop loop;
+    static countingMeasurement w;
+    w.showFullScreen();
+
+    cm_auto->stop_measurement_no_transmit();
+    sm->stop_measurement_no_transmit();
+
+    connect(&w, SIGNAL(closed()), &loop, SLOT(quit()));
+    loop.exec();
+    loop.exit();
+}
+
+void Widget::on_spectrumMeasurementButton_clicked()
+{
+    QEventLoop loop;
+    static spectrummeasurement w;
+    cm_auto->stop_measurement_no_transmit();
+    sm->stop_measurement_no_transmit();
+
+    connect(&w, SIGNAL(closed()), &loop, SLOT(quit()));
+    w.showFullScreen();
+    loop.exec();
+    loop.exit();
 }

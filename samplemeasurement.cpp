@@ -72,6 +72,13 @@ sampleMeasurement::sampleMeasurement(QWidget *parent) :
   connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(slotStartClicked()));
   connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(slotStopClicked()));
   connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(slotReturnClicked()));
+
+   ui->comboBo_queue->clear();
+   ui->comboBo_queue->addItem(QString::fromLocal8Bit("自动选择工作曲线"));
+  for (int i = 0; i < 15; ++i)
+  {
+    ui->comboBo_queue->addItem(QString::number(i+1));
+  }
 }
 
 sampleMeasurement::~sampleMeasurement()
@@ -135,8 +142,7 @@ void sampleMeasurement::doing_measurement(){
                     ui->comboBox_count->currentText() + ";";
 
             //倒着打印正确的数据
-            showsm->show_calculate_storage(tr_data);
-            printer_result();
+            showsm->show_calculate_storage(tr_data); printer_result();
 
             all_combox_disabled(false);
             return;
@@ -206,9 +212,9 @@ void sampleMeasurement::slotStartClicked()
             WinInforListDialog::instance()->showMsg(tr("您不能自动选择“自动选择工作曲线”，工作曲线2没有kb值，请重新选择"));
             return;
         }
-        workCurve = p_mySettings->value(MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(6)).toString();
+        workCurve = p_mySettings->value(MYSETTINGS_CALIBRATE_RESULT_REAL_KBR(WORK_CURVE_1_MAX + 1)).toString();
         if((workCurve.split(";")[0] == NULL) || (workCurve.split(";")[1] == NULL)){
-            WinInforListDialog::instance()->showMsg(tr("您不能自动选择“自动选择工作曲线”，工作曲线6没有kb值，请重新选择"));
+            WinInforListDialog::instance()->showMsg(tr("您不能自动选择“自动选择工作曲线”，工作曲线11没有%1值，请重新选择").arg(WORK_CURVE_1_MAX + 1));
             return;
         }
      }
@@ -232,7 +238,8 @@ void sampleMeasurement::slotStartClicked()
     //如果没有收到滑板到位指令，则返回
     QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
     if(recv_data == NULL){
-        WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv Null"));
+        if(measurement_flag = MEASUREMENT_10_AUTO)
+            WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv Null"));
         measurement_flag = MEASUREMENT_NOTHING;
         return;
     }
@@ -261,7 +268,8 @@ void sampleMeasurement::slotStartClicked()
         return;
     }else{
         ErrorCountSave::instance()->addCount(3);
-        WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + recv_data);
+        if(measurement_flag = MEASUREMENT_10_AUTO)
+            WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + recv_data);
 
         measurement_flag = MEASUREMENT_NOTHING;
         all_combox_disabled(false);
@@ -292,7 +300,8 @@ int sampleMeasurement::slotStopClicked()
     QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
     if(recv_data == NULL){
         ErrorCountSave::instance()->addCount(10);
-        WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv Null"));
+        if(measurement_flag = MEASUREMENT_10_AUTO)
+           WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv Null"));
         return ERRNO_COMMUNICATION_1;
       }
     if(recv_data[1] == (char)0x31){//recv_data[0] == (char)0x98 &&
@@ -354,7 +363,7 @@ void sampleMeasurement::printer_result(){
   printer::transmit(work_line1,8);
   printer::transmit(work_line2,2);
   printer::transmit((void *)":  ",4);
-  printer::transmit((char)(showsm->get_real_curve() + 0x30));
+  printer::transmit((void*)QString::number(showsm->get_real_curve()).toStdString().c_str(), QString::number(showsm->get_real_curve()).size());
   printer ::transmit(enter,1);
 
   //日期

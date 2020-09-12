@@ -18,6 +18,7 @@ count_kb_value::count_kb_value(QWidget *parent):
 
   ui->setupUi(this);
   ui->comboBox->setCurrentIndex(0);
+  ui->comboBox->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   count_record = p_mySettings->value("test").toInt();
   count_record = p_mySettings->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt();
   connect(this,SIGNAL(destroyed()),this,SLOT(on_pushButton_2_clicked()));
@@ -66,7 +67,7 @@ void count_kb_value::on_pushButton_clicked()
       return;
     }
 
-  if(ui->comboBox->currentText().toInt() <= 9){
+  if(ui->comboBox->currentText().toInt() <= WORK_CURVE_2_MAX){
       //QString kbr_data = query_s_count_d->get_kbr_a012(ui->comboBox->currentIndex() + 1);
       QString kbr_data = countKbrValue(ui->comboBox->currentIndex() + 1);
 
@@ -131,7 +132,7 @@ QString count_kb_value::countKbrValue(int judge_which)
 {
     QStringList calibrate_data;//存储所有硫含量
     QStringList reference_proportion_wait;//标定样和参考样的比
-    for(int i = 0; i <= 11 ;i++){
+    for(int i = 0; i <= 50;i++){
         //得到用户输入的硫的含量，并判断是否是空或者为0.0000
         QString input_s_data = p_mySettings->value(MYSETTINGS_CALIBRATE_S_INPUT(i)).toString();
         if(input_s_data == NULL || !input_s_data.compare("0.0000" ) || input_s_data.toDouble() == 0.0){
@@ -175,7 +176,7 @@ QString count_kb_value::countKbrValue(int judge_which)
         w_sub_avrg_2_sum += (calibrate_data[i].toDouble() - w_average) * (calibrate_data[i].toDouble() - w_average);
     }
     double k = 0,b = 0,r = 0;
-    if(judge_which >= 1 && judge_which <= 5){
+    if(judge_which >= 1 && judge_which <= WORK_CURVE_1_MAX){
         k = (double)(rw_sum * calibrate_data.size() - r_sum * w_sum) /(calibrate_data.size() * r_2_sum - r_sum * r_sum);
         b = (double )(w_sum * r_2_sum - r_sum * rw_sum) /(calibrate_data.size() * r_2_sum  - r_sum * r_sum);
         r = rw_sub_avrg_sum /pow(r_sub_avrg_2_sum * w_sub_avrg_2_sum,0.5);
@@ -393,7 +394,7 @@ void count_kb_value::printer_result(){
   //工作曲线：
   printer::transmit(work_line,8);
   printer::transmit((void *)"    ",3);
-  printer::transmit((void *)ui->comboBox->currentText().toLocal8Bit().data(),1);
+  printer::transmit((void *)ui->comboBox->currentText().toLocal8Bit().data(), ui->comboBox->currentText().toLocal8Bit().size());
   printer ::transmit(enter,1);
 
   QString tmpCalibrateDataKey = QString(MYSETTINGS_CALIBRATE_RESULT_DATA( p_mySettings->value(MYSETTINGS_CALIBRATE_RESULT_COUNT).toInt() - 1) );

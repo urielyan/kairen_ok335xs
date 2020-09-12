@@ -5,7 +5,7 @@
 
 #define SEGMENT_LENGTH        30
 
-#define TRANST_DATA_TO_PC
+//#define TRANST_DATA_TO_PC
 class printer : public QObject
 {
   Q_OBJECT

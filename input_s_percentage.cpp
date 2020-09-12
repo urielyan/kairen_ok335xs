@@ -8,12 +8,15 @@
 #include <QMessageBox>
 #include <QDebug>
 
+int WinInputSPercentage::s_calibrateNumber = 50;
+
 WinInputSPercentage::WinInputSPercentage(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::input_S_percentage)
 {
   p_mySettings = MeasurementDataSave::instance();
   ui->setupUi(this);
+  ui->tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
   this->setFont(QFont(FONT_NAME, FONT_SIZE ,QFont::Normal));
   QList<QLabel *> labellist = this->findChildren<QLabel *>();
@@ -35,13 +38,13 @@ WinInputSPercentage::~WinInputSPercentage()
 
 void WinInputSPercentage::clear_all_tablewidget()
 {
-  for(int tmpNumber = 0; tmpNumber < 12 ;tmpNumber++){
+  for(int tmpNumber = 0; tmpNumber < s_calibrateNumber ;tmpNumber++){
       p_mySettings->setValue(MYSETTINGS_CALIBRATE_S_INPUT(tmpNumber), "0.0000");
       p_mySettings->setValue(MYSETTINGS_CALIBRATE_S_DATA(tmpNumber), "");
     }
 
   //TODO: down 4 line: useless
-  for(int row = 0;row < 12;row++)
+  for(int row = 0;row < s_calibrateNumber;row++)
     {
       ui->tableWidget->item(row,0)->setText("0.0000");
     }
@@ -177,7 +180,7 @@ void WinInputSPercentage::on_b_sure_clicked()
   msgbox.setDefaultButton(QMessageBox::Save);
   int ret = msgbox.exec();
   if (QMessageBox::Save == ret){
-      for(row = 0 ; row < 12 ; row++){
+      for(row = 0 ; row < s_calibrateNumber ; row++){
           QString calibrateInputKey = MYSETTINGS_CALIBRATE_S_INPUT(row);
           p_mySettings->setValue(calibrateInputKey,  WinInforListDialog::instance()->doubleToCompleteDouble(ui->tableWidget->item(row,0)->text().toDouble()));
         }
@@ -191,8 +194,17 @@ void WinInputSPercentage::on_b_sure_clicked()
 void WinInputSPercentage::initTableWidget()
 {
   //set tableWidget size
-  ui->tableWidget->setRowCount(12);
+  ui->tableWidget->setRowCount(s_calibrateNumber);
   ui->tableWidget->setColumnCount(3);
+
+  for (int i = 0; i < ui->tableWidget->rowCount(); ++i)
+  {
+      ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString::number(i + 1) + "#"));
+      for (int j = 0; j < ui->tableWidget->columnCount(); ++j)
+      {
+          ui->tableWidget->setItem(i, j, new QTableWidgetItem(""));
+      }
+  }
 
   //set tableWidget column header and column width.
   for(int columnCount = 0; columnCount < 3; columnCount++)
@@ -208,12 +220,6 @@ void WinInputSPercentage::initTableWidget()
 
   initTableWidgetData();
 
-  for(int i = 0; i < 12; i++)
-    {
-      //set vertical header.
-      ui->tableWidget->verticalHeaderItem(i)->setText(QString::number(i + 1) + "#");
-    }
-
   ui->tableWidget->setCurrentCell(0,0);
 }
 
@@ -221,7 +227,7 @@ void WinInputSPercentage::initTableWidgetData()
 {
   //set tableWidget row header ,row height, item isEnabled, item text.
   ui->tableWidget->clearContents();
-  for(int i = 0; i < 12; i++)
+  for(int i = 0; i < s_calibrateNumber; i++)
     {
       //set 0 column text.
       ui->tableWidget->setItem(i, 0,new QTableWidgetItem(
@@ -256,8 +262,8 @@ void WinInputSPercentage::initTableWidgetData()
 
 void WinInputSPercentage::initSignalSlotConnect()
 {
-  //point signal and slot.
-  connect(ui->b_point, SIGNAL(clicked()), this, SLOT(slotPointClicked()));
+    //point signal and slot.
+    connect(ui->b_point, SIGNAL(clicked()), this, SLOT(slotPointClicked()));
 
   //define the number key slots.
   QList<QPushButton *> allPButtons = this->findChildren<QPushButton *>();

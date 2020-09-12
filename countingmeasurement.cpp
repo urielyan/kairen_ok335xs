@@ -1,5 +1,7 @@
 #include <QMessageBox>
 
+#include <QDebug>
+
 #include <stdio.h>
 #include <unistd.h>
 
@@ -60,6 +62,7 @@ countingMeasurement::countingMeasurement(QWidget *parent) :
 }
 countingMeasurement::~countingMeasurement()
 {
+    qDebug() << __FILE__;
   delete timer;
   delete show_count_mea;
   delete ui;
@@ -190,10 +193,10 @@ void countingMeasurement::count_second(){
   if(turn_second < 0){
       recv_data = Communciation_Com::receive(5);
       if(recv_data == NULL){
-          on_pushButton_2_clicked();
-          ErrorCountSave::instance()->addCount(2);
-          WinInforListDialog::instance()->showMsg(tr("没有接收到计数数据，已停止测量"));
-          QTimer::singleShot(MESSAGEBOX_AUTO_CLOSE_SECOND * 1000,WinInforListDialog::instance(),SLOT(close()));
+//          on_pushButton_2_clicked();
+//          ErrorCountSave::instance()->addCount(2);
+//          WinInforListDialog::instance()->showMsg(tr("没有接收到计数数据，已停止测量"));
+//          QTimer::singleShot(MESSAGEBOX_AUTO_CLOSE_SECOND * 1000,WinInforListDialog::instance(),SLOT(close()));
           return;
         }else if(recv_data[0] != (char)0x02){
           ErrorCountSave::instance()->addCount(2);
@@ -311,6 +314,7 @@ void countingMeasurement::on_pushButton_clicked()
 
 void countingMeasurement::on_pushButton_3_clicked()
 {
+    emit closed();
   this->close();
 }
 
@@ -339,7 +343,9 @@ int countingMeasurement::on_pushButton_2_clicked()
   QString recv_data = Communciation_Com::receive(1);
   if(recv_data == NULL){
       ErrorCountSave::instance()->addCount(10);
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv Null"));
+
+       if(measurement_flag = MEASUREMENT_10_AUTO)
+           WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv Null"));
 
       return ERRNO_COMMUNICATION_1;
     }
@@ -402,7 +408,8 @@ void countingMeasurement::on_pushButton_6_clicked()
   QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   if(recv_data == NULL){
       ErrorCountSave::instance()->addCount(6);
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT));
+      if(measurement_flag = MEASUREMENT_10_AUTO)
+          WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT));
 
     }else if(recv_data[1] == (char)0x32){//recv_data[0] == (char)0x98 &&
       ui->widget->change_label_content(WAIT_BE_LOCATION);
@@ -412,7 +419,8 @@ void countingMeasurement::on_pushButton_6_clicked()
       emit transmit_move_sliding(false,false);
     }else {
       ErrorCountSave::instance()->addCount(6);
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT)
+      if(measurement_flag = MEASUREMENT_10_AUTO)
+          WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT)
                                               + recv_data + QString::number(measurement_flag));
     }
 
@@ -451,7 +459,8 @@ int countingMeasurement::on_pushButton_4_clicked()
   //qDebug() <<recv_data.toLocal8Bit().data();
   if(recv_data == NULL){
       ErrorCountSave::instance()->addCount(6);
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("\n recv Null"));
+      if(measurement_flag = MEASUREMENT_10_AUTO)
+          WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("\n recv Null"));
       return -1;
     }else if(recv_data[1] == (char)0x31){
       ui->widget->change_label_content(REFERENCE_BE_LOCATON);
@@ -463,7 +472,8 @@ int countingMeasurement::on_pushButton_4_clicked()
       return -1;
     }else {
       ErrorCountSave::instance()->addCount(6);
-      WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT)
+      if(measurement_flag = MEASUREMENT_10_AUTO)
+          WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT)
                                               + recv_data + "," + QString::number(measurement_flag));
       return -1;
     }

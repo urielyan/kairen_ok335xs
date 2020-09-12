@@ -28,6 +28,7 @@ signals:
   void transmit_stop_auto_count();
   void start_steady_summit_measurement();
   void transmit_move_sliding(bool,bool);
+  void closed();
 
 public slots:
   int examine_count_5_data_availability();

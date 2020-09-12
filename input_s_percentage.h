@@ -40,6 +40,8 @@ private:
     void initTableWidget();
     void initTableWidgetData();
     void initSignalSlotConnect();
+
+    static int s_calibrateNumber;
 };
 
 #endif // INPUT_S_PERCENTAGE_H

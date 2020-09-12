@@ -33,7 +33,7 @@ Communciation_Com::Communciation_Com(QObject *parent) :
         fd = open( "/dev/ttySAC3", O_RDWR|O_NOCTTY|O_NDELAY);
 #endif
     if (-1 == fd){
-        fd = open( "/dev/ttyO1", O_RDWR|O_NOCTTY|O_NDELAY);//mid com
+        fd = open( "/dev/ttyUSB0", O_RDWR|O_NOCTTY|O_NDELAY);//mid com
         if(fd == -1)
         {
             //WinInforListDialog::instance()->showMsg(tr("open err"));

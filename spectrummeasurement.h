@@ -26,6 +26,7 @@ signals:
     void transmit_stop_auto_count();
     void transmit_steady_summit_result(double);
     void transmit_move_sliding(bool,bool);
+    void closed();
 
 
 public slots:

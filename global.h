@@ -30,14 +30,14 @@
 #define REFERENCE_BE_LOCATON_TEXT        "参考样处在测量位置"
 #define WAIT_BE_LOCATION_TEXT            "待测样处在测量位置"
 #define MACHINE_MALFUNCTION_TEXT         "机械故障，滑板没到位，请检查"
-#define SLIDING_PLATE_NO_CHANGE_TEXT     "没有接受到滑板改变信息，请查看机械"
+#define SLIDING_PLATE_NO_CHANGE_TEXT     "没有接收到滑板改变信息，请查看机械"
 #define TRANSMIT_DATA_ERROR     "通讯故障"
 #define SLIDING_PLATE_NOT_ALLOW "您移动滑板过于频繁, 请等待几秒"
 
 #define CALIBRATE_RESULT_MAX_RECORD 20
 #define NO_BEHAVIOUR_START_COUNT       10 //* 6
 #define MESSAGEBOX_AUTO_CLOSE_SECOND    3
-#define TURN_SECONDS 31//count a measurement time
+#define TURN_SECONDS 30//count a measurement time
 
 #define MEASUREMENT_NOTHING     0
 #define MEASUREMENT_SPECTRUM    1
@@ -122,3 +122,8 @@ private :
   GlobalData(QObject *parent = 0);
 };
 #endif // GLOBAL_H
+
+
+
+#define WORK_CURVE_1_MAX 10
+#define WORK_CURVE_2_MAX 15

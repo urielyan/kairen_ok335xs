@@ -96,15 +96,18 @@ void  hide_system::time_use_count(){
       //timer->stop();
       return;
     }
-  if(used_time >= most_use_time  * 30 * 24 * 60){
+  //
+  if(used_time >= most_use_time  * 30){//30 * 24 *
     input_time->input_decode_serial();
     }
+
+  //使最大使用时间记录的是分钟
   static int i = 0;
   i += 1;
-
   if(i < 60){
       return;
     }
+  i = 0;
 
   p_mySettings->setValue(MYSETTINGS_USED_TIME,used_time + 1);
   used_time += 1;

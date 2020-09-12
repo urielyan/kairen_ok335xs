@@ -69,7 +69,7 @@ void calibrationmeasurement::doing_measurement(){
   ui->label_issamlpe->show();
   static QString query_data;
   QString tmpstr_second,tmpstr_count;
-  tmpstr_count = QString("标定样序号 %1").arg(count + 1);
+  tmpstr_count = QString("第%1个标定样 ").arg(count + 1);
   tmpstr_second =QString("%1 秒").arg(second);
   ui->label_number->setText(tmpstr_count);
   ui->label_second->setText(tmpstr_second);

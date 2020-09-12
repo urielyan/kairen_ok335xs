@@ -38,7 +38,7 @@
        <item>
         <widget class="QLabel" name="label_number">
          <property name="text">
-          <string>第 01# 标定样</string>
+          <string>第 01个 标定样</string>
          </property>
         </widget>
        </item>

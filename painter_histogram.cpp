@@ -103,8 +103,8 @@ void painter_histogram::on_b_forword_clicked()
       return;
     }
   different_display_color ++;
-  ui->label->setText(QString("当前阈值:%1V 计数值:%2").arg(QString::number((double)(different_display_color )/10,'f',1))\
-                     .arg(*(spectrum_data + different_display_color)));
+  ui->label->setText(QString("当前阈值:%1V 计数值:%2").arg(QString::number((double)(different_display_color - 1)/10,'f',1))\
+                     .arg(*(spectrum_data + different_display_color - 1)));
   this->update();
 }
 
@@ -118,8 +118,8 @@ void painter_histogram::on_b_back_clicked()
       return;
     }
   different_display_color --;
-    ui->label->setText(QString("当前阈值:%1V 计数值:%2").arg(QString::number((double)(different_display_color)/10,'f',1))\
-                       .arg(*(spectrum_data + different_display_color)));
+    ui->label->setText(QString("当前阈值:%1V 计数值:%2").arg(QString::number((double)(different_display_color - 1)/10,'f',1))\
+                       .arg(*(spectrum_data + different_display_color - 1)));
     this->update();
     PRINT_DEBUG_INFOR;
 }

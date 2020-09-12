@@ -43,6 +43,10 @@ private slots:
     void set_sliding_disabled(bool,bool);
     void judge_spectrument_measurement_result(double);
 
+    void on_countMeasurementButton_clicked();
+
+    void on_spectrumMeasurementButton_clicked();
+
 private:
     void get_slide_current_position();
     Ui::Widget *ui;

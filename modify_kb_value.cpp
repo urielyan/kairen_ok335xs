@@ -19,6 +19,7 @@ modify_kb_value::modify_kb_value(QWidget *parent) :
     ui->label_a2->setText("");
     ui->lineEdit_a2->hide();
     ui->lineEdit_ka0->setFocus();
+    ui->comboBox->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     on_comboBox_currentIndexChanged("1");
     //TODO: 待删除已用上面这行代替。
@@ -90,7 +91,7 @@ void modify_kb_value::on_comboBox_currentIndexChanged(const QString &arg1)
     ui->lineEdit_ba1->setText("");
     ui->lineEdit_ka0->setText("");
 
-    if(arg1.toInt() <=5){
+    if(arg1.toInt() <= WORK_CURVE_1_MAX){
         ui->lineEdit_a2->hide();
         ui->label_a2->setText("");
         ui->label_b_a1->setText("b=");

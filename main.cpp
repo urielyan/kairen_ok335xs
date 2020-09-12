@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
 
 #endif
 
-#ifdef FORLIN_OK335XSd
+#ifdef FORLIN_OK335XS
     a.setStyleSheet(QString("QPushButton{"
                             "min-width:80; font: 28px; min-height:60;border: 1px solid gray;border-radius: 10px;"
                             "}"
@@ -321,9 +321,10 @@ int main(int argc, char *argv[])
                             "}"
 
                             "QComboBox {"
-                            "min-height: 50px;"
+                            "min-height: 0px;"
                             "font: 25px;"
                             "}"
+
 
                             "QLineEdit{"
                             "font: 24px;"
@@ -341,12 +342,13 @@ int main(int argc, char *argv[])
                             "border: 0px solid grey;"
                             "width: 20px;"
                             " }"
+
                             ).arg(FONT_SIZE * 1.5));
 #endif
 
-    QFile file(":qss/resource/qss/ok335xs.qss");
-       if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-           return -1;
+//    QFile file(":qss/resource/qss/ok335xs.qss");
+//       if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+//           return -1;
 
 
 

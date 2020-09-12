@@ -72,11 +72,11 @@ printer::printer(QObject *parent) :
 
   //initData();
 
-  QTimer *m_timer = new QTimer(this);
-  connect(m_timer, SIGNAL(timeout()), this, SLOT(recvData()));
-  m_timer->start(3000);
+//  QTimer *m_timer = new QTimer(this);
+//  connect(m_timer, SIGNAL(timeout()), this, SLOT(recvData()));
+//  m_timer->start(3000);
 
-  printf("open /dev/ttyO2 success");
+//  printf("open /dev/ttyO2 success");
 }
 int printer::fd;
 struct termios printer::options;

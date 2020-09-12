@@ -41,6 +41,9 @@ systemsetup::systemsetup(QWidget *parent) :
   INIT_LABEL_SIZE_FONT;
   ui->label->setFont(QFont(FONT_NAME, FONT_SIZE * 2 ,QFont::Normal));
   ui->label->setObjectName("title");
+
+  ui->pushButton_7->setVisible(false);
+  ui->pushButton_9->setVisible(false);
 }
 
 systemsetup::~systemsetup()

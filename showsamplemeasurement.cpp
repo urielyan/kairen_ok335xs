@@ -91,13 +91,13 @@ void showsamplemeasurement::add_data(int workCurveIndex,QString data,int size){
     QStringList workCurveList;
     double percentage = 0;
     workCurveList = workCurveValue.split(";");
-    if(workCurveIndex <= 5 && workCurveIndex >= 1){
+    if(workCurveIndex <= WORK_CURVE_1_MAX && workCurveIndex >= 1){
         if((workCurveList.size() != 3) || (workCurveList[0] == NULL)|| (workCurveList[1] == NULL))return;
         if(workCurveList[0].split("=").size() == 2){
             percentage = workCurveList[0].split("=")[1].toDouble() * \
                     ((data.toDouble())/sample_average) + workCurveList[1].split("=")[1].toDouble();
         }
-    }else if((workCurveIndex > 5) && (workCurveIndex <= 9)){
+    }else if((workCurveIndex > WORK_CURVE_1_MAX) && (workCurveIndex <= WORK_CURVE_2_MAX)){
         if((workCurveList.size() != 3) || (workCurveList[0] == NULL)|| \
                 (workCurveList[1] == NULL)|| (workCurveList[2] == NULL))return;
         if(workCurveList[0].split("=").size() == 2){
@@ -150,7 +150,7 @@ void showsamplemeasurement::show_calculate_storage(QString data){
     //get and storage average
     //double average = sum / rows - (int)(sum / rows);
     double average = sum / rows;
-    QString str_average = QString::number(average,'f',4);
+    QString str_average = QString("%1").arg(average, -1, 'f', 4, '0');
 
     while(str_average.size() < 6){
         str_average.append("0");
@@ -167,7 +167,7 @@ void showsamplemeasurement::show_calculate_storage(QString data){
     }
     standard_deviation = pow(n_avg_sub_2_sum/(rows - 1),0.5);
 
-    QString str_deviation = QString::number(standard_deviation,'f',4);
+    QString str_deviation = QString("%1").arg(standard_deviation, -1, 'f', 4, '0');
 
     while (str_deviation.size() < 6) {
         str_deviation.append("0");
