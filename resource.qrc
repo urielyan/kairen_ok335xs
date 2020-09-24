@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/qss">
-        <file alias="qss">resource/qss/ok335xs.qss</file>
-    </qresource>
-</RCC>
