@@ -412,15 +412,17 @@ void count_kb_value::printer_result(QVector<int> count_input_s_index){
       if(one_data.size() != 3){
           continue;
         }
-      if (i < count_input_s_index.size())
-      {
-          printer::transmit(QString::number(count_input_s_index[i]).toLocal8Bit().data()
-                            , QString::number(count_input_s_index[i]).size());
+//      if (i < count_input_s_index.size())
+//      {
 
-      }else
-      {
-          printer::transmit(QString::number(i).toLocal8Bit().data(), QString::number(i).size());
-      }
+
+//      }else
+//      {
+//          printer::transmit(QString::number(i).toLocal8Bit().data(), QString::number(i).size());
+//      }
+      //第几组数据
+      printer::transmit(QString::number(count_input_s_index[i - 1] + 1).toLocal8Bit().data()
+                        , QString::number(count_input_s_index[i]).size());
       printer::transmit('#');
       printer::transmit((void *)"     ",2);
       printer::transmit((void *)one_data[0].toLocal8Bit().data(),one_data[0].size());

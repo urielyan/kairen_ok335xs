@@ -27,9 +27,13 @@ logo::logo(QWidget *parent) :
 //    ui->labelCompute->setText(tr("上海景颐自动化设备有限公司"));
 
     //xuezong
-    ui->labelID->setText(tr("YZ--6180A"));
-    ui->labelName->setText(tr("X荧光测硫仪"));
-    ui->labelCompute->setText(tr("上海荧展电子仪器有限公司"));
+//    ui->labelID->setText(tr("YZ--6180A"));
+//    ui->labelName->setText(tr("X荧光测硫仪"));
+//    ui->labelCompute->setText(tr("上海荧展电子仪器有限公司"));
+
+    ui->labelID->setText(tr("THA-6000XS"));
+    ui->labelName->setText(tr("X荧光定硫仪"));
+    ui->labelCompute->setText(tr("泰州金航分析仪器有限公司"));
 }
 
 logo::~logo()
