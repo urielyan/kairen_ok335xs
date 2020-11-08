@@ -24,7 +24,7 @@ class passwd : public QWidget
 public:
   enum ENUM_INPUT_MAX{
     //unit : v
-    enumMaxCountVoltage = 700,
+    enumMaxCountVoltage = 1500,
     enumMinCountVoltage = 500,
 
     enumMaxLightVoltage = 9999,
