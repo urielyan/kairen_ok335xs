@@ -31,9 +31,13 @@ logo::logo(QWidget *parent) :
 //    ui->labelName->setText(tr("X荧光测硫仪"));
 //    ui->labelCompute->setText(tr("上海荧展电子仪器有限公司"));
 
-    ui->labelID->setText(tr("THA-6000XS"));
-    ui->labelName->setText(tr("X荧光定硫仪"));
-    ui->labelCompute->setText(tr("泰州金航分析仪器有限公司"));
+//    ui->labelID->setText(tr("THA-6000XS"));
+//    ui->labelName->setText(tr("X荧光定硫仪"));
+//    ui->labelCompute->setText(tr("泰州金航分析仪器有限公司"));
+
+    ui->labelID->setText("JY-9020");
+    ui->labelName->setText("微量快速硫含量测试仪");
+    ui->labelCompute->setText("上海阳光科学仪器制造有限公司");
 }
 
 logo::~logo()

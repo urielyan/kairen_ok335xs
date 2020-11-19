@@ -344,8 +344,8 @@ int countingMeasurement::on_pushButton_2_clicked()
   if(recv_data == NULL){
       ErrorCountSave::instance()->addCount(10);
 
-       if(measurement_flag = MEASUREMENT_10_AUTO)
-           WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv Null"));
+//       if(measurement_flag != MEASUREMENT_10_AUTO)
+//           WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("recv Null"));
 
       return ERRNO_COMMUNICATION_1;
     }
@@ -408,9 +408,7 @@ void countingMeasurement::on_pushButton_6_clicked()
   QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   if(recv_data == NULL){
       ErrorCountSave::instance()->addCount(6);
-      if(measurement_flag = MEASUREMENT_10_AUTO)
-          WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT));
-
+      return;
     }else if(recv_data[1] == (char)0x32){//recv_data[0] == (char)0x98 &&
       ui->widget->change_label_content(WAIT_BE_LOCATION);
     }else if( recv_data[1] == (char)0x33){//recv_data[0] == (char)0x98 &&
@@ -419,9 +417,7 @@ void countingMeasurement::on_pushButton_6_clicked()
       emit transmit_move_sliding(false,false);
     }else {
       ErrorCountSave::instance()->addCount(6);
-      if(measurement_flag = MEASUREMENT_10_AUTO)
-          WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT)
-                                              + recv_data + QString::number(measurement_flag));
+      return;
     }
 
   set_sliding_disabled(false,true);
@@ -458,9 +454,7 @@ int countingMeasurement::on_pushButton_4_clicked()
   QString recv_data = Communciation_Com::receive(SLIDING_PLATE_CHANGE_TIME);
   //qDebug() <<recv_data.toLocal8Bit().data();
   if(recv_data == NULL){
-      ErrorCountSave::instance()->addCount(6);
-      if(measurement_flag = MEASUREMENT_10_AUTO)
-          WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT) + tr("\n recv Null"));
+      ErrorCountSave::instance()->addCount(6); 
       return -1;
     }else if(recv_data[1] == (char)0x31){
       ui->widget->change_label_content(REFERENCE_BE_LOCATON);
@@ -472,9 +466,6 @@ int countingMeasurement::on_pushButton_4_clicked()
       return -1;
     }else {
       ErrorCountSave::instance()->addCount(6);
-      if(measurement_flag = MEASUREMENT_10_AUTO)
-          WinInforListDialog::instance()->showMsg(tr(SLIDING_PLATE_NO_CHANGE_TEXT)
-                                              + recv_data + "," + QString::number(measurement_flag));
       return -1;
     }
   set_sliding_disabled(true,false);
